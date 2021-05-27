@@ -1,18 +1,50 @@
 import 'package:flutter/material.dart';
 
 import '../model/model.dart' show Exercise;
+import '../controller/data/data_helper.dart';
 
 class ExerciseRepository extends ChangeNotifier {
-  int? _unnamedExerciseIndex;
+  ExerciseRepository.withDB(this._exerciseList, this.dB) {
+    this.dB = DataHelper.dbAccess;
+  }
+  DataHelper? dB;
+  final tableName = 'exercise';
+  List<Exercise> _exerciseList = [];
+  List<Exercise> get exerciseList => _exerciseList;
 
   ///
+  int? _unnamedExerciseIndex;
   Exercise? selectedExercise;
   //Exercise get selectedExercise => _selectedExercise;
   // set selectedExercise(Exercise value) {
   //   _selectedExercise = value;
   //   notifyListeners();
   // }
+  Future<void> fetchAndSetData() async {
+    if (dB != null) {
+      // do not execute if db is not instantiate
+      final dataList = await dB?.getDataForRepo(tableName);
+      _exerciseList = dataList!
+          .map(
+            (item) => Exercise(
+              id: item['id'],
+              name: item['title'],
+              totalCount: item['totalCount'],
+              countForSets: item['countForSets'],
+              targets: item['targets'],
+              equipment: item['equipment'],
+              notes: item['notes'],
+              resistance: item['resistance'],
+              steps: item['steps'],
+              style: item['style'],
+            ),
+          )
+          .toList();
+      notifyListeners();
+    }
+  }
 
+  ///
   void saveExercise(Exercise e) {
     /// handles an empty name. _unnamedExerciseIndex is 0 if this is called for the first time
     // if (e.name == '') e.name = _userSkippedName(_unnamedExerciseIndex ?? 0);
@@ -23,7 +55,7 @@ class ExerciseRepository extends ChangeNotifier {
 
     /// always starts at 0
     //  e.count = 0;
-    e.copyWith(count: 0);
+    e.copyWith(totalCount: 0);
 
     ///TODO: ACTUALLY SAVE AN EXERCISE
   }
@@ -60,9 +92,9 @@ class ExerciseRepository extends ChangeNotifier {
   }
 
   void incrementExerciseCount(Exercise exercise) {
-    int i = exercise.count!;
+    int i = exercise.totalCount!;
     exercise.copyWith(
-      count: i += 1,
+      totalCount: i += 1,
     ); //count++;
     notifyListeners();
   }

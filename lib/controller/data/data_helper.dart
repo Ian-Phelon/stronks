@@ -1,87 +1,131 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:flutter/widgets.dart';
+// import 'package:expense_manager/db/migrations/db_script.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:stronks/model/model.dart';
 
-class DatabaseHelper {
-  static final _databaseName = "stronks.db";
-  static final _databaseVersion = 1;
+import 'migration/migration.dart';
 
-  static final table = 'my_table';
+class DataHelper extends ChangeNotifier {
+  DataHelper._();
 
   static final columnId = '_id';
-  static final columnName = 'name';
-  static final columnAge = 'age';
+  // static final columnName = 'name';
+  // static final columnAge = 'age';
+  //We use the singleton pattern to ensure that
+  //we have only one class instance and provide a global point access to it
+  static final DataHelper dbAccess = DataHelper._();
+  static final String _dbName = "stronks_user_mobile_device.db";
+  static late Database _database;
 
-  DatabaseHelper._();
-  static final DatabaseHelper instance = DatabaseHelper._();
-
-  // only have a single app-wide reference to the database
-  static Database? _database;
   Future<Database> get database async {
-    if (_database != null) return _database!;
-    // lazily instantiate the db the first time it is accessed
-    _database = await _initDatabase();
-    return _database!;
+    _database = await initDB();
+    return _database;
   }
 
-  // this opens the database (and creates it if it doesn't exist)
-  _initDatabase() async {
+  initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    String path = join(documentsDirectory.path, _dbName);
+
+    var maxMigratedDbVersion = DbMigrator.migrations.keys.reduce(max);
+
+    _database = await openDatabase(path,
+        version: maxMigratedDbVersion,
+        onOpen: (db) {}, onCreate: (Database db, int _) async {
+      DbMigrator.migrations.keys.toList()
+        ..sort()
+        ..forEach((k) async {
+          var script = DbMigrator.migrations[k];
+          await db.execute(script!);
+        });
+    }, onUpgrade: (Database db, int _, int __) async {
+      var currentDbVersion = await getCurrentDbVersion(db);
+
+      var upgradeScripts = new Map.fromIterable(
+          DbMigrator.migrations.keys.where((k) => k > currentDbVersion),
+          key: (k) => k,
+          value: (k) => DbMigrator.migrations[k]);
+
+      if (upgradeScripts.length == 0) return;
+
+      upgradeScripts.keys.toList()
+        ..sort()
+        ..forEach((k) async {
+          var script = upgradeScripts[k];
+          await db.execute(script!);
+        });
+
+      _upgradeDbVersion(db, maxMigratedDbVersion);
+    });
+    notifyListeners();
+    return _database;
   }
 
-  // SQL code to create the database table
-  Future _onCreate(Database db, int version) async {
-    await db.execute('''
-          CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY,
-            $columnName TEXT NOT NULL,
-            $columnAge INTEGER NOT NULL
-          )
-          ''');
+  _upgradeDbVersion(Database db, int version) async {
+    await db.rawQuery('pragma user_version = $version;');
   }
 
-  // Helper methods
+  Future<int> getCurrentDbVersion(Database db) async {
+    var res = await db.rawQuery('PRAGMA user_version;', null);
+    var version = res[0]['user_version'].toString();
+    return int.parse(version);
+  }
+
+  /// how often do we actually do this?
+  dropDB() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, _dbName);
+    return await deleteDatabase(path);
+  }
+
+  Future<List<Map<String, dynamic>>> getDataForRepo(String table) async {
+    Database db = await dbAccess.database;
+    return await db.query(table);
+  }
+
+  //   // Helper methods
 
   // Inserts a row in the database where each key in the Map is a column name
   // and the value is the column value. The return value is the id of the
   // inserted row.
-  Future<int> insert(Map<String, dynamic> row) async {
-    Database db = await instance.database;
-    return await db.insert(table, row);
+  Future<int> insert(Exercise exercise, String table) async {
+    Database db = await dbAccess.database;
+    return await db.insert(table, exercise.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   //The data present in the table is returned as a List of Map, where each
   // row is of type map
-  Future<List<Map<String, dynamic>>> queryAllRows() async {
-    Database db = await instance.database;
+  Future<List<Map<String, dynamic>>> queryAllRows(String table) async {
+    Database db = await dbAccess.database;
     return await db.query(table);
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
-  Future<int?> queryRowCount() async {
-    Database db = await instance.database;
+  Future<int?> queryRowCount(String table) async {
+    Database db = await dbAccess.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
   // We are assuming here that the id column in the map is set. The other
   // column values will be used to update the row.
-  Future<int> update(Map<String, dynamic> row) async {
-    Database db = await instance.database;
-    int id = row[columnId];
-    return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+  Future<int> update(Exercise exercise, String table) async {
+    Database db = await dbAccess.database;
+    int id = exercise.toMap()[columnId];
+    return await db
+        .update(table, exercise.toMap(), where: 'id = ?', whereArgs: [id]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
-  Future<int> delete(int id) async {
-    Database db = await instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+  Future<int> delete(int id, String table) async {
+    Database db = await dbAccess.database;
+    return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }

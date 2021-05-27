@@ -95,7 +95,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         width: 20.0,
                       ),
                       Text(
-                        '${exercise?.count}',
+                        '${exercise?.totalCount}',
                         style: TextStyle(fontSize: 26),
                       ),
                       RoundIconButton(

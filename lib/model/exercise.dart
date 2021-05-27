@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class Exercise {
   int? id;
-  int? count;
+  int? totalCount;
   String? name;
   int? countForSets;
   String? targets;
@@ -12,9 +12,9 @@ class Exercise {
   String? style;
   String? notes;
 
-  Exercise([
+  Exercise({
     this.id,
-    this.count,
+    this.totalCount,
     this.name,
     this.countForSets,
     this.targets,
@@ -23,11 +23,11 @@ class Exercise {
     this.steps,
     this.style,
     this.notes,
-  ]);
+  });
 
   Exercise copyWith({
     int? id,
-    int? count,
+    int? totalCount,
     String? name,
     int? countForSets,
     String? targets,
@@ -38,23 +38,23 @@ class Exercise {
     String? notes,
   }) {
     return Exercise(
-      id ?? this.id,
-      count ?? this.count,
-      name ?? this.name,
-      countForSets ?? this.countForSets,
-      targets ?? this.targets,
-      resistance ?? this.resistance,
-      equipment ?? this.equipment,
-      steps ?? this.steps,
-      style ?? this.style,
-      notes ?? this.notes,
+      id: id ?? this.id,
+      totalCount: totalCount ?? this.totalCount,
+      name: name ?? this.name,
+      countForSets: countForSets ?? this.countForSets,
+      targets: targets ?? this.targets,
+      resistance: resistance ?? this.resistance,
+      equipment: equipment ?? this.equipment,
+      steps: steps ?? this.steps,
+      style: style ?? this.style,
+      notes: notes ?? this.notes,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'count': count,
+      'totalCount': totalCount,
       'name': name,
       'countForSets': countForSets,
       'targets': targets,
@@ -68,16 +68,16 @@ class Exercise {
 
   factory Exercise.fromMap(Map<String, dynamic> map) {
     return Exercise(
-      map['id'],
-      map['count'],
-      map['name'],
-      map['countForSets'],
-      map['targets'],
-      map['resistance'],
-      map['equipment'],
-      map['steps'],
-      map['style'],
-      map['notes'],
+      id: map['id'],
+      totalCount: map['totalCount'],
+      name: map['name'],
+      countForSets: map['countForSets'],
+      targets: map['targets'],
+      resistance: map['resistance'],
+      equipment: map['equipment'],
+      steps: map['steps'],
+      style: map['style'],
+      notes: map['notes'],
     );
   }
 
@@ -88,7 +88,7 @@ class Exercise {
 
   @override
   String toString() {
-    return 'Exercise(id: $id, count: $count, name: $name, countForSets: $countForSets, targets: $targets, resistance: $resistance, equipment: $equipment, steps: $steps, style: $style, notes: $notes)';
+    return 'Exercise(id: $id, totalCount: $totalCount, name: $name, countForSets: $countForSets, targets: $targets, resistance: $resistance, equipment: $equipment, steps: $steps, style: $style, notes: $notes)';
   }
 
   @override
@@ -97,7 +97,7 @@ class Exercise {
 
     return other is Exercise &&
         other.id == id &&
-        other.count == count &&
+        other.totalCount == totalCount &&
         other.name == name &&
         other.countForSets == countForSets &&
         other.targets == targets &&
@@ -111,7 +111,7 @@ class Exercise {
   @override
   int get hashCode {
     return id.hashCode ^
-        count.hashCode ^
+        totalCount.hashCode ^
         name.hashCode ^
         countForSets.hashCode ^
         targets.hashCode ^
