@@ -22,19 +22,12 @@ class _TutorialBarState extends State<TutorialBar> {
   @override
   void initState() {
     super.initState();
-    if (isVisible == null) {
-      setState(() {
-        isVisible = false;
-        tutorial = [];
-        tutorialIndex = 0;
-      });
-    }
-    if (isVisible != null) {
+
+    setState(() {
+      isVisible = false;
       tutorial = _getTutorialStrings();
-      if (tutorialIndex == null) {
-        tutorialIndex = 0;
-      }
-    }
+      tutorialIndex = 0;
+    });
   }
 
   void triggerVisibility() {
@@ -60,7 +53,7 @@ class _TutorialBarState extends State<TutorialBar> {
   }
 
   void updateTutorialIndex(int indicator) {
-    if (indicator == 1 && tutorialIndex! < tutorial!.length - 1) {
+    if (indicator == 1 && tutorialIndex < tutorial!.length - 1) {
       setState(() {
         tutorialIndex += indicator;
       });
@@ -87,7 +80,7 @@ class _TutorialBarState extends State<TutorialBar> {
           ),
         ),
       ),
-      visible: isVisible!,
+      visible: isVisible,
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: Material(
@@ -96,6 +89,7 @@ class _TutorialBarState extends State<TutorialBar> {
             side: BorderSide(color: Colors.black, width: 0.9),
           ),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
@@ -106,7 +100,7 @@ class _TutorialBarState extends State<TutorialBar> {
               ),
               Flexible(
                 child: Text(
-                  '${tutorial?[tutorialIndex!].trim()}',
+                  '${tutorial![tutorialIndex].trim()}',
                 ),
               ),
               Row(
@@ -231,15 +225,19 @@ class Tutorial {
     switch (this.pageContext?.widget.toString()) {
       case 'DashboardScreen':
         return dashboardScreen;
+        // ignore: dead_code
         break;
       case 'ExercisesScreen':
         return exercisesScreen;
+        // ignore: dead_code
         break;
       case 'CreateExerciseScreen':
         return createExerciseScreen;
+        // ignore: dead_code
         break;
       case 'EditExerciseScreen':
         return editExerciseScreen;
+        // ignore: dead_code
         break;
 
       default:

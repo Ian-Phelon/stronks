@@ -70,6 +70,7 @@ class PurpleTextField extends TextField {
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           cursorColor: Colors.purpleAccent,
+          autofocus: true,
           decoration: const InputDecoration(
             hoverColor: Colors.purpleAccent,
           ),

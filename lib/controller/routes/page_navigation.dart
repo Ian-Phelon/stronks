@@ -5,7 +5,7 @@ import 'package:stronks/view/view.dart';
 
 import '../routes/pages/pages.dart';
 import '../../model/model.dart';
-import '../controller.dart';
+// import '../controller.dart';
 
 class StronksRouterDelegate extends RouterDelegate<StronksPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<StronksPath> {
@@ -40,9 +40,8 @@ class StronksRouterDelegate extends RouterDelegate<StronksPath>
     }
 
     /// Notify the PageManager that page was popped
-    /// TODO: holy shit this better work
-    pageManager.didPop(route.currentResult);
-
+    pageManager.didPop(route);
+    notifyListeners();
     return true;
   }
 
@@ -56,13 +55,11 @@ class StronksRouterDelegate extends RouterDelegate<StronksPath>
 }
 
 class RoutePageManager extends ChangeNotifier {
-  RoutePageManager([this.exerciseRepo]);
-
   static RoutePageManager of(BuildContext context) {
     return Provider.of<RoutePageManager>(context, listen: false);
   }
 
-  final ExerciseRepository? exerciseRepo;
+  // ExerciseRepository? exerciseRepo;
 
   /// Here we are storing the current list of pages
   List<Page> get pages => List.unmodifiable(_pages);
@@ -70,19 +67,14 @@ class RoutePageManager extends ChangeNotifier {
 
   final List<Page> _pages = [
     DashPage(),
-    // MaterialPage(
-    //   child: DashboardScreen(),
-    //   key: const Key('DashboardScreen'),
-    //   name: '/',
-    // ),
   ];
 
   StronksPath get currentPath {
     return parseRoute(Uri.parse(_pages.last.name!));
   }
 
-  void didPop(Page page) {
-    _pages.remove(page);
+  void didPop(Route route) {
+    _pages.remove(route.settings);
     notifyListeners();
   }
 
@@ -240,7 +232,7 @@ class StronksPath {
   StronksPath.stats() : id = 'stats';
   StronksPath.unknown() : id = 'unknown';
 
-  bool get isDashPage => id == '';
+  bool get isDashPage => id == 'dash';
   bool get isExerciesPage => id == 'exercises';
   bool get isCreateExerciseScreenPage => id == 'create_exercise';
   bool get isEditExerciseScreenPage => id == 'edit_exercises';

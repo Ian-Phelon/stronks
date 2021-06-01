@@ -3,17 +3,5 @@
 /// number of variables in this file.
 
 /// 1: initialize app. My first relational DB!
-const String initializeApp = ''' 
-    CREATE TABLE [IF NOT EXISTS] exercise(
-    id INTEGER PRIMARY KEY, 
-    totalCount INTEGER,
-    name TEXT,
-    countForSets INTEGER,
-    targets TEXT,
-    resistance REAL,
-    equipment TEXT,
-    steps INTEGER,
-    style TEXT,
-    notes TEXT
-    );
-''';
+const String initializeApp =
+    'CREATE TABLE IF NOT EXISTS exercise (id INTEGER PRIMARY KEY, totalCount INTEGER, name TEXT, countForSets INTEGER, targets TEXT, resistance INTEGER, equipment TEXT, steps INTEGER, style TEXT, notes TEXT);';

@@ -1,63 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../model/model.dart' show Exercise;
-import '../controller/data/data_helper.dart';
+import '../controller/controller.dart' as db show DataHelper;
 
 class ExerciseRepository extends ChangeNotifier {
-  ExerciseRepository.withDB(this._exerciseList, this.dB) {
-    this.dB = DataHelper.dbAccess;
-  }
-  DataHelper? dB;
-  final tableName = 'exercise';
-  List<Exercise> _exerciseList = [];
-  List<Exercise> get exerciseList => _exerciseList;
+  static final String table = 'exercise';
+  // Future<Database> dB = db.DataHelper.dbAccess.database;
+  static final dbHelper = db.DataHelper();
 
-  ///
-  int? _unnamedExerciseIndex;
+  List<Exercise> exerciseList = [];
+  // int? _unnamedExerciseIndex;
+
   Exercise? selectedExercise;
-  //Exercise get selectedExercise => _selectedExercise;
-  // set selectedExercise(Exercise value) {
-  //   _selectedExercise = value;
-  //   notifyListeners();
-  // }
+
   Future<void> fetchAndSetData() async {
-    if (dB != null) {
-      // do not execute if db is not instantiate
-      final dataList = await dB?.getDataForRepo(tableName);
-      _exerciseList = dataList!
-          .map(
-            (item) => Exercise(
-              id: item['id'],
-              name: item['title'],
-              totalCount: item['totalCount'],
-              countForSets: item['countForSets'],
-              targets: item['targets'],
-              equipment: item['equipment'],
-              notes: item['notes'],
-              resistance: item['resistance'],
-              steps: item['steps'],
-              style: item['style'],
-            ),
-          )
-          .toList();
-      notifyListeners();
-    }
+    final dataList = await dbHelper.getDataForRepo(table);
+    List<Exercise> convertedList = dataList
+        .map<Exercise>(
+          (item) => Exercise(
+            item['id'], item['totalCount'], item['name'],
+            // id: item['id'],
+            // name: item['title'],
+            // totalCount: item['totalCount'],
+            // countForSets: item['countForSets'],
+            // targets: item['targets'],
+            // equipment: item['equipment'],
+            // notes: item['notes'],
+            // resistance: item['resistance'],
+            // steps: item['steps'],
+            // style: item['style'],
+          ),
+        )
+        .toList();
+    exerciseList = convertedList;
+    notifyListeners();
   }
 
-  ///
-  void saveExercise(Exercise e) {
-    /// handles an empty name. _unnamedExerciseIndex is 0 if this is called for the first time
-    // if (e.name == '') e.name = _userSkippedName(_unnamedExerciseIndex ?? 0);
-    if (e.name == '')
-      e.copyWith(
-        name: _userSkippedName(_unnamedExerciseIndex ?? 0),
-      );
+  Future<void> addNewExercise(Map<String, dynamic> e) async {
+    final Database dB = await dbHelper.database;
+    // final Exercise x = Exercise.fromMap(e);
+    // x.name = e.values.singleWhere((element) => e.containsKey('name') == true);
+    // print('${x.name}');
+    // print('${x.runtimeType}');
 
-    /// always starts at 0
-    //  e.count = 0;
-    e.copyWith(totalCount: 0);
+    await dB.insert(table, e);
+    await fetchAndSetData();
 
-    ///TODO: ACTUALLY SAVE AN EXERCISE
+    /////////////////
+    print(exerciseList);
   }
 
   void selectExercise(Exercise e) {
@@ -68,7 +59,7 @@ class ExerciseRepository extends ChangeNotifier {
   void updateSelectedExerciseName(String e) {
     if (e == selectedExercise?.name || e == '') return;
 
-    selectedExercise?.copyWith(name: e);
+    // selectedExercise?.copyWith(name: e);
     selectExercise(selectedExercise!);
     // exercisesBox.putAt(selectedExercise.index, selectedExercise);
     notifyListeners();
@@ -76,32 +67,28 @@ class ExerciseRepository extends ChangeNotifier {
 
   void removeExerciseUpdateView(Exercise e) {
     //  exercisesBox.deleteAt(e.index);
+
     notifyListeners();
   }
 
-  String _userSkippedName(int identity) {
-    /// identity WILL BE 0 when `_userSkippedName()` is called for the first time.
-    // if (exercisesBox.isEmpty || identity <= 0) {
-    //   _unnamedExerciseIndex = 1;
-    // }
-    // if (exercisesBox.isNotEmpty && _unnamedExerciseIndex >= 1) {
-    //   _unnamedExerciseIndex++;
-    // }
-
-    return 'Unnamed Exercise #$_unnamedExerciseIndex';
-  }
+  // String _userSkippedName(int? id) {
+  //   if (id == null)
+  //     _unnamedExerciseIndex = 1;
+  //   else {
+  //     _unnamedExerciseIndex = id + 1;
+  //   }
+  //   notifyListeners();
+  //   String onComplete = 'Unnamed Exercise #${_unnamedExerciseIndex!}';
+  //   return onComplete;
+  // }
 
   void incrementExerciseCount(Exercise exercise) {
-    int i = exercise.totalCount!;
-    exercise.copyWith(
-      totalCount: i += 1,
-    ); //count++;
+    dbHelper.update(exercise, table);
     notifyListeners();
   }
 
-  void deleteExerciseList() {
-    _unnamedExerciseIndex = null;
-    // exercisesBox.clear();
+  Future<void> deleteExerciseList() async {
+    dbHelper.dropDB();
     notifyListeners();
   }
 }

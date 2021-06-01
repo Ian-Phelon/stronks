@@ -33,14 +33,22 @@ class ExercisesScreen extends StatelessWidget {
 }
 
 Widget _body(BuildContext context) {
-  TutorialBar bar = TutorialBar(
+  //final List<Exercise>? repoList =
+  context.read<ExerciseRepository>().fetchAndSetData();
+  final List<Exercise> repoList =
+      context.watch<ExerciseRepository>().exerciseList;
+  final TutorialBar bar = TutorialBar(
     pageContext: context,
   );
+  Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
+        exercise: exercise,
+      );
 
   ///DEV PURPOSES ONLY, PLEASE DELETE
-  Row yourBoat = Row(
+  final Widget yourBoat = Row(
+    mainAxisSize: MainAxisSize.min,
     children: [
-      bar,
+      Expanded(child: bar),
       GestureDetector(
         child: TextButton(
           onPressed: () {
@@ -51,44 +59,31 @@ Widget _body(BuildContext context) {
       ),
     ],
   );
-  List<int> okok = [
-    0,
-    1,
-  ];
-  return ListView.builder(
-    itemBuilder:
 
-        ///TODO: NEEDS AN ACTUAL LIST TO BUILD FROM
-        (_, ok) {
-      if (ok == 0) {
-        return Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: bar,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text('noWidgets'),
-            )
-          ],
-        );
-      }
-      return CustomScrollView(
-        slivers: [
-          /// replace  yourBoat with bar, delete yourBoat
-          SliverToBoxAdapter(child: yourBoat),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => ExerciseTile(
-                  //  exercise: box.(index),
-                  ),
-              // ..exercise?.index = index,
-              childCount: okok.length,
-            ),
-          ),
-        ],
-      );
-    },
+  return CustomScrollView(
+    //shrinkWrap: true,
+    slivers: [
+      SliverToBoxAdapter(
+        child: yourBoat,
+      ),
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, index) {
+            if (repoList.isEmpty) {
+              return Text('nowidgets');
+            }
+            return _tile(
+              context,
+              repoList[index],
+            ); //tile.exercise = repoList[index];
+            // return ExerciseTile(
+            //   exercise: repoList[index],
+            // );
+          },
+          childCount: repoList.isEmpty ? 1 : repoList.length,
+          //repoList.isEmpty ? 1 : repoList.length,
+        ),
+      ),
+    ],
   );
 }

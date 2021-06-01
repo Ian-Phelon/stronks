@@ -8,11 +8,10 @@ import 'widgets.dart';
 
 class ExerciseTile extends StatelessWidget {
   const ExerciseTile({
-    this.exercise,
-  });
-
+    Key? key,
+    required this.exercise,
+  }) : super(key: key);
   final Exercise? exercise;
-
   @override
   Widget build(BuildContext context) {
     final repoWatch = context.watch<ExerciseRepository>();
@@ -59,7 +58,7 @@ class ExerciseTile extends StatelessWidget {
                   width: 8.0,
                 ),
                 Text(
-                  'Shares: ${exercise?.totalCount.toString()}',
+                  'Shares: ${exercise!.totalCount.toString()}',
                 ),
               ],
             ),

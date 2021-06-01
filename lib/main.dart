@@ -9,19 +9,27 @@ import 'controller/controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  DataHelper.dbAccess.initDB();
+  DataHelper(); //.initDB();
   runApp(
     MultiProvider(
       providers: [
-        // ChangeNotifierProvider(
-        //   create: (_) => ExerciseRepository(),
-        // ),
-        ChangeNotifierProvider(create: (_) => DataHelper.dbAccess),
-        ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
-          create: (_) => ExerciseRepository.withDB([], null),
-          update: (_, db, previous) => ExerciseRepository.withDB(
-              previous!.exerciseList, DataHelper.dbAccess),
+        ChangeNotifierProvider<DataHelper>(
+          create: (_) => DataHelper(),
         ),
+        ChangeNotifierProvider<ExerciseRepository>(
+          create: (_) => ExerciseRepository(),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => RoutePageManager(),
+        // )
+        // ChangeNotifierProvider(create: (_) => DataHelper.dbAccess),
+        // ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
+        //   create: (_) => ExerciseRepository(),
+        //   update: (_, db, previous) => ExerciseRepository(
+        //     list: previous!.exerciseList,
+        //     dataHelper: DataHelper.dbAccess,
+        //   ),
+        // ),
       ],
       child: const App(),
     ),

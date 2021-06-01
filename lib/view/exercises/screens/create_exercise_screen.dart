@@ -4,7 +4,6 @@ import 'package:stronks/controller/exercise_repository.dart'
     show ExerciseRepository;
 import 'package:stronks/view/exercises/widgets/widgets.dart';
 
-import '../../../model/model.dart' show Exercise;
 import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart' show TutorialBar, TargetPanel;
@@ -49,12 +48,13 @@ class CreateExerciseScreen extends StatelessWidget {
       ),
       floatingActionButton: RoundTextButton(
         onPressed: () {
-          final Exercise createdExercise = Exercise().copyWith(
-            name: txtCtrl.text,
-          );
-          // createdExercise.name = txtCtrl.text;
+          //createdExercise.copyWith().name = txtCtrl.text;
           // createdExercise.bodyTargets = targetPanel.exercise.bodyTargets;
-          context.read<ExerciseRepository>().saveExercise(createdExercise);
+          Map<String, dynamic> result = {
+            'name': '${txtCtrl.text}',
+            'totalCount': 0,
+          };
+          context.read<ExerciseRepository>().addNewExercise(result);
           RoutePageManager.of(context).toExercises();
         },
         size: 42,

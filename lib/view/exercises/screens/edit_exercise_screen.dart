@@ -19,11 +19,17 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   final TextEditingController txtCtrl = TextEditingController();
   late bool editNameVisibility;
 
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      editNameVisibility = false;
+    });
+  }
+
   void _triggerVisibility() {
     setState(() {
-      editNameVisibility == null
-          ? editNameVisibility = true
-          : editNameVisibility = !editNameVisibility;
+      editNameVisibility = !editNameVisibility;
     });
   }
 
@@ -70,10 +76,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
                 Visibility(
                   replacement: const SizedBox.shrink(),
-                  visible:
-                      editNameVisibility == null || editNameVisibility == false
-                          ? false
-                          : true,
+                  visible: editNameVisibility,
                   child: PurpleTextField(
                     keyboard: TextInputType.text,
                     // autofocus: true,

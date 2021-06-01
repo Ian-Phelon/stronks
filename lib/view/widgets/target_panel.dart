@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../controller/controller.dart' show ExerciseRepository;
+// import 'package:provider/provider.dart';
+// import '../../controller/controller.dart' show ExerciseRepository;
 import '../../model/model.dart';
 
 class TargetPanel extends StatefulWidget {
@@ -30,7 +30,7 @@ class _TargetPanelState extends State<TargetPanel> {
   // List<Target> _addTargets(List<Target> targets)=>targets;
   @override
   Widget build(BuildContext context) {
-    final repoRead = context.read<ExerciseRepository>();
+    // final repoRead = context.read<ExerciseRepository>();
     // repoRead.selectExercise(exercise);
     // widget.config.
     // TargetPanelConfiguration config =
@@ -55,7 +55,7 @@ class _TargetPanelState extends State<TargetPanel> {
                 children: [
                   TargetButton(
                     title: 'Arms',
-                    target: widget.config?.arms,
+                    // target: widget.config?.arms,
                   ),
                   TargetButton(
                     title: 'Chest',
@@ -91,12 +91,12 @@ class TargetButton extends StatelessWidget {
   const TargetButton({
     Key? key,
     @required this.title,
-    @required this.target,
+    // @required this.target,
     //  @required this.targetFineIsVisible,
   }) : super(key: key);
 
   final String? title;
-  final Target? target;
+  // final Target? target;
   //final bool targetFineIsVisible;
 
   @override
@@ -127,7 +127,7 @@ class TargetButton extends StatelessWidget {
                       child: Center(
                         child: RichText(
                           text: TextSpan(
-                            text: target.runtimeType.toString(),
+                            text: 'boooo', //target.runtimeType.toString(),
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Montserrat',
@@ -197,16 +197,16 @@ class TargetButton extends StatelessWidget {
 
 class TargetPanelConfiguration {
   final BuildContext pageContext;
-  final Arms arms;
+  // final Arms arms;
   // final Chest chest;
   // final Back back;
   // final Core core;
   // final Legs legs;
-  final List<Target> targets = [];
+  // final List<Target> targets = [];
 
   TargetPanelConfiguration(
     this.pageContext,
-    this.arms,
+    // this.arms,
     // this.chest,
     // this.back,
     // this.core,
