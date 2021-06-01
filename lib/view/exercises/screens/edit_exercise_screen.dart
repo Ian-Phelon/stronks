@@ -37,7 +37,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   Widget build(BuildContext context) {
     final repoWatch = context.watch<ExerciseRepository>();
     final repoRead = context.read<ExerciseRepository>();
-    final exercise = repoRead.selectedExercise;
+    final exercise = repoWatch.selectedExercise;
     return Scaffold(
       appBar: AppBar(
         title: Text('${exercise?.name}'),
@@ -105,7 +105,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         size: 12.0,
                         icon: Icons.add,
                         onPressed: () {
-                          repoWatch.incrementExerciseCount(exercise!);
+                          print('PRESSING');
+                          repoWatch.incrementExerciseCount(exercise!, 1);
                         },
                         elevation: 4.0,
                       ),

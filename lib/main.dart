@@ -10,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   DataHelper(); //.initDB();
+  ExerciseRepository();
   runApp(
     MultiProvider(
       providers: [

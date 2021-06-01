@@ -36,7 +36,7 @@ Widget _body(BuildContext context) {
   //final List<Exercise>? repoList =
   context.read<ExerciseRepository>().fetchAndSetData();
   final List<Exercise> repoList =
-      context.watch<ExerciseRepository>().exerciseList;
+      context.watch<ExerciseRepository>().getExercises();
   final TutorialBar bar = TutorialBar(
     pageContext: context,
   );

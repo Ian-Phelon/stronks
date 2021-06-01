@@ -47,5 +47,5 @@ app.*.map.json
 
 
 # IAN: adding for now to keep off of github
-*.android/
-*.ios/
+android/
+ios/

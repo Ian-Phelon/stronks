@@ -4,15 +4,22 @@ import 'package:sqflite/sqflite.dart';
 import '../model/model.dart' show Exercise;
 import '../controller/controller.dart' as db show DataHelper;
 
-class ExerciseRepository extends ChangeNotifier {
-  static final String table = 'exercise';
-  // Future<Database> dB = db.DataHelper.dbAccess.database;
-  static final dbHelper = db.DataHelper();
+const String table = 'exercise';
+final dbHelper = db.DataHelper();
 
-  List<Exercise> exerciseList = [];
+class ExerciseRepository extends ChangeNotifier {
+  ExerciseRepository._() {
+    fetchAndSetData();
+  }
+  static final ExerciseRepository _exerciseRepo = ExerciseRepository._();
+  factory ExerciseRepository() => _exerciseRepo;
+
+  static late List<Exercise> exerciseList;
   // int? _unnamedExerciseIndex;
 
   Exercise? selectedExercise;
+
+  List<Exercise> getExercises() => exerciseList;
 
   Future<void> fetchAndSetData() async {
     final dataList = await dbHelper.getDataForRepo(table);
@@ -58,10 +65,10 @@ class ExerciseRepository extends ChangeNotifier {
 
   void updateSelectedExerciseName(String e) {
     if (e == selectedExercise?.name || e == '') return;
-
-    // selectedExercise?.copyWith(name: e);
-    selectExercise(selectedExercise!);
-    // exercisesBox.putAt(selectedExercise.index, selectedExercise);
+    Exercise thisExercise =
+        Exercise(selectedExercise!.id, selectedExercise!.totalCount, e);
+    dbHelper.update(thisExercise, table);
+    selectExercise(thisExercise);
     notifyListeners();
   }
 
@@ -82,8 +89,13 @@ class ExerciseRepository extends ChangeNotifier {
   //   return onComplete;
   // }
 
-  void incrementExerciseCount(Exercise exercise) {
-    dbHelper.update(exercise, table);
+  Future<void> incrementExerciseCount(Exercise e, int bump) async {
+    if (e.id != selectedExercise!.id) return;
+    int i = selectedExercise!.totalCount! + bump;
+
+    Exercise thisExercise =
+        Exercise(selectedExercise!.id, i, selectedExercise!.name);
+    await dbHelper.update(thisExercise, table);
     notifyListeners();
   }
 

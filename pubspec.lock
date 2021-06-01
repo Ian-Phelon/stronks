@@ -79,7 +79,7 @@ packages:
     source: hosted
     version: "7.0.0"
   built_collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: built_collection
       url: "https://pub.dartlang.org"
@@ -303,6 +303,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   logging:
     dependency: transitive
     description:
@@ -588,6 +595,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  tekartik_common_utils:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: null_safety
+      resolved-ref: "75c10c885aa7b616e4531e6bc83922556acdd032"
+      url: "git://github.com/tekartik/common_utils.dart"
+    source: git
+    version: "0.11.5"
   term_glyph:
     dependency: transitive
     description:
