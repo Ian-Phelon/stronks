@@ -1,32 +1,33 @@
 import 'dart:convert';
 
-abstract class ExerciseModel {
-  ExerciseModel(
-      {this.id,
-      this.totalCount,
-      this.name,
-      this.countForSets,
-      this.targets,
-      this.resistance,
-      this.equipment,
-      this.steps,
-      this.style,
-      this.notes});
-  final int? id;
-  final int? totalCount;
-  final String? name;
-  final int? countForSets;
-  final String? targets;
-  final int? resistance;
-  final String? equipment;
-  final int? steps;
-  final String? style;
-  final String? notes;
+// abstract class ExerciseModel {
+//   ExerciseModel(
+//       {this.id,
+//       this.totalCount,
+//       this.name,
+//       this.countForSets,
+//       this.targets,
+//       this.resistance,
+//       this.equipment,
+//       this.steps,
+//       this.style,
+//       this.notes});
+//   final int? id;
+//   final int? totalCount;
+//   final String? name;
+//   final int? countForSets;
+//   final String? targets;
+//   final int? resistance;
+//   final String? equipment;
+//   final int? steps;
+//   final String? style;
+//   final String? notes;
 
-  Map<String, bool> mapTargets();
-}
+//   Map<String, bool> mapTargets();
+// }
 
-class Exercise extends ExerciseModel {
+class Exercise {
+  // extends ExerciseModel {
   final int? id;
   int? totalCount;
   String? name;
@@ -52,7 +53,7 @@ class Exercise extends ExerciseModel {
     totalCount = totalCount ?? 0;
     name = name ?? '';
     countForSets = countForSets ?? 0;
-    targets = targets ?? '';
+    targets = targets ?? 'legsTargetUpper';
     resistance = resistance ?? 0;
     equipment = equipment ?? '';
     steps = steps ?? 0;
@@ -121,12 +122,10 @@ class Exercise extends ExerciseModel {
   factory Exercise.fromJson(String source) =>
       Exercise.fromMap(json.decode(source));
 
-  @override
   String toString() {
     return 'Exercise(id: $id, totalCount: $totalCount, name: $name, countForSets: $countForSets, targets: $targets, resistance: $resistance, equipment: $equipment, steps: $steps, style: $style, notes: $notes)';
   }
 
-  @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -143,7 +142,6 @@ class Exercise extends ExerciseModel {
         other.notes == notes;
   }
 
-  @override
   int get hashCode {
     return id.hashCode ^
         totalCount.hashCode ^
@@ -157,14 +155,53 @@ class Exercise extends ExerciseModel {
         notes.hashCode;
   }
 
-  @override
-  Map<String, bool> mapTargets() {
-    // if(targets==null)return;
-    Map<String, bool> parsedTargets = {};
-    targets!.contains('armsTargetInner')
-        ? parsedTargets.addAll(<String, bool>{'armsTargetInner': true})
-        : parsedTargets.addAll(<String, bool>{'armsTargetInner': false});
+  Map<String, bool> constructTargetMap() {
+    final Set<String> targetSet = this.targetSet();
+    final List<String> allTargets = _keys;
+    bool isTargeted(String key) => targetSet.contains(key);
 
+    Map<String, bool> parsedTargets = Map<String, bool>();
+    for (var i = 0; i < allTargets.length; i++) {
+      String key = allTargets[i];
+      bool targeted = isTargeted(key);
+      parsedTargets.addAll({key: targeted});
+    }
+    // Map<String, bool> parsedTargets = Map<String, bool>();
+    // this.targets!.contains('armsTargetInner')
+    //     ? parsedTargets.addAll(<String, bool>{'armsTargetInner': true})
+    //     : parsedTargets.addAll(<String, bool>{'armsTargetInner': false});
+    print(parsedTargets);
     return parsedTargets;
   }
+
+  Set<String> targetSet() {
+    Set<String> setOfTargets = {};
+    this.targets!.trim();
+    setOfTargets.addAll(this.targets!.split(r', '));
+    print(setOfTargets.length);
+    return setOfTargets;
+  }
 }
+
+const List<String> _keys = [
+  'armsTargetInner',
+  'armsTargetOuter',
+  'armsTargetUpper',
+  'armsTargetLower',
+  'chestTargetInner',
+  'chestTargetOuter',
+  'chestTargetUpper',
+  'chestTargetLower',
+  'backTargetInner',
+  'backTargetOuter',
+  'backTargetUpper',
+  'backTargetLower',
+  'coreTargetInner',
+  'coreTargetOuter',
+  'coreTargetUpper',
+  'coreTargetLower',
+  'legsTargetInner',
+  'legsTargetOuter',
+  'legsTargetUpper',
+  'legsTargetLower',
+];

@@ -27,6 +27,12 @@ class ExerciseRepository extends ChangeNotifier {
     return exerciseList;
   }
 
+  /// dev only
+  Set<String> targetSet(Exercise e) => e.targetSet();
+  Map<String, bool> targetMap(Exercise e) => e.constructTargetMap();
+
+  ///
+
   Future<void> fetchAndSetData() async {
     final dataList = await dbHelper.getDataForRepo(table);
     List<Exercise> convertedList = dataList

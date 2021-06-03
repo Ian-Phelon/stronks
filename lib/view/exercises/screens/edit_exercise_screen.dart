@@ -35,16 +35,23 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repoWatch = context.watch<ExerciseRepository>();
+    final repo = context.watch<ExerciseRepository>();
     // final repoRead = context.read<ExerciseRepository>();
-    final exercise = repoWatch.selectedExercise!;
-    final TargetPanel targetPanel = TargetPanel(
-      pageContext: context,
-      exercise: exercise,
-    );
+    final exercise = repo.selectedExercise!;
+    // final TargetPanel targetPanel = TargetPanel(
+    //   pageContext: context,
+    //   exercise: exercise,
+    // );
     return Scaffold(
       appBar: AppBar(
         title: Text('${exercise.name}'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                repo.targetMap(exercise);
+              },
+              icon: const Icon(Icons.menu))
+        ],
       ),
       body: GestureDetector(
         onTap: () {},
@@ -88,7 +95,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       txtCtrl.text = value;
                     },
                     onSubmitted: (value) {
-                      repoWatch.updateSelectedExerciseName(txtCtrl.text);
+                      repo.updateSelectedExerciseName(txtCtrl.text);
                       _triggerVisibility();
                     },
                   ),
@@ -109,16 +116,16 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         size: 12.0,
                         icon: Icons.add,
                         onPressed: () {
-                          repoWatch.incrementExerciseCount(exercise, 1);
+                          repo.incrementExerciseCount(exercise, 1);
                         },
                         elevation: 4.0,
                       ),
                       CounterRow(countOne: () {
-                        repoWatch.incrementExerciseCount(exercise, 1);
+                        repo.incrementExerciseCount(exercise, 1);
                       }, countFive: () {
-                        repoWatch.incrementExerciseCount(exercise, 5);
+                        repo.incrementExerciseCount(exercise, 5);
                       }, countTen: () {
-                        repoWatch.incrementExerciseCount(exercise, 10);
+                        repo.incrementExerciseCount(exercise, 10);
                       })
                     ],
                   ),
