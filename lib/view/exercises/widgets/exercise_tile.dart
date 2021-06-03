@@ -9,7 +9,7 @@ import 'widgets.dart';
 class ExerciseTile extends StatelessWidget {
   const ExerciseTile({
     Key? key,
-    required this.exercise,
+    @required this.exercise,
   }) : super(key: key);
   final Exercise? exercise;
   @override

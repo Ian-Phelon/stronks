@@ -12,11 +12,17 @@ class ExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final repoRead = context.read<ExerciseRepository>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(runtimeType.toString()),
+        actions: [
+          IconButton(
+              onPressed: () {
+                final ok = context.read<ExerciseRepository>().getExercises();
+                print(ok.toString());
+              },
+              icon: Icon(Icons.menu))
+        ],
       ),
       backgroundColor: colorExercisesBG,
       body: _body(context),
@@ -33,38 +39,20 @@ class ExercisesScreen extends StatelessWidget {
 }
 
 Widget _body(BuildContext context) {
-  //final List<Exercise>? repoList =
   context.read<ExerciseRepository>().fetchAndSetData();
   final List<Exercise> repoList =
       context.watch<ExerciseRepository>().getExercises();
   final TutorialBar bar = TutorialBar(
     pageContext: context,
   );
-  Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
-        exercise: exercise,
-      );
-
-  ///DEV PURPOSES ONLY, PLEASE DELETE
-  final Widget yourBoat = Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Expanded(child: bar),
-      GestureDetector(
-        child: TextButton(
-          onPressed: () {
-            context.read<ExerciseRepository>().deleteExerciseList();
-          },
-          child: Text('delete'),
-        ),
-      ),
-    ],
-  );
+  Widget _tile(BuildContext context, Exercise exercise) =>
+      ExerciseTile(exercise: exercise);
 
   return CustomScrollView(
     //shrinkWrap: true,
     slivers: [
       SliverToBoxAdapter(
-        child: yourBoat,
+        child: bar,
       ),
       SliverList(
         delegate: SliverChildBuilderDelegate(
@@ -75,10 +63,7 @@ Widget _body(BuildContext context) {
             return _tile(
               context,
               repoList[index],
-            ); //tile.exercise = repoList[index];
-            // return ExerciseTile(
-            //   exercise: repoList[index],
-            // );
+            );
           },
           childCount: repoList.isEmpty ? 1 : repoList.length,
           //repoList.isEmpty ? 1 : repoList.length,

@@ -5,13 +5,11 @@ import '../../model/model.dart';
 
 class TargetPanel extends StatefulWidget {
   final BuildContext? pageContext;
-  // final Exercise exercise;
-  final TargetPanelConfiguration? config;
+  final Exercise? exercise;
   const TargetPanel({
     Key? key,
     @required this.pageContext,
-    // @required this.exercise,
-    this.config,
+    this.exercise,
   }) : super(key: key);
   @override
   _TargetPanelState createState() => _TargetPanelState();
@@ -20,14 +18,24 @@ class TargetPanel extends StatefulWidget {
 class _TargetPanelState extends State<TargetPanel> {
   // _TargetPanelState(this.exercise);
   // final Exercise exercise;
-  // bool armsVisiblity;
-  // bool chestVisibility;
-  // bool backVisibility;
-  // bool coreVisibility;
-  // bool legsVisibility;
+  late List<bool> armsTargeted;
+  late List<bool> chestTargeted;
+  late List<bool> backTargeted;
+  late List<bool> coreTargeted;
+  late List<bool> legsTargeted;
 
-  //Arms arms = Arms();
-  // List<Target> _addTargets(List<Target> targets)=>targets;
+  @override
+  void initState() {
+    super.initState();
+    _mapTargets();
+  }
+
+  void _mapTargets() {
+    if (widget.exercise == null) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // final repoRead = context.read<ExerciseRepository>();
@@ -36,157 +44,146 @@ class _TargetPanelState extends State<TargetPanel> {
     // TargetPanelConfiguration config =
     //     TargetPanelConfiguration(widget.pageContext);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: BorderSide(
-            width: 1.2,
-            color: Colors.black,
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TargetTile(
+            title: 'Arms',
+            // target: widget.config?.arms,
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TargetButton(
-                    title: 'Arms',
-                    // target: widget.config?.arms,
-                  ),
-                  TargetButton(
-                    title: 'Chest',
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TargetButton(
-                    title: 'Back',
-                  ),
-                  TargetButton(
-                    title: 'Core',
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: TargetButton(
-                  title: 'Legs',
-                ),
-              ),
-            ],
+          TargetTile(
+            title: 'Chest',
           ),
-        ),
+          TargetTile(
+            title: 'Back',
+          ),
+          //  exercise = null ? TargetTile(
+          //     title: 'Core'):TargetTile.withExercise(title: title, targetFine: targetFine);
+          TargetTile(title: 'Core'),
+          TargetTile(
+            title: 'Legs',
+          ),
+        ],
       ),
     );
   }
 }
 
-class TargetButton extends StatelessWidget {
-  const TargetButton({
-    Key? key,
-    @required this.title,
-    // @required this.target,
-    //  @required this.targetFineIsVisible,
-  }) : super(key: key);
+class TargetTile extends StatefulWidget {
+  const TargetTile({Key? key, @required this.title, this.targetFine})
+      : super(key: key);
 
   final String? title;
-  // final Target? target;
-  //final bool targetFineIsVisible;
+  final List<bool>? targetFine;
+
+  @override
+  _TargetTileState createState() => _TargetTileState();
+}
+
+class _TargetTileState extends State<TargetTile> {
+  late bool isTargeted;
+  late bool? targetInner;
+  late bool? targetOuter;
+  late bool? targetUpper;
+  late bool? targetLower;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      ///
+      isTargeted = false;
+      // super.widget.targetFine == null
+      //     ? targetInner = true
+      //     : targetInner = super.widget.targetFine!.containsKey('targetInner');
+    });
+  }
+
+  void _triggerVisibility() {
+    setState(() {
+      isTargeted = !isTargeted;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      alignment: Alignment.center,
       padding: const EdgeInsets.all(8.0),
-      child: Column(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          ///  targetFineRow here
-          Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: 12,
-                  right: 12,
-                  child: Material(
-                    color: Colors.white,
-                    shape: ContinuousRectangleBorder(
-                      side: BorderSide(
-                        width: 4,
-                        color: Colors.black,
+          Positioned(
+            left: 12,
+            right: isTargeted == true ? 12 : null,
+            child: Material(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  width: 4,
+                  color: Colors.black,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 33,
+                    ),
+                    Text(
+                      '${widget.title}',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'boooo', //target.runtimeType.toString(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          textScaleFactor: 1,
-                        ),
+                    Visibility(
+                      visible: isTargeted,
+                      replacement: const SizedBox.shrink(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _targetFineIcon(Icons.gps_fixed, targetInner!),
+                          _targetFineIcon(Icons.all_out, targetOuter!),
+                          _targetFineIcon(
+                              Icons.keyboard_arrow_up, targetUpper!),
+                          _targetFineIcon(
+                              Icons.keyboard_arrow_down, targetLower!),
+                        ],
                       ),
-                    ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                _triggerVisibility();
+              },
+              child: Material(
+                shape: CircleBorder(
+                  side: BorderSide(
+                    width: 6,
+                    color: Colors.black,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Material(
-                      shape: CircleBorder(
-                        side: BorderSide(
-                          width: 6,
-                          color: Colors.black,
-                        ),
-                      ),
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Icon(
-                          Icons.gps_fixed_outlined,
-                        ),
-                      ),
-                    ),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(11.0),
+                  child: Icon(
+                    Icons.check,
+                    size: 29,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Material(
-                      color: Colors.white,
-                      shape: CircleBorder(
-                        side: BorderSide(
-                          width: 6,
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Icon(
-                          Icons.check,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
@@ -195,29 +192,15 @@ class TargetButton extends StatelessWidget {
   }
 }
 
-class TargetPanelConfiguration {
-  final BuildContext pageContext;
-  // final Arms arms;
-  // final Chest chest;
-  // final Back back;
-  // final Core core;
-  // final Legs legs;
-  // final List<Target> targets = [];
-
-  TargetPanelConfiguration(
-    this.pageContext,
-    // this.arms,
-    // this.chest,
-    // this.back,
-    // this.core,
-    // this.legs,
+Widget _targetFineIcon(IconData iconData, bool isSelected) {
+  bool selector = isSelected;
+  return Padding(
+    padding: const EdgeInsets.all(2.0),
+    child: GestureDetector(
+      onTap: () {
+        selector = !selector;
+      },
+      child: Opacity(opacity: isSelected ? 1 : 0.5, child: Icon(iconData)),
+    ),
   );
-  void acquireTargets() {
-    pageContext.visitAncestorElements((e) => e.runtimeType == Exercise);
-  }
-  // void addArms() => targets.add(Arms(
-  //     targetInnerArm: true,
-  //     targetOuterArm: true,
-  //     targetLowerArm: true,
-  //     targetUpperArm: true));
 }

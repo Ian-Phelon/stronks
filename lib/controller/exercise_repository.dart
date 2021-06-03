@@ -15,28 +15,33 @@ class ExerciseRepository extends ChangeNotifier {
   factory ExerciseRepository() => _exerciseRepo;
 
   static late List<Exercise> exerciseList;
-  // int? _unnamedExerciseIndex;
+  int? _unnamedExerciseIndex;
+  int? get unnamedExerciseIndex => this._unnamedExerciseIndex;
+
+  set unnamedExerciseIndex(int? value) => this._unnamedExerciseIndex = value;
 
   Exercise? selectedExercise;
 
-  List<Exercise> getExercises() => exerciseList;
+  List<Exercise> getExercises() {
+    fetchAndSetData();
+    return exerciseList;
+  }
 
   Future<void> fetchAndSetData() async {
     final dataList = await dbHelper.getDataForRepo(table);
     List<Exercise> convertedList = dataList
         .map<Exercise>(
           (item) => Exercise(
-            item['id'], item['totalCount'], item['name'],
-            // id: item['id'],
-            // name: item['title'],
-            // totalCount: item['totalCount'],
-            // countForSets: item['countForSets'],
-            // targets: item['targets'],
-            // equipment: item['equipment'],
-            // notes: item['notes'],
-            // resistance: item['resistance'],
-            // steps: item['steps'],
-            // style: item['style'],
+            id: item['id'],
+            totalCount: item['totalCount'],
+            name: item['name'],
+            countForSets: item['countForSets'],
+            targets: item['targets'],
+            equipment: item['equipment'],
+            notes: item['notes'],
+            resistance: item['resistance'],
+            steps: item['steps'],
+            style: item['style'],
           ),
         )
         .toList();
@@ -46,16 +51,16 @@ class ExerciseRepository extends ChangeNotifier {
 
   Future<void> addNewExercise(Map<String, dynamic> e) async {
     final Database dB = await dbHelper.database;
-    // final Exercise x = Exercise.fromMap(e);
-    // x.name = e.values.singleWhere((element) => e.containsKey('name') == true);
-    // print('${x.name}');
-    // print('${x.runtimeType}');
+    Exercise x = Exercise.fromMap(e);
+    if (x.name == '' || x.name == null) {
+      Exercise y = x.copyWith(
+        name: _userSkippedName(unnamedExerciseIndex),
+      );
+      x = y;
+    }
 
-    await dB.insert(table, e);
+    await dB.insert(table, x.toMap());
     await fetchAndSetData();
-
-    /////////////////
-    print(exerciseList);
   }
 
   void selectExercise(Exercise e) {
@@ -63,43 +68,44 @@ class ExerciseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedExerciseName(String e) {
+  Future<void> updateSelectedExerciseName(String e) async {
     if (e == selectedExercise?.name || e == '') return;
-    Exercise thisExercise =
-        Exercise(selectedExercise!.id, selectedExercise!.totalCount, e);
-    dbHelper.update(thisExercise, table);
+    Exercise thisExercise = Exercise(
+        id: selectedExercise!.id,
+        totalCount: selectedExercise!.totalCount,
+        name: e);
+    await dbHelper.update(thisExercise, table);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
-  void removeExerciseUpdateView(Exercise e) {
-    //  exercisesBox.deleteAt(e.index);
-
+  Future<void> removeExerciseUpdateView(Exercise e) async {
+    await dbHelper.delete(e.id!, table);
     notifyListeners();
   }
-
-  // String _userSkippedName(int? id) {
-  //   if (id == null)
-  //     _unnamedExerciseIndex = 1;
-  //   else {
-  //     _unnamedExerciseIndex = id + 1;
-  //   }
-  //   notifyListeners();
-  //   String onComplete = 'Unnamed Exercise #${_unnamedExerciseIndex!}';
-  //   return onComplete;
-  // }
 
   Future<void> incrementExerciseCount(Exercise e, int bump) async {
     if (e.id != selectedExercise!.id) return;
     int i = selectedExercise!.totalCount! + bump;
 
-    Exercise thisExercise =
-        Exercise(selectedExercise!.id, i, selectedExercise!.name);
+    Exercise thisExercise = e.copyWith(totalCount: i);
     await dbHelper.update(thisExercise, table);
+    selectExercise(thisExercise);
     notifyListeners();
   }
 
-  Future<void> deleteExerciseList() async {
+  String _userSkippedName(int? id) {
+    if (id == null)
+      unnamedExerciseIndex = 1;
+    else {
+      unnamedExerciseIndex = id + 1;
+      notifyListeners();
+    }
+    String onComplete = 'Unnamed Exercise #${_unnamedExerciseIndex!}';
+    return onComplete;
+  }
+
+  Future<void> dropDB() async {
     dbHelper.dropDB();
     notifyListeners();
   }

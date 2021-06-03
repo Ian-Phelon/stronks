@@ -4,7 +4,7 @@ import 'package:stronks/controller/controller.dart';
 
 import '../widgets/widgets.dart';
 import '../../../constants.dart';
-import '../../widgets/widgets.dart' show TutorialBar;
+import '../../widgets/widgets.dart' show TutorialBar, TargetPanel, CounterRow;
 
 class EditExerciseScreen extends StatefulWidget {
   const EditExerciseScreen({
@@ -36,11 +36,15 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final repoWatch = context.watch<ExerciseRepository>();
-    final repoRead = context.read<ExerciseRepository>();
-    final exercise = repoWatch.selectedExercise;
+    // final repoRead = context.read<ExerciseRepository>();
+    final exercise = repoWatch.selectedExercise!;
+    final TargetPanel targetPanel = TargetPanel(
+      pageContext: context,
+      exercise: exercise,
+    );
     return Scaffold(
       appBar: AppBar(
-        title: Text('${exercise?.name}'),
+        title: Text('${exercise.name}'),
       ),
       body: GestureDetector(
         onTap: () {},
@@ -63,7 +67,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         width: 20.0,
                       ),
                       Text(
-                        '${exercise?.name}',
+                        '${exercise.name}',
                       ),
                       RoundIconButton(
                         size: 12.0,
@@ -84,7 +88,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       txtCtrl.text = value;
                     },
                     onSubmitted: (value) {
-                      repoRead.updateSelectedExerciseName(txtCtrl.text);
+                      repoWatch.updateSelectedExerciseName(txtCtrl.text);
                       _triggerVisibility();
                     },
                   ),
@@ -98,21 +102,28 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         width: 20.0,
                       ),
                       Text(
-                        '${exercise?.totalCount}',
+                        '${exercise.totalCount}',
                         style: TextStyle(fontSize: 26),
                       ),
                       RoundIconButton(
                         size: 12.0,
                         icon: Icons.add,
                         onPressed: () {
-                          print('PRESSING');
-                          repoWatch.incrementExerciseCount(exercise!, 1);
+                          repoWatch.incrementExerciseCount(exercise, 1);
                         },
                         elevation: 4.0,
                       ),
+                      CounterRow(countOne: () {
+                        repoWatch.incrementExerciseCount(exercise, 1);
+                      }, countFive: () {
+                        repoWatch.incrementExerciseCount(exercise, 5);
+                      }, countTen: () {
+                        repoWatch.incrementExerciseCount(exercise, 10);
+                      })
                     ],
                   ),
-                )
+                ),
+                // targetPanel,
               ],
             ),
           ],

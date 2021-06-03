@@ -6,20 +6,34 @@ import 'package:stronks/view/exercises/widgets/widgets.dart';
 
 import '../../../constants.dart';
 import '../../../controller/controller.dart';
-import '../../widgets/widgets.dart' show TutorialBar, TargetPanel;
+import '../../widgets/widgets.dart';
 
-class CreateExerciseScreen extends StatelessWidget {
+class CreateExerciseScreen extends StatefulWidget {
   const CreateExerciseScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController txtCtrl = TextEditingController();
+  _CreateExerciseScreenState createState() => _CreateExerciseScreenState();
+}
 
+class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
+  final TextEditingController txtCtrl = TextEditingController();
+  int? countForSets;
+  void setCountForSets(int i) {
+    setState(() {
+      countForSets = i;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    /// since this exercise hasn't been created yet, we probably dont need to pass context
     final TargetPanel targetPanel = TargetPanel(
       pageContext: context,
-      // exercise: createdExercise,
     );
-// var repoRead =
+
+    final TutorialBar tutorialBar = TutorialBar(
+      pageContext: context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Exercise'),
@@ -28,20 +42,21 @@ class CreateExerciseScreen extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           GradientBG(),
-          TutorialBar(
-            pageContext: context,
-          ),
+          tutorialBar,
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PurpleTextField(
-                keyboard: TextInputType.text,
-                onChanged: (value) => txtCtrl.text = value,
-                onSubmitted: (value) => txtCtrl.text = value,
-                // autofocus: true,
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: PurpleTextField(
+                  keyboard: TextInputType.text,
+                  onChanged: (value) => txtCtrl.text = value,
+                  onSubmitted: (value) => txtCtrl.text = value,
+                  // autofocus: true,
+                ),
               ),
               //  TargetPanel(),
-              targetPanel,
+              // targetPanel,
             ],
           ),
         ],
@@ -53,6 +68,7 @@ class CreateExerciseScreen extends StatelessWidget {
           Map<String, dynamic> result = {
             'name': '${txtCtrl.text}',
             'totalCount': 0,
+            'countForSets': countForSets,
           };
           context.read<ExerciseRepository>().addNewExercise(result);
           RoutePageManager.of(context).toExercises();
@@ -63,11 +79,10 @@ class CreateExerciseScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-// PurpleTextField(
-//   keyboard: TextInputType.text,
-//   onChanged: (value) => txtCtrl.text = value,
-//   onSubmitted: (value) => txtCtrl.text = value,
-//   // autofocus: true,
-// ),
+  @override
+  void dispose() {
+    this.txtCtrl.dispose();
+    super.dispose();
+  }
+}

@@ -5,7 +5,7 @@ import 'package:stronks/view/view.dart';
 
 import '../routes/pages/pages.dart';
 import '../../model/model.dart';
-// import '../controller.dart';
+import '../controller.dart';
 
 class StronksRouterDelegate extends RouterDelegate<StronksPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<StronksPath> {
@@ -95,7 +95,10 @@ class RoutePageManager extends ChangeNotifier {
       );
       _pages.add(
         MaterialPage(
-          child: ExercisesScreen(),
+          child: Consumer<ExerciseRepository>(
+            builder: (_, repo, __) => ExercisesScreen(),
+          ),
+          // child: ExercisesScreen(),),
           // unique?
           key: UniqueKey(),
           name: '/exercises',

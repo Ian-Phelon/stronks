@@ -32,36 +32,68 @@ class SquareButton extends StatelessWidget {
 class RoundIconButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
-  final Function? onPressedFunction;
   final double? size;
   final double? elevation;
+  final int? countAmount;
+  final bool isCounter;
+  // final Row? iconRow;
   //final Color color;
 
-  const RoundIconButton(
-      {Key? key,
-      @required this.icon,
-      @required this.onPressed,
-      @required this.size,
-      @required this.elevation,
-      this.onPressedFunction})
-      : super(key: key);
+  const RoundIconButton({
+    Key? key,
+    @required this.icon,
+    @required this.onPressed,
+    @required this.size,
+    @required this.elevation,
+    this.countAmount = 0,
+    this.isCounter = false,
+  }) : super(key: key);
+  const RoundIconButton.asCounter({
+    Key? key,
+    this.icon,
+    @required this.onPressed,
+    @required this.size,
+    @required this.elevation,
+    @required this.countAmount,
+    this.isCounter = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      constraints: BoxConstraints(
-        minHeight: size!,
-        minWidth: size!,
-      ),
-      child: Icon(
-        icon,
-        size: size,
-      ),
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      onPressed: onPressed,
-      shape: CircleBorder(),
-      fillColor: Colors.blueGrey,
-      elevation: elevation!,
+      child: RawMaterialButton(
+        constraints: BoxConstraints(
+          minHeight: size!,
+          minWidth: size!,
+        ),
+        child: isCounter
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(Icons.add),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Text(
+                      '$countAmount',
+                    ),
+                  ],
+                ),
+              )
+            : Icon(
+                icon,
+                size: size,
+              ),
+        padding: const EdgeInsets.all(8.0),
+        onPressed: onPressed,
+        shape: CircleBorder(),
+        fillColor: Colors.blueGrey,
+        elevation: elevation!,
+      ),
     );
   }
 }

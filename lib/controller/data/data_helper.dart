@@ -117,9 +117,8 @@ class DataHelper extends ChangeNotifier {
   // column values will be used to update the row.
   Future<int> update(Exercise exercise, String table) async {
     Database db = await _dbAccess.database;
-    int id = exercise.toMap()['id'];
-    return await db
-        .update(table, exercise.toMap(), where: 'id = ?', whereArgs: [id]);
+    return await db.update(table, exercise.toMap(),
+        where: 'id = ?', whereArgs: [exercise.id]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is
