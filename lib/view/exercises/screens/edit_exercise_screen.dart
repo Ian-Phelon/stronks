@@ -48,7 +48,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                repo.targetMap(exercise);
+                //repo.targetMap(exercise);
               },
               icon: const Icon(Icons.menu))
         ],

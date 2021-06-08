@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/model.dart' show Exercise;
-import '../controller/controller.dart' as db show DataHelper;
+import '../model/model.dart';
+import '../controller/controller.dart';
 
 const String table = 'exercise';
-final dbHelper = db.DataHelper();
+final _dbHelper = DataHelper();
 
 class ExerciseRepository extends ChangeNotifier {
   ExerciseRepository._() {
@@ -13,12 +13,9 @@ class ExerciseRepository extends ChangeNotifier {
   }
   static final ExerciseRepository _exerciseRepo = ExerciseRepository._();
   factory ExerciseRepository() => _exerciseRepo;
+  static final ExerciseHelper eHelper = ExerciseHelper();
 
   static late List<Exercise> exerciseList;
-  int? _unnamedExerciseIndex;
-  int? get unnamedExerciseIndex => this._unnamedExerciseIndex;
-
-  set unnamedExerciseIndex(int? value) => this._unnamedExerciseIndex = value;
 
   Exercise? selectedExercise;
 
@@ -27,14 +24,9 @@ class ExerciseRepository extends ChangeNotifier {
     return exerciseList;
   }
 
-  /// dev only
-  Set<String> targetSet(Exercise e) => e.targetSet();
-  Map<String, bool> targetMap(Exercise e) => e.constructTargetMap();
-
-  ///
-
+  ///  LOOK UP LIST KEY SQL STATEMENTS
   Future<void> fetchAndSetData() async {
-    final dataList = await dbHelper.getDataForRepo(table);
+    final dataList = await _dbHelper.getDataForRepo(table);
     List<Exercise> convertedList = dataList
         .map<Exercise>(
           (item) => Exercise(
@@ -56,16 +48,14 @@ class ExerciseRepository extends ChangeNotifier {
   }
 
   Future<void> addNewExercise(Map<String, dynamic> e) async {
-    final Database dB = await dbHelper.database;
-    Exercise x = Exercise.fromMap(e);
-    if (x.name == '' || x.name == null) {
-      Exercise y = x.copyWith(
-        name: _userSkippedName(unnamedExerciseIndex),
-      );
-      x = y;
-    }
+    final Database dB = await _dbHelper.database;
 
-    await dB.insert(table, x.toMap());
+    e.update(
+      'name',
+      (value) => value == '' ? _userSkippedName() : value,
+    );
+
+    await dB.insert(table, e);
     await fetchAndSetData();
   }
 
@@ -80,13 +70,13 @@ class ExerciseRepository extends ChangeNotifier {
         id: selectedExercise!.id,
         totalCount: selectedExercise!.totalCount,
         name: e);
-    await dbHelper.update(thisExercise, table);
+    await _dbHelper.update(thisExercise, table);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
   Future<void> removeExerciseUpdateView(Exercise e) async {
-    await dbHelper.delete(e.id!, table);
+    await _dbHelper.delete(e.id!, table);
     notifyListeners();
   }
 
@@ -95,24 +85,19 @@ class ExerciseRepository extends ChangeNotifier {
     int i = selectedExercise!.totalCount! + bump;
 
     Exercise thisExercise = e.copyWith(totalCount: i);
-    await dbHelper.update(thisExercise, table);
+    await _dbHelper.update(thisExercise, table);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
-  String _userSkippedName(int? id) {
-    if (id == null)
-      unnamedExerciseIndex = 1;
-    else {
-      unnamedExerciseIndex = id + 1;
-      notifyListeners();
-    }
-    String onComplete = 'Unnamed Exercise #${_unnamedExerciseIndex!}';
+  String _userSkippedName() {
+    int len = exerciseList.length + 1;
+    String onComplete = 'Unnamed Exercise #$len';
     return onComplete;
   }
 
   Future<void> dropDB() async {
-    dbHelper.dropDB();
+    _dbHelper.dropDB();
     notifyListeners();
   }
 }

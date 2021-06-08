@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' show ReadContext;
+import 'package:provider/provider.dart';
 import 'package:stronks/controller/exercise_repository.dart'
     show ExerciseRepository;
 import 'package:stronks/view/exercises/widgets/widgets.dart';
@@ -16,24 +16,22 @@ class CreateExerciseScreen extends StatefulWidget {
 }
 
 class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
-  final TextEditingController txtCtrl = TextEditingController();
   int? countForSets;
+  StringBuffer? targets;
   void setCountForSets(int i) {
     setState(() {
       countForSets = i;
     });
   }
 
+  final TextEditingController txtCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    /// since this exercise hasn't been created yet, we probably dont need to pass context
-    final TargetPanel targetPanel = TargetPanel(
-      pageContext: context,
-    );
-
+    final repo = context.watch<ExerciseRepository>();
     final TutorialBar tutorialBar = TutorialBar(
       pageContext: context,
     );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Exercise'),
@@ -69,8 +67,10 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
             'name': '${txtCtrl.text}',
             'totalCount': 0,
             'countForSets': countForSets,
+            //'targets': ,
           };
-          context.read<ExerciseRepository>().addNewExercise(result);
+          // context.read<ExerciseRepository>()
+          repo.addNewExercise(result);
           RoutePageManager.of(context).toExercises();
         },
         size: 42,

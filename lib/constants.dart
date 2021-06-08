@@ -1,5 +1,44 @@
 import 'package:flutter/material.dart';
 
+/// Easy member access for a lot of common strings
+const String kTargetArmsInner = 'targetArmsInner';
+const String kTargetArmsOuter = 'targetArmsOuter';
+const String kTargetArmsUpper = 'targetArmsUpper';
+const String kTargetArmsLower = 'targetArmsLower';
+const String kTargetChestInner = 'targetChestInner';
+const String kTargetChestOuter = 'targetChestOuter';
+const String kTargetChestUpper = 'targetChestUpper';
+const String kTargetChestLower = 'targetChestLower';
+const String kTargetBackInner = 'targetBackInner';
+const String kTargetBackOuter = 'targetBackOuter';
+const String kTargetBackUpper = 'targetBackUpper';
+const String kTargetBackLower = 'targetBackLower';
+const String kTargetCoreInner = 'targetCoreInner';
+const String kTargetCoreOuter = 'targetCoreOuter';
+const String kTargetCoreUpper = 'targetCoreUpper';
+const String kTargetCoreLower = 'targetCoreLower';
+const String kTargetLegsInner = 'targetLegsInner';
+const String kTargetLegsOuter = 'targetLegsOuter';
+const String kTargetLegsUpper = 'targetLegsUpper';
+const String kTargetLegsLower = 'targetLegsLower';
+const String kEquipBarbell = 'equipBarbell';
+const String kEquipDumbell = 'equipDumbell';
+const String kEquipMat = 'equipMat';
+const String kEquipBand = 'equipBand';
+const String kEquipMachineCardio = 'equipMachineCardio';
+const String kEquipMachineStrength = 'equipMachineStrength';
+const String kEquipBench = 'equipBench';
+const String kEquipPullupBar = 'equipPullupBar';
+const String kEquipRaisedPlatform = 'equipRaisedPlatform';
+const String kEquipWeight = 'equipWeight';
+const String kStyleAerobic = 'styleAerobic';
+const String kStyleAnaerobic = 'styleAnaerobic';
+const String kStyleWarmup = 'styleWarmup';
+const String kStyleStretch = 'styleStretch';
+const String kStyleStrength = 'styleStrength';
+const String kStyleIsometric = 'styleIsometric';
+const String kStyleCardio = 'styleCardio';
+
 const colorPurpleDark = Color(0xff6654d1);
 const colorPurpleLight = Color(0xff9286db);
 

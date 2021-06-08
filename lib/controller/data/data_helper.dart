@@ -106,6 +106,7 @@ class DataHelper extends ChangeNotifier {
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
+
   // raw SQL commands. This method uses a raw query to give the row count.
   Future<int?> queryRowCount(String table) async {
     Database db = await _dbAccess.database;

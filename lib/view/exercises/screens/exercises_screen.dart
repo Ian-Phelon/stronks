@@ -18,6 +18,7 @@ class ExercisesScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
+                /// TODO: delete dev print
                 final ok = context.read<ExerciseRepository>().getExercises();
                 print(ok.toString());
               },

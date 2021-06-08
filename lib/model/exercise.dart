@@ -1,33 +1,6 @@
 import 'dart:convert';
 
-// abstract class ExerciseModel {
-//   ExerciseModel(
-//       {this.id,
-//       this.totalCount,
-//       this.name,
-//       this.countForSets,
-//       this.targets,
-//       this.resistance,
-//       this.equipment,
-//       this.steps,
-//       this.style,
-//       this.notes});
-//   final int? id;
-//   final int? totalCount;
-//   final String? name;
-//   final int? countForSets;
-//   final String? targets;
-//   final int? resistance;
-//   final String? equipment;
-//   final int? steps;
-//   final String? style;
-//   final String? notes;
-
-//   Map<String, bool> mapTargets();
-// }
-
 class Exercise {
-  // extends ExerciseModel {
   final int? id;
   int? totalCount;
   String? name;
@@ -35,7 +8,7 @@ class Exercise {
   String? targets;
   int? resistance;
   String? equipment;
-  int? steps;
+  String? steps;
   String? style;
   String? notes;
 
@@ -51,12 +24,12 @@ class Exercise {
       this.style,
       this.notes}) {
     totalCount = totalCount ?? 0;
-    name = name ?? '';
+    // name = name ?? '';
     countForSets = countForSets ?? 0;
-    targets = targets ?? 'legsTargetUpper';
+    targets = targets ?? '';
     resistance = resistance ?? 0;
     equipment = equipment ?? '';
-    steps = steps ?? 0;
+    steps = steps ?? '';
     style = style ?? '';
     notes = notes ?? '';
   }
@@ -69,7 +42,7 @@ class Exercise {
     String? targets,
     int? resistance,
     String? equipment,
-    int? steps,
+    String? steps,
     String? style,
     String? notes,
   }) {
@@ -116,7 +89,6 @@ class Exercise {
       notes: map['notes'],
     );
   }
-
   String toJson() => json.encode(toMap());
 
   factory Exercise.fromJson(String source) =>
@@ -154,54 +126,4 @@ class Exercise {
         style.hashCode ^
         notes.hashCode;
   }
-
-  Map<String, bool> constructTargetMap() {
-    final Set<String> targetSet = this.targetSet();
-    final List<String> allTargets = _keys;
-    bool isTargeted(String key) => targetSet.contains(key);
-
-    Map<String, bool> parsedTargets = Map<String, bool>();
-    for (var i = 0; i < allTargets.length; i++) {
-      String key = allTargets[i];
-      bool targeted = isTargeted(key);
-      parsedTargets.addAll({key: targeted});
-    }
-    // Map<String, bool> parsedTargets = Map<String, bool>();
-    // this.targets!.contains('armsTargetInner')
-    //     ? parsedTargets.addAll(<String, bool>{'armsTargetInner': true})
-    //     : parsedTargets.addAll(<String, bool>{'armsTargetInner': false});
-    print(parsedTargets);
-    return parsedTargets;
-  }
-
-  Set<String> targetSet() {
-    Set<String> setOfTargets = {};
-    this.targets!.trim();
-    setOfTargets.addAll(this.targets!.split(r', '));
-    print(setOfTargets.length);
-    return setOfTargets;
-  }
 }
-
-const List<String> _keys = [
-  'armsTargetInner',
-  'armsTargetOuter',
-  'armsTargetUpper',
-  'armsTargetLower',
-  'chestTargetInner',
-  'chestTargetOuter',
-  'chestTargetUpper',
-  'chestTargetLower',
-  'backTargetInner',
-  'backTargetOuter',
-  'backTargetUpper',
-  'backTargetLower',
-  'coreTargetInner',
-  'coreTargetOuter',
-  'coreTargetUpper',
-  'coreTargetLower',
-  'legsTargetInner',
-  'legsTargetOuter',
-  'legsTargetUpper',
-  'legsTargetLower',
-];
