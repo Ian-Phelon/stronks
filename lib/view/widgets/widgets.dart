@@ -1,5 +1,5 @@
 export './buttons.dart';
-export './target_panel.dart';
+export 'aspect_tile.dart';
 export './login.dart';
 export './tutorial_bar.dart';
 export './signup.dart';

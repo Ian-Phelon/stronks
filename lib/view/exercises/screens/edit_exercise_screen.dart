@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/controller/controller.dart';
+import 'package:stronks/controller/controller.dart' show ExerciseRepository;
 
-import '../widgets/widgets.dart';
+import '../widgets/widgets.dart' show RoundIconButton;
 import '../../../constants.dart';
-import '../../widgets/widgets.dart' show TutorialBar, TargetPanel, CounterRow;
+import '../../widgets/widgets.dart' show TutorialBar, CounterRow;
 
 class EditExerciseScreen extends StatefulWidget {
   const EditExerciseScreen({
@@ -34,11 +34,18 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   }
 
   @override
+  void dispose() {
+    this.txtCtrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final repo = context.watch<ExerciseRepository>();
     // final repoRead = context.read<ExerciseRepository>();
     final exercise = repo.selectedExercise!;
-    // final TargetPanel targetPanel = TargetPanel(
+    // final AspectPanel targetPanel = AspectPanel(
     //   pageContext: context,
     //   exercise: exercise,
     // );

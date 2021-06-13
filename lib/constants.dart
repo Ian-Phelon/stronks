@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+enum Aspect {
+  targets,
+  equip,
+  style,
+  newExercise,
+}
+
 /// Easy member access for a lot of common strings
 const String kTargetArmsInner = 'targetArmsInner';
 const String kTargetArmsOuter = 'targetArmsOuter';
@@ -21,23 +28,26 @@ const String kTargetLegsInner = 'targetLegsInner';
 const String kTargetLegsOuter = 'targetLegsOuter';
 const String kTargetLegsUpper = 'targetLegsUpper';
 const String kTargetLegsLower = 'targetLegsLower';
-const String kEquipBarbell = 'equipBarbell';
-const String kEquipDumbell = 'equipDumbell';
-const String kEquipMat = 'equipMat';
-const String kEquipBand = 'equipBand';
-const String kEquipMachineCardio = 'equipMachineCardio';
-const String kEquipMachineStrength = 'equipMachineStrength';
-const String kEquipBench = 'equipBench';
-const String kEquipPullupBar = 'equipPullupBar';
-const String kEquipRaisedPlatform = 'equipRaisedPlatform';
-const String kEquipWeight = 'equipWeight';
-const String kStyleAerobic = 'styleAerobic';
-const String kStyleAnaerobic = 'styleAnaerobic';
-const String kStyleWarmup = 'styleWarmup';
-const String kStyleStretch = 'styleStretch';
-const String kStyleStrength = 'styleStrength';
-const String kStyleIsometric = 'styleIsometric';
-const String kStyleCardio = 'styleCardio';
+const String kEquipsBarbell = 'equipsBarbell';
+const String kEquipsDumbell = 'equipsDumbell';
+const String kEquipsMat = 'equipsMat';
+const String kEquipsBand = 'equipsBand';
+const String kEquipsMachineCardio = 'equipsMachineCardio';
+const String kEquipsMachineStrength = 'equipsMachineStrength';
+const String kEquipsBench = 'equipsBench';
+const String kEquipsPullupBar = 'equipsPullupBar';
+const String kEquipsRaisedPlatform = 'equipsRaisedPlatform';
+const String kEquipsWeight = 'equipsWeight';
+const String kStylesAerobic = 'styleAerobic';
+const String kStylesAnaerobic = 'styleAnaerobic';
+const String kStylesWarmup = 'styleWarmup';
+const String kStylesStretch = 'styleStretch';
+const String kStylesStrength = 'styleStrength';
+const String kStylesIsometric = 'styleIsometric';
+const String kStylesCardio = 'styleCardio';
+
+///it's 6 letters but 5th index??
+const int kAspectStringSkip = 5;
 
 const colorPurpleDark = Color(0xff6654d1);
 const colorPurpleLight = Color(0xff9286db);
@@ -54,6 +64,8 @@ class GradientBG extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,

@@ -24,7 +24,7 @@ class Exercise {
       this.style,
       this.notes}) {
     totalCount = totalCount ?? 0;
-    // name = name ?? '';
+    name = name ?? '';
     countForSets = countForSets ?? 0;
     targets = targets ?? '';
     resistance = resistance ?? 0;

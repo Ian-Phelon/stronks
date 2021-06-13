@@ -1,11 +1,12 @@
-// import '../model/model.dart' show Exercise;
 import '../constants.dart';
 
-/// methods to return parsed values for Exercise elements:
-/// TODO: steps**:
-///  TODO: notes
-/// TEMPLATE: eElemenForView(), eElementFromUser()///
-///
+void main() {
+  ExerciseHelper ok = ExerciseHelper();
+  //Exercise me = ok.newExerciseAspects();
+  print(ok.initializeAllAspects());
+}
+
+/// methods to return parsed values for Exercise elements
 class ExerciseHelper {
   ExerciseHelper._();
   static final ExerciseHelper exerciseHelper = ExerciseHelper._();
@@ -14,25 +15,32 @@ class ExerciseHelper {
 
   /// facilitates visual representation by returning an Exercise's targets, equipment, and style with boolean values
   Map<String, bool> eAspectForView({required String aspect}) {
-    var pattern = aspect.substring(0, 5);
+    final String pattern = aspect.length > 1 ? aspect.substring(0, 5) : '';
 
-    final Set<String> targetSet = _makeSet(exerciseAspect: aspect);
+    final Set<String> aspectSet = _makeSet(exerciseAspect: aspect);
+
     List<String> listVariableAspect() {
+      late final List<String> finalList;
+
       switch (pattern) {
         case r'target':
-          return _keys.targets;
-        case r'equip':
-          return _keys.equip;
-        case r'style':
-          return _keys.style;
-        case '':
-          return _keys.none;
+          finalList = _keys.targets;
+          break;
+        case r'equips':
+          finalList = _keys.equip;
+          break;
+        case r'styles':
+          finalList = _keys.style;
+          break;
+
         default:
-          return _keys.none;
+          finalList = _keys.none;
+          break;
       }
+      return finalList;
     }
 
-    bool contains(String key) => targetSet.contains(key);
+    bool contains(String key) => aspectSet.contains(key);
 
     Map<String, bool> parsedAspects = {};
 
@@ -52,7 +60,7 @@ class ExerciseHelper {
   }
 
   //
-  /// helper method for this.eTargetsForView()
+  /// helper method for this.eAspectsForView()
   Set<String> _makeSet({required String? exerciseAspect}) {
     Set<String> setFromView = {};
     exerciseAspect!.trim();
@@ -60,14 +68,39 @@ class ExerciseHelper {
     return setFromView;
   }
 
-  ///  Storage only accepts a string, not a Map<String,bool>. eTargetsFromUser()
+  ///  Storage only accepts a string, not a Map<String,bool>. eAspectFromUser()
   /// provides a string for repo to store
-  String eAspectFromUser(Map<String, bool> aspectFromUser) {
+  String eAspectToString(Map<String, bool> aspectFromUser) {
     var helper = StringBuffer();
     aspectFromUser.forEach((key, value) {
       value == true ? helper.write(key + ', ') : helper = helper;
     });
     return helper.toString();
+  }
+
+  /// List [0]:targets, [1]:equip, [2]:style
+  List<Map<String, bool>> initializeAllAspects() {
+    final List<Map<String, bool>> newExercise = [];
+    final Map<String, bool> targets = {};
+    final Map<String, bool> equips = {};
+    final Map<String, bool> styles = {};
+    for (var e in ExerciseKeys.keys.targets) {
+      final String key = e;
+      targets[key] = false;
+    }
+    for (var e in ExerciseKeys.keys.equip) {
+      final String key = e;
+
+      equips[key] = false;
+    }
+    for (var e in ExerciseKeys.keys.style) {
+      final String key = e;
+      styles[key] = false;
+    }
+    newExercise.add(targets);
+    newExercise.add(equips);
+    newExercise.add(styles);
+    return newExercise;
   }
 }
 
@@ -75,10 +108,8 @@ class ExerciseKeys {
   ExerciseKeys._();
   static final ExerciseKeys keys = ExerciseKeys._();
   factory ExerciseKeys() => keys;
-  List<String> none = [
-    '',
-  ];
-  List<String> targets = [
+  final List<String> none = [];
+  final List<String> targets = [
     kTargetArmsInner,
     kTargetArmsOuter,
     kTargetArmsUpper,
@@ -100,25 +131,25 @@ class ExerciseKeys {
     kTargetLegsUpper,
     kTargetLegsLower,
   ];
-  List<String> equip = [
-    kEquipBarbell,
-    kEquipDumbell,
-    kEquipMat,
-    kEquipBand,
-    kEquipMachineCardio,
-    kEquipMachineStrength,
-    kEquipBench,
-    kEquipPullupBar,
-    kEquipRaisedPlatform,
-    kEquipWeight,
+  final List<String> equip = [
+    kEquipsBarbell,
+    kEquipsDumbell,
+    kEquipsMat,
+    kEquipsBand,
+    kEquipsMachineCardio,
+    kEquipsMachineStrength,
+    kEquipsBench,
+    kEquipsPullupBar,
+    kEquipsRaisedPlatform,
+    kEquipsWeight,
   ];
-  List<String> style = [
-    kStyleAerobic,
-    kStyleAnaerobic,
-    kStyleWarmup,
-    kStyleStretch,
-    kStyleStrength,
-    kStyleIsometric,
-    kStyleCardio,
+  final List<String> style = [
+    kStylesAerobic,
+    kStylesAnaerobic,
+    kStylesWarmup,
+    kStylesStretch,
+    kStylesStrength,
+    kStylesIsometric,
+    kStylesCardio,
   ];
 }

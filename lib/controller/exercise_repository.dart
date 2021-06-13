@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/model.dart';
-import '../controller/controller.dart';
+import '../constants.dart';
+import '../model/model.dart' show Exercise;
+import '../controller/controller.dart' show DataHelper, ExerciseHelper;
 
 const String table = 'exercise';
 final _dbHelper = DataHelper();
@@ -24,7 +25,6 @@ class ExerciseRepository extends ChangeNotifier {
     return exerciseList;
   }
 
-  ///  LOOK UP LIST KEY SQL STATEMENTS
   Future<void> fetchAndSetData() async {
     final dataList = await _dbHelper.getDataForRepo(table);
     List<Exercise> convertedList = dataList
@@ -100,4 +100,11 @@ class ExerciseRepository extends ChangeNotifier {
     _dbHelper.dropDB();
     notifyListeners();
   }
+
+  Map<String, bool> eTargets() =>
+      eHelper.eAspectForView(aspect: Aspect.targets.toString());
+  Map<String, bool> eEquip() =>
+      eHelper.eAspectForView(aspect: Aspect.equip.toString());
+  Map<String, bool> eStyle() =>
+      eHelper.eAspectForView(aspect: '$kStylesAerobic, $kStylesCardio, ');
 }

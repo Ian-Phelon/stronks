@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../controller/controller.dart';
+import '../../../controller/controller.dart'
+    show ExerciseRepository, RoutePageManager;
 import '../../../model/model.dart';
-import '../widgets/widgets.dart';
+import '../widgets/widgets.dart'
+    show ExerciseTile, RoundIconButton, DeleteExercisePopup;
 import '../../widgets/widgets.dart' show TutorialBar;
 
 class ExercisesScreen extends StatelessWidget {
@@ -12,6 +14,7 @@ class ExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // context.watch<ExerciseRepository>().fetchAndSetData();
     return Scaffold(
       appBar: AppBar(
         title: Text(runtimeType.toString()),
@@ -40,14 +43,33 @@ class ExercisesScreen extends StatelessWidget {
 }
 
 Widget _body(BuildContext context) {
-  context.read<ExerciseRepository>().fetchAndSetData();
-  final List<Exercise> repoList =
-      context.watch<ExerciseRepository>().getExercises();
+  final repo = context.watch<ExerciseRepository>();
+  repo.fetchAndSetData();
+
+  final List<Exercise> repoList = repo.getExercises();
   final TutorialBar bar = TutorialBar(
     pageContext: context,
   );
-  Widget _tile(BuildContext context, Exercise exercise) =>
-      ExerciseTile(exercise: exercise);
+  Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
+        exercise: exercise,
+        selectAndPush: () {
+          repo.selectExercise(exercise);
+          RoutePageManager.of(context).toEditExerciseScreen(exercise);
+        },
+        deleteExercise: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                DeleteExercisePopup(deleteExerciseAndTile: () {
+              Navigator.pop(context);
+              repo.removeExerciseUpdateView(exercise);
+            }),
+          );
+        },
+      );
+
+  ///
+  ///
 
   return CustomScrollView(
     //shrinkWrap: true,

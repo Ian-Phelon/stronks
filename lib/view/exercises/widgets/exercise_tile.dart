@@ -1,38 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../controller/controller.dart';
 import '../../../model/exercise.dart';
-import 'widgets.dart';
 
 class ExerciseTile extends StatelessWidget {
   const ExerciseTile({
     Key? key,
-    @required this.exercise,
+    required this.exercise,
+    required this.selectAndPush,
+    required this.deleteExercise,
   }) : super(key: key);
-  final Exercise? exercise;
+  final Exercise exercise;
+  final VoidCallback selectAndPush;
+  final VoidCallback deleteExercise;
+
   @override
   Widget build(BuildContext context) {
-    final repoWatch = context.watch<ExerciseRepository>();
-    final repoRead = context.read<ExerciseRepository>();
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: GestureDetector(
-        onTap: () {
-          repoRead.selectExercise(this.exercise!);
-          RoutePageManager.of(context).toEditExerciseScreen(this.exercise!);
-        },
-        onLongPress: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) =>
-                DeleteExercisePopup(deleteExerciseAndTile: () {
-              Navigator.pop(context);
-              repoWatch.removeExerciseUpdateView(this.exercise!);
-            }),
-          );
-        },
+        onTap: selectAndPush,
+        onLongPress: deleteExercise,
         child: Material(
           shadowColor: colorPurpleDark,
           borderOnForeground: true,
@@ -51,14 +39,14 @@ class ExerciseTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  exercise!.name!,
+                  exercise.name!,
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900),
                 ),
                 SizedBox(
                   width: 8.0,
                 ),
                 Text(
-                  'Shares: ${exercise!.totalCount.toString()}',
+                  'Shares: ${exercise.totalCount}',
                 ),
               ],
             ),

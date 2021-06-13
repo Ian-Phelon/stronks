@@ -222,26 +222,23 @@ class Tutorial {
 
   /// uses the context recieved from tutorial's constructor to provide a list of strings to be rendered by the `TutorialBar`
   List<String> stringsFromContext() {
+    late final List<String> finalList;
     switch (this.pageContext?.widget.toString()) {
       case 'DashboardScreen':
-        return dashboardScreen;
-        // ignore: dead_code
+        finalList = dashboardScreen;
         break;
       case 'ExercisesScreen':
-        return exercisesScreen;
-        // ignore: dead_code
+        finalList = exercisesScreen;
         break;
       case 'CreateExerciseScreen':
-        return createExerciseScreen;
-        // ignore: dead_code
+        finalList = createExerciseScreen;
         break;
       case 'EditExerciseScreen':
-        return editExerciseScreen;
-        // ignore: dead_code
+        finalList = editExerciseScreen;
         break;
-
       default:
-        return ['errrrrrror $pageContext'];
+        finalList = ['errrrrrror $pageContext'];
     }
+    return finalList;
   }
 }
