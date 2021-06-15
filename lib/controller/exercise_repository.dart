@@ -3,7 +3,8 @@ import 'package:sqflite/sqflite.dart';
 
 import '../constants.dart';
 import '../model/model.dart' show Exercise;
-import '../controller/controller.dart' show DataHelper, ExerciseHelper;
+import '../controller/controller.dart'
+    show DataHelper, ExerciseHelper, ExerciseKeys;
 
 const String table = 'exercise';
 final _dbHelper = DataHelper();
@@ -47,16 +48,22 @@ class ExerciseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNewExercise(Map<String, dynamic> e) async {
+  Future<void> addToExerciseList(Map<String, dynamic> e) async {
     final Database dB = await _dbHelper.database;
-
     e.update(
       'name',
       (value) => value == '' ? _userSkippedName() : value,
     );
+    // e.update('style', (value) => value);
+
+    // e.updateAll((key, value) => {
+    //       'name': value == '' ? _userSkippedName() : value,
+    //       'style': value,
+    //     });
 
     await dB.insert(table, e);
     await fetchAndSetData();
+    print(exerciseList);
   }
 
   void selectExercise(Exercise e) {
@@ -69,7 +76,8 @@ class ExerciseRepository extends ChangeNotifier {
     Exercise thisExercise = Exercise(
         id: selectedExercise!.id,
         totalCount: selectedExercise!.totalCount,
-        name: e);
+        name: e,
+        style: selectedExercise!.style);
     await _dbHelper.update(thisExercise, table);
     selectExercise(thisExercise);
     notifyListeners();
@@ -101,10 +109,13 @@ class ExerciseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, bool> eTargets() =>
-      eHelper.eAspectForView(aspect: Aspect.targets.toString());
-  Map<String, bool> eEquip() =>
-      eHelper.eAspectForView(aspect: Aspect.equip.toString());
-  Map<String, bool> eStyle() =>
-      eHelper.eAspectForView(aspect: '$kStylesAerobic, $kStylesCardio, ');
+  Map<String, bool> eStyle({required String? inputStyles}) =>
+      eHelper.eAspectForView(
+        aspect: inputStyles ?? 'styles',
+      );
+  String eAspectToStringBuilder(Map<String, bool> aspectFromUser) {
+    return eHelper.eAspectToString(aspectFromUser);
+  }
+
+  final List<String> syleKeys = ExerciseKeys.ekeys.style;
 }

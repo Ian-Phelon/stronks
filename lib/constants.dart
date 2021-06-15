@@ -49,6 +49,12 @@ const String kStylesCardio = 'styleCardio';
 ///it's 6 letters but 5th index??
 const int kAspectStringSkip = 5;
 
+const TextStyle kAspectTextStyle = TextStyle(
+  fontFamily: 'Montserrat',
+  fontWeight: FontWeight.bold,
+  fontSize: 22,
+);
+
 const colorPurpleDark = Color(0xff6654d1);
 const colorPurpleLight = Color(0xff9286db);
 

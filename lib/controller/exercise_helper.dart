@@ -1,40 +1,33 @@
 import '../constants.dart';
 
-void main() {
-  ExerciseHelper ok = ExerciseHelper();
-  //Exercise me = ok.newExerciseAspects();
-  print(ok.initializeAllAspects());
-}
-
 /// methods to return parsed values for Exercise elements
 class ExerciseHelper {
-  ExerciseHelper._();
-  static final ExerciseHelper exerciseHelper = ExerciseHelper._();
-  static final ExerciseKeys _keys = ExerciseKeys();
-  factory ExerciseHelper() => exerciseHelper;
+  const ExerciseHelper();
+
+  static final ExerciseKeys keys = ExerciseKeys();
 
   /// facilitates visual representation by returning an Exercise's targets, equipment, and style with boolean values
   Map<String, bool> eAspectForView({required String aspect}) {
-    final String pattern = aspect.length > 1 ? aspect.substring(0, 5) : '';
+    // final String pattern = aspect.length > 1 ? aspect.substring(0, 5) : '';
 
     final Set<String> aspectSet = _makeSet(exerciseAspect: aspect);
 
     List<String> listVariableAspect() {
       late final List<String> finalList;
 
-      switch (pattern) {
+      switch (aspect) {
         case r'target':
-          finalList = _keys.targets;
+          finalList = keys.targets;
           break;
         case r'equips':
-          finalList = _keys.equip;
+          finalList = keys.equip;
           break;
         case r'styles':
-          finalList = _keys.style;
+          finalList = keys.style;
           break;
 
         default:
-          finalList = _keys.none;
+          finalList = keys.none;
           break;
       }
       return finalList;
@@ -63,8 +56,8 @@ class ExerciseHelper {
   /// helper method for this.eAspectsForView()
   Set<String> _makeSet({required String? exerciseAspect}) {
     Set<String> setFromView = {};
-    exerciseAspect!.trim();
-    setFromView.addAll(exerciseAspect.split(r', '));
+    // exerciseAspect!.trim();
+    setFromView.addAll(exerciseAspect!.split(r', '));
     return setFromView;
   }
 
@@ -84,16 +77,16 @@ class ExerciseHelper {
     final Map<String, bool> targets = {};
     final Map<String, bool> equips = {};
     final Map<String, bool> styles = {};
-    for (var e in ExerciseKeys.keys.targets) {
+    for (var e in ExerciseKeys.ekeys.targets) {
       final String key = e;
       targets[key] = false;
     }
-    for (var e in ExerciseKeys.keys.equip) {
+    for (var e in ExerciseKeys.ekeys.equip) {
       final String key = e;
 
       equips[key] = false;
     }
-    for (var e in ExerciseKeys.keys.style) {
+    for (var e in ExerciseKeys.ekeys.style) {
       final String key = e;
       styles[key] = false;
     }
@@ -104,12 +97,12 @@ class ExerciseHelper {
   }
 }
 
-class ExerciseKeys {
-  ExerciseKeys._();
-  static final ExerciseKeys keys = ExerciseKeys._();
-  factory ExerciseKeys() => keys;
-  final List<String> none = [];
-  final List<String> targets = [
+class ExerciseKeys extends ExerciseHelper {
+  const ExerciseKeys._();
+  static final ExerciseKeys ekeys = ExerciseKeys._();
+  factory ExerciseKeys() => ekeys;
+  final List<String> none = const [];
+  final List<String> targets = const [
     kTargetArmsInner,
     kTargetArmsOuter,
     kTargetArmsUpper,
@@ -131,7 +124,7 @@ class ExerciseKeys {
     kTargetLegsUpper,
     kTargetLegsLower,
   ];
-  final List<String> equip = [
+  final List<String> equip = const [
     kEquipsBarbell,
     kEquipsDumbell,
     kEquipsMat,
@@ -143,7 +136,7 @@ class ExerciseKeys {
     kEquipsRaisedPlatform,
     kEquipsWeight,
   ];
-  final List<String> style = [
+  final List<String> style = const [
     kStylesAerobic,
     kStylesAnaerobic,
     kStylesWarmup,

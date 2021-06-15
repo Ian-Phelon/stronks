@@ -1,59 +1,119 @@
 import 'package:flutter/material.dart';
+
+import '../../constants.dart';
 // import 'package:flutter/rendering.dart';
 
-class AspectTile extends StatefulWidget {
+// Size _size(BuildContext context, String text) {
+//   text += '_____';
+//   return (TextPainter(
+//           text: TextSpan(text: text, style: kAspectTextStyle),
+//           maxLines: 1,
+//           textScaleFactor: MediaQuery.of(context).textScaleFactor,
+//           textDirection: TextDirection.ltr)
+//         ..layout())
+//       .size;
+// }
+
+// class AspectTileBuilder extends StatelessWidget {
+//   const AspectTileBuilder(
+//       {Key? key,
+//       this.context,
+//       required this.whichAspect,
+//       required this.stringsForSizing,
+//       required this.tapForSelection})
+//       : super(key: key);
+//   final BuildContext? context;
+//   final Map<String, bool> whichAspect;
+//   final List<String> stringsForSizing;
+//   final VoidCallback tapForSelection;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     double textHeight(int index) =>
+//         _size(context, stringsForSizing[index]).height;
+//     double textWidth(int index) =>
+//         _size(context, stringsForSizing[index]).width;
+
+//     return ListView.builder(
+//       // addAutomaticKeepAlives: true,
+
+//       itemCount: whichAspect.length,
+//       scrollDirection: Axis.horizontal,
+//       itemBuilder: (context, index) {
+//         bool isSelected = whichAspect.entries.elementAt(index).value;
+//         /////////
+//         return Container(
+//           height: textHeight(index),
+//           width: textWidth(index),
+//           //Provider.of<ExerciseRepository>(context).syleKeys[index],
+
+//           child: AspectTile(
+//             // context: context,
+//             isSelected: isSelected,
+//             aspect: whichAspect.entries.elementAt(index),
+//             tapForSelection: tapForSelection,
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+class AspectTile extends StatelessWidget {
   const AspectTile({
     Key? key,
-    required this.buildContext,
-    required this.title,
+    // required this.buildContext,
+    required this.aspect,
+    required this.tapForSelection,
     required this.isSelected,
     this.isTargets,
   }) : super(key: key);
-  final BuildContext buildContext;
-  final String title;
+  // final BuildContext buildContext;
+
   final Map<String, bool>? isTargets;
+  final MapEntry aspect;
+  final VoidCallback tapForSelection;
+
   final bool isSelected;
 
   @override
-  _AspectTileState createState() => _AspectTileState();
-}
-
-class _AspectTileState extends State<AspectTile> {
-  late bool isSelected;
-
-  void _triggerSelection() {
-    setState(() {
-      isSelected = !isSelected;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      isSelected = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.48,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            left: 12,
-            right: isSelected
-                ? 12
-                : widget.isTargets == null
-                    ? 12
-                    : null,
+    final String key = aspect.key;
+    final String title = key.characters.skip(kAspectStringSkip).toString();
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+    /////////////////////////
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Positioned(
+          left: 12,
+          right: isSelected
+              ? 12
+              : isTargets == null
+                  ? 12
+                  : null,
+          child: Container(
+            margin: EdgeInsets.all(2.0),
             child: Material(
               color: Colors.white,
               shape: RoundedRectangleBorder(
@@ -70,18 +130,16 @@ class _AspectTileState extends State<AspectTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      width: 33,
+                      width: 28,
                     ),
-                    Text(
-                      '${widget.title}',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                    Center(
+                      child: Text(
+                        title,
+                        style: kAspectTextStyle,
                       ),
                     ),
                     Visibility(
-                      visible: isSelected && widget.isTargets != null,
+                      visible: isSelected && isTargets != null,
                       replacement: const SizedBox.shrink(),
 
                       /// THIS IS DEPENDENT UPON Aspect.value
@@ -93,33 +151,34 @@ class _AspectTileState extends State<AspectTile> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: GestureDetector(
-              onTap: () {
-                _triggerSelection();
-              },
-              child: Material(
-                shape: CircleBorder(
-                  side: BorderSide(
-                    width: 6,
-                    color: Colors.black,
-                  ),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: GestureDetector(
+            onTap: tapForSelection,
+            // onTap: () {
+            //   _triggerSelection();
+            // },
+            child: Material(
+              shape: CircleBorder(
+                side: BorderSide(
+                  width: 6,
+                  color: Colors.black,
                 ),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(11.0),
-                  child: Icon(
-                    Icons.check,
-                    color: isSelected ? Colors.green : Colors.black,
-                    size: 29,
-                  ),
+              ),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(11.0),
+                child: Icon(
+                  Icons.check,
+                  color: isSelected ? Colors.green : Colors.black,
+                  size: 29,
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -139,24 +198,33 @@ Widget _targetIcon({required IconData iconData, required bool isSelected}) {
 }
 
 Widget _targetIconRow(Map<String, bool> isSelected) {
+  bool inner =
+      isSelected.entries.firstWhere((e) => e.key.contains(r'*Inner')).value;
+  bool outer =
+      isSelected.entries.firstWhere((e) => e.key.contains(r'*Outer')).value;
+  bool upper =
+      isSelected.entries.firstWhere((e) => e.key.contains(r'*Upper')).value;
+  bool lower =
+      isSelected.entries.firstWhere((e) => e.key.contains(r'*Lower')).value;
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       _targetIcon(
         iconData: Icons.gps_fixed,
-        isSelected: true,
+        isSelected: inner,
       ),
       _targetIcon(
         iconData: Icons.all_out,
-        isSelected: true,
+        isSelected: outer,
       ),
       _targetIcon(
         iconData: Icons.keyboard_arrow_up,
-        isSelected: true,
+        isSelected: upper,
       ),
       _targetIcon(
         iconData: Icons.keyboard_arrow_down,
-        isSelected: true,
+        isSelected: lower,
       ),
     ],
   );

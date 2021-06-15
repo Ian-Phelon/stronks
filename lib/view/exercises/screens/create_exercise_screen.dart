@@ -8,15 +8,23 @@ import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
-List<String> USEME = [
-  kStylesAerobic.characters.skip(kAspectStringSkip).toString(),
-  kStylesAnaerobic.characters.skip(kAspectStringSkip).toString(),
-  kStylesCardio.characters.skip(kAspectStringSkip).toString(),
-  kStylesIsometric.characters.skip(kAspectStringSkip).toString(),
-  kStylesStrength.characters.skip(kAspectStringSkip).toString(),
-  kStylesStretch.characters.skip(kAspectStringSkip).toString(),
-  kStylesWarmup.characters.skip(kAspectStringSkip).toString(),
-];
+Map<String, bool> _styles(BuildContext context, String? input) {
+  return Provider.of<ExerciseRepository>(
+    context,
+    listen: false,
+  ).eStyle(inputStyles: input == null || input == '' ? 'styles' : input);
+}
+
+Size _size(BuildContext context, String text) {
+  text += '_____';
+  return (TextPainter(
+          text: TextSpan(text: text, style: kAspectTextStyle),
+          maxLines: 1,
+          textScaleFactor: MediaQuery.of(context).textScaleFactor,
+          textDirection: TextDirection.ltr)
+        ..layout())
+      .size;
+}
 
 class CreateExerciseScreen extends StatefulWidget {
   const CreateExerciseScreen({Key? key}) : super(key: key);
@@ -27,11 +35,26 @@ class CreateExerciseScreen extends StatefulWidget {
 
 class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   int? countForSets;
-  StringBuffer? targets;
-  void setCountForSets(int i) {
-    setState(() {
-      countForSets = i;
-    });
+  StringBuffer? target;
+  StringBuffer stylesStringBuilder = StringBuffer();
+  StringBuffer? equips;
+  late final Map<String, bool> styles =
+      _styles(context, stylesStringBuilder.toString());
+
+  @override
+  void initState() {
+    super.initState();
+    setState(
+      () {
+        stylesStringBuilder.writeAll(_styles(
+                super.context,
+                stylesStringBuilder.length < 1
+                    ? 'styles'
+                    : stylesStringBuilder.toString())
+            .entries
+            .where((element) => element.value == true));
+      },
+    );
   }
 
   final TextEditingController txtCtrl = TextEditingController();
@@ -49,6 +72,9 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       body: ListView(
         children: [
           tutorialBar,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .20,
+          ),
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -61,33 +87,67 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   onSubmitted: (value) => txtCtrl.text = value,
                 ),
               ),
-              Container(
-                height: 99,
-                child: ListView.builder(
-                  addAutomaticKeepAlives: true,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 99,
+                  child: ListView.builder(
+                    // addAutomaticKeepAlives: true,
 
-                  itemCount: 7,
-                  // itemExtent: 200,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return haha(
-                      context: context,
-                      title: USEME[index],
-                    );
-                  },
+                    itemCount: styles.length,
+                    // itemExtent: 200,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      bool isSelected = styles.entries.elementAt(index).value;
+                      /////////
+                      return Container(
+                        height: _size(
+                          context,
+                          Provider.of<ExerciseRepository>(context)
+                              .syleKeys[index],
+                        ).height,
+                        width: _size(
+                          context,
+                          Provider.of<ExerciseRepository>(context)
+                              .syleKeys[index],
+                        ).width,
+                        child: haha(
+                          // context: context,
+                          isSelected: isSelected,
+                          aspect: styles.entries.elementAt(index),
+                          tapForSelection: () {
+                            setState(() {
+                              String newString =
+                                  Provider.of<ExerciseRepository>(context,
+                                          listen: false)
+                                      .syleKeys
+                                      .elementAt(index);
+                              styles.update(newString, (value) => !isSelected);
+                              newString += ', ';
+                              stylesStringBuilder.write(
+                                  stylesStringBuilder.toString() + newString);
+                            });
+                            print(stylesStringBuilder);
+                            print(styles);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
           ),
         ],
       ),
-      floatingActionButton: _pFAB(context, txtCtrl.text, countForSets),
+      floatingActionButton: _pFAB(context, txtCtrl.text, countForSets, styles),
     );
   }
 
   @override
   void dispose() {
     this.txtCtrl.dispose();
+    this.styles.clear();
     super.dispose();
   }
 }
@@ -96,16 +156,21 @@ Widget _pFAB(
   BuildContext context,
   String text,
   int? countForSets,
+  Map<String, bool> style,
 ) {
+  final String styleString =
+      Provider.of<ExerciseRepository>(context).eAspectToStringBuilder(style);
+  final Map<String, dynamic> result = {
+    'id': null,
+    'name': '$text',
+    'totalCount': 0,
+    'countForSets': countForSets ?? 0,
+    'style': styleString,
+  };
   final repo = context.watch<ExerciseRepository>();
   return RoundTextButton(
     onPressed: () {
-      Map<String, dynamic> result = {
-        'name': '$text',
-        'totalCount': 0,
-        'countForSets': countForSets,
-      };
-      repo.addNewExercise(result);
+      repo.addToExerciseList(result);
       RoutePageManager.of(context).toExercises();
     },
     size: 42,
@@ -115,26 +180,31 @@ Widget _pFAB(
 }
 
 Widget haha({
-  required BuildContext context,
-  required String title,
+  // required BuildContext context,
+  required MapEntry<String, bool> aspect,
+  required VoidCallback tapForSelection,
   required bool isSelected,
 }) {
   return AspectTile(
-    buildContext: context,
-    title: title,
+    // buildContext: context,
+    aspect: aspect,
+    tapForSelection: tapForSelection,
     isSelected: isSelected,
   );
 }
 
 Widget hehe({
-  required BuildContext context,
-  required String title,
+  // required BuildContext context,
+  required MapEntry aspect,
+  required Map<String, bool> targets,
+  required VoidCallback tapForSelection,
   required bool isSelected,
 }) {
   return AspectTile(
-    buildContext: context,
-    title: title,
-    isTargets: {},
+    // buildContext: context,
+    isTargets: targets,
+    aspect: aspect,
+    tapForSelection: tapForSelection,
     isSelected: isSelected,
   );
 }
