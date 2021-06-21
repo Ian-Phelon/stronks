@@ -113,13 +113,9 @@ class ExerciseRepository extends ChangeNotifier {
       eHelper.eAspectForView(
         aspect: input ?? 'none',
       );
-  // Map<String, bool> eTargets({required String? inputTargets}) =>
-  //     eHelper.eAspectForView(
-  //       aspect: inputTargets ?? 'target',
-  //     );
-  String eAspectToStringBuilder(Map<String, bool> aspectFromUser) {
-    return eHelper.eAspectToString(aspectFromUser);
-  }
+
+  String eAspectToStringBuilder(Map<String, bool> aspectFromUser) =>
+      eHelper.eAspectToString(aspectFromUser);
 
   final List<String> syleKeys = ExerciseKeys.ekeys.style;
   final List<String> targetKeys = ExerciseKeys.ekeys.targets;

@@ -105,6 +105,12 @@ class AspectTile extends StatelessWidget {
     /////////////////////////
     /////////////////////////
     /////////////////////////
+    late Map<String, bool> targetFine;
+    if (mapTargetFine == null || mapTargetFine!.isEmpty) {
+      targetFine = {};
+    } else {
+      targetFine = mapTargetFine!;
+    }
 
     return Stack(
       alignment: Alignment.center,
@@ -145,10 +151,9 @@ class AspectTile extends StatelessWidget {
                     Visibility(
                       visible: isSelected && mapTargetFine != null,
                       replacement: const SizedBox.shrink(),
+                      child: _targetIconRow(targetFine),
 
-                      /// THIS IS DEPENDENT UPON Aspect.value
-                      /// if it's targets, we need a row of target icons.
-                      child: Text('BOO'),
+                      ///Text('BOO'),
                     ),
                   ],
                 ),
@@ -160,9 +165,6 @@ class AspectTile extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: GestureDetector(
             onTap: tapForSelection,
-            // onTap: () {
-            //   _triggerSelection();
-            // },
             child: Material(
               shape: CircleBorder(
                 side: BorderSide(
@@ -202,15 +204,30 @@ Widget _targetIcon({required IconData iconData, required bool isSelected}) {
 }
 
 Widget _targetIconRow(Map<String, bool> isSelected) {
-  bool inner =
-      isSelected.entries.firstWhere((e) => e.key.contains(r'*Inner')).value;
-  bool outer =
-      isSelected.entries.firstWhere((e) => e.key.contains(r'*Outer')).value;
-  bool upper =
-      isSelected.entries.firstWhere((e) => e.key.contains(r'*Upper')).value;
-  bool lower =
-      isSelected.entries.firstWhere((e) => e.key.contains(r'*Lower')).value;
+  // bool inner =
+  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Inner')).value;
+  // bool outer =
+  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Outer')).value;
+  // bool upper =
+  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Upper')).value;
+  // bool lower =
+  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Lower')).value;
 
+  late bool inner;
+  late bool outer;
+  late bool upper;
+  late bool lower;
+  if (isSelected.isEmpty) {
+    inner = false;
+    outer = false;
+    upper = false;
+    lower = false;
+  } else if (isSelected.isNotEmpty) {
+    inner = isSelected.values.elementAt(0);
+    outer = isSelected.values.elementAt(1);
+    upper = isSelected.values.elementAt(2);
+    lower = isSelected.values.elementAt(3);
+  }
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [

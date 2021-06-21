@@ -8,14 +8,17 @@ import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
-Map<String, bool> _style(BuildContext context, String? input) {
+///  STARTING HERE, we need these methods, and under the big /// block are
+///  experimental methods
+
+Map<String, bool> _getStyleForView(BuildContext context, String? input) {
   return Provider.of<ExerciseRepository>(
     context,
     listen: false,
   ).eAspectForView(input: input == null || input == '' ? 'style' : input);
 }
 
-Map<String, bool> _targets(BuildContext context, String? input) {
+Map<String, bool> _getTargetForView(BuildContext context, String? input) {
   return Provider.of<ExerciseRepository>(
     context,
     listen: false,
@@ -33,6 +36,47 @@ Size _size(BuildContext context, String text) {
       .size;
 }
 
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+//////////////////////////
+/// provide string values for targetsFine in CreateExerciseScreen
+Set<List<String>> _targetStrings(Map<String, bool> allTargets) {
+  List<String> arms = [];
+  List<String> chest = [];
+  List<String> back = [];
+  List<String> core = [];
+  List<String> legs = [];
+  for (var targets in allTargets.entries) {
+    while (targets.key.startsWith(r'targetArms')) {
+      arms.add(targets.key);
+    }
+    while (targets.key.startsWith(r'targetChest')) {
+      chest.add(targets.key);
+    }
+    while (targets.key.startsWith(r'targetBack')) {
+      back.add(targets.key);
+    }
+    while (targets.key.startsWith(r'targetCore')) {
+      core.add(targets.key);
+    }
+    while (targets.key.startsWith(r'targetLegs')) {
+      legs.add(targets.key);
+    }
+  }
+  Set<List<String>> tToS = {arms, chest, back, core, legs};
+  return tToS;
+}
+
+final List<Map<String, bool>> targetFine = [{}, {}, {}, {}, {}];
+
 class CreateExerciseScreen extends StatefulWidget {
   const CreateExerciseScreen({Key? key}) : super(key: key);
 
@@ -45,25 +89,28 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   StringBuffer targetStringBuilder = StringBuffer();
   StringBuffer stylesStringBuilder = StringBuffer();
   StringBuffer? equips;
-  late final Map<String, bool> styles =
-      _style(context, stylesStringBuilder.toString());
+  late final Map<String, bool> styles = _getStyleForView(
+      context,
+      stylesStringBuilder.toString() == ''
+          ? 'style'
+          : stylesStringBuilder.toString());
 
-  late final Map<String, bool> targets =
-      _targets(context, targetStringBuilder.toString());
+  // late final Map<String, bool> allTargets =
+  //     _targets(context, targetStringBuilder.toString());
 
   @override
   void initState() {
     super.initState();
     setState(
       () {
-        stylesStringBuilder.writeAll(_style(
+        stylesStringBuilder.writeAll(_getStyleForView(
                 super.context,
                 stylesStringBuilder.length < 1
                     ? 'style'
                     : stylesStringBuilder.toString())
             .entries
             .where((element) => element.value == true));
-        targetStringBuilder.writeAll(_style(
+        targetStringBuilder.writeAll(_getTargetForView(
                 super.context,
                 targetStringBuilder.length < 1
                     ? 'target'
@@ -72,6 +119,38 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
             .where((element) => element.value == true));
       },
     );
+    setState(() {
+      final Map<String, bool> allTargets =
+          _getStyleForView(context, targetStringBuilder.toString());
+      for (var target in allTargets.entries) {
+        var arms = target.key.startsWith(r'targetArms');
+        var chest = target.key.startsWith(r'targetChest');
+        var back = target.key.startsWith(r'targetBack');
+        var core = target.key.startsWith(r'targetCore');
+        var legs = target.key.startsWith(r'targetLegs');
+
+        while (arms) {
+          targetFine.elementAt(0).addAll({target.key: target.value});
+          break;
+        }
+        while (chest) {
+          targetFine.elementAt(1).addAll({target.key: target.value});
+          break;
+        }
+        while (back) {
+          targetFine.elementAt(2).addAll({target.key: target.value});
+          break;
+        }
+        while (core) {
+          targetFine.elementAt(3).addAll({target.key: target.value});
+          break;
+        }
+        while (legs) {
+          targetFine.elementAt(4).addAll({target.key: target.value});
+          break;
+        }
+      }
+    });
   }
 
   final TextEditingController txtCtrl = TextEditingController();
@@ -85,6 +164,13 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       backgroundColor: colorExercisesBG,
       appBar: AppBar(
         title: Text('Create Exercise'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                print('TARGET FINE: $targetFine \n STYLES: $styles');
+              },
+              icon: Icon(Icons.menu))
+        ],
       ),
       body: ListView(
         children: [
@@ -130,17 +216,14 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                     itemBuilder: (context, index) {
                       bool isSelected = styles.entries.elementAt(index).value;
                       /////////
+                      Size sizeFromText = _size(
+                        context,
+                        Provider.of<ExerciseRepository>(context)
+                            .syleKeys[index],
+                      );
                       return Container(
-                        height: _size(
-                          context,
-                          Provider.of<ExerciseRepository>(context)
-                              .syleKeys[index],
-                        ).height,
-                        width: _size(
-                          context,
-                          Provider.of<ExerciseRepository>(context)
-                              .syleKeys[index],
-                        ).width,
+                        height: sizeFromText.height,
+                        width: sizeFromText.width,
                         child: haha(
                           // context: context,
                           isSelected: isSelected,
@@ -154,6 +237,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                                       .elementAt(index);
                               styles.update(
                                   newStyleString, (value) => !isSelected);
+
                               newStyleString += ', ';
                               if (stylesStringBuilder
                                       .toString()
@@ -174,65 +258,74 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
 ////////////////////////////
 ////////////////////////////
 ////////////////////////////
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 99,
-                  child: ListView.builder(
-                    // addAutomaticKeepAlives: true,
-
-                    itemCount: targets.length,
-                    // itemExtent: 200,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      bool isSelected = targets.entries.elementAt(index).value;
-                      /////////
-                      ///targets.entries.elementAt(index)
-                      return Container(
-                        height: _size(
-                          context,
-                          Provider.of<ExerciseRepository>(context)
-                              .targetKeys[index],
-                        ).height,
-                        width: _size(
-                          context,
-                          Provider.of<ExerciseRepository>(context)
-                              .targetKeys[index],
-                        ).width,
-                        child: hehe(
-                          // context: context,
-                          targetFine: {},
-                          isSelected: isSelected,
-                          aspect: targets.entries.elementAt(index),
-                          tapForSelection: () {
-                            setState(() {
-                              String newTargetString =
-                                  Provider.of<ExerciseRepository>(context,
-                                          listen: false)
-                                      .targetKeys
-                                      .elementAt(index);
-                              targets.update(
-                                  newTargetString, (value) => !isSelected);
-                              newTargetString += ', ';
-                              if (targetStringBuilder
-                                      .toString()
-                                      .contains(newTargetString) ==
-                                  false)
-                                targetStringBuilder.write(newTargetString);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Container(
+              //     height: 99,
+              //     child: ListView.builder(
+              //       /////we dont want all targets, we want targetFine.
+              //       itemCount: allTargets.length,
+              //       scrollDirection: Axis.horizontal,
+              //       itemBuilder: (context, index) {
+              //         bool isSelected =
+              //             allTargets.entries.elementAt(index).value;
+              //         /////////
+              //         Size sizeFromText = _size(
+              //           context,
+              //           Provider.of<ExerciseRepository>(context)
+              //               .targetKeys[index],
+              //         );
+              //         return Container(
+              //           height: sizeFromText.height,
+              //           width: isSelected
+              //               ? sizeFromText.width * 1.2
+              //               : sizeFromText.width,
+              //           child: hehe(
+              //             targetFine: {},
+              //             isSelected: isSelected,
+              //             aspect: allTargets.entries.elementAt(index),
+              //             tapForSelection: () {
+              //               setState(() {
+              //                 String newTargetString =
+              //                     Provider.of<ExerciseRepository>(context,
+              //                             listen: false)
+              //                         .targetKeys
+              //                         .elementAt(index);
+              //                 allTargets.update(
+              //                     newTargetString, (value) => !isSelected);
+              //                 // arms.update(key, (value) => false);
+              //                 newTargetString += ', ';
+              //                 if (targetStringBuilder
+              //                         .toString()
+              //                         .contains(newTargetString) ==
+              //                     false)
+              //                   targetStringBuilder.write(newTargetString);
+              //               });
+              //             },
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ),
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
+              //////////////////////////////////////
             ],
           ),
         ],
       ),
       floatingActionButton:
-          _pFAB(context, txtCtrl.text, countForSets, styles, targets),
+          _pFAB(context, txtCtrl.text, countForSets, styles, {}),
     );
   }
 
@@ -246,7 +339,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
 
 Widget _pFAB(
   BuildContext context,
-  String text,
+  String name,
   int? countForSets,
   Map<String, bool> style,
   Map<String, bool> targets,
@@ -257,7 +350,7 @@ Widget _pFAB(
       Provider.of<ExerciseRepository>(context).eAspectToStringBuilder(targets);
   final Map<String, dynamic> result = {
     'id': null,
-    'name': '$text',
+    'name': '$name',
     'totalCount': 0,
     'countForSets': countForSets ?? 0,
     'style': styleString,
