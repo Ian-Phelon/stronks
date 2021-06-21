@@ -6,7 +6,9 @@ class ExerciseHelper {
 
   static final ExerciseKeys keys = ExerciseKeys();
 
-  /// facilitates visual representation by returning an Exercise's targets, equipment, and style with boolean values
+  /// facilitates visual representation by returning an Exercise's targets,
+  /// equipment, and style with booleanvalues. Strings accetpted are
+  /// 'target', 'equip, 'style'
   Map<String, bool> eAspectForView({required String aspect}) {
     // final String pattern = aspect.length > 1 ? aspect.substring(0, 5) : '';
 
@@ -19,12 +21,13 @@ class ExerciseHelper {
         case r'target':
           finalList = keys.targets;
           break;
-        case r'equips':
+        case r'equip':
           finalList = keys.equip;
           break;
-        case r'styles':
+        case r'style':
           finalList = keys.style;
           break;
+        case r'none':
 
         default:
           finalList = keys.none;

@@ -44,7 +44,6 @@ class ExercisesScreen extends StatelessWidget {
 
 Widget _body(BuildContext context) {
   final repo = context.watch<ExerciseRepository>();
-  repo.fetchAndSetData();
 
   final List<Exercise> repoList = repo.getExercises();
   final TutorialBar bar = TutorialBar(

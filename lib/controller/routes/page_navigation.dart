@@ -95,9 +95,10 @@ class RoutePageManager extends ChangeNotifier {
       );
       _pages.add(
         MaterialPage(
-          child: Consumer<ExerciseRepository>(
-            builder: (_, repo, __) => ExercisesScreen(),
-          ),
+          child: Consumer<ExerciseRepository>(builder: (_, repo, ___) {
+            repo.fetchAndSetData();
+            return ExercisesScreen();
+          }),
           // child: ExercisesScreen(),),
           // unique?
           key: UniqueKey(),

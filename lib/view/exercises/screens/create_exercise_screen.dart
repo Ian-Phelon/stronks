@@ -8,11 +8,18 @@ import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
-Map<String, bool> _styles(BuildContext context, String? input) {
+Map<String, bool> _style(BuildContext context, String? input) {
   return Provider.of<ExerciseRepository>(
     context,
     listen: false,
-  ).eStyle(inputStyles: input == null || input == '' ? 'styles' : input);
+  ).eAspectForView(input: input == null || input == '' ? 'style' : input);
+}
+
+Map<String, bool> _targets(BuildContext context, String? input) {
+  return Provider.of<ExerciseRepository>(
+    context,
+    listen: false,
+  ).eAspectForView(input: input == null || input == '' ? 'target' : input);
 }
 
 Size _size(BuildContext context, String text) {
@@ -35,22 +42,32 @@ class CreateExerciseScreen extends StatefulWidget {
 
 class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   int? countForSets;
-  StringBuffer? target;
+  StringBuffer targetStringBuilder = StringBuffer();
   StringBuffer stylesStringBuilder = StringBuffer();
   StringBuffer? equips;
   late final Map<String, bool> styles =
-      _styles(context, stylesStringBuilder.toString());
+      _style(context, stylesStringBuilder.toString());
+
+  late final Map<String, bool> targets =
+      _targets(context, targetStringBuilder.toString());
 
   @override
   void initState() {
     super.initState();
     setState(
       () {
-        stylesStringBuilder.writeAll(_styles(
+        stylesStringBuilder.writeAll(_style(
                 super.context,
                 stylesStringBuilder.length < 1
-                    ? 'styles'
+                    ? 'style'
                     : stylesStringBuilder.toString())
+            .entries
+            .where((element) => element.value == true));
+        targetStringBuilder.writeAll(_style(
+                super.context,
+                targetStringBuilder.length < 1
+                    ? 'target'
+                    : targetStringBuilder.toString())
             .entries
             .where((element) => element.value == true));
       },
@@ -87,6 +104,19 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   onSubmitted: (value) => txtCtrl.text = value,
                 ),
               ),
+
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
+              /////////////////////
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -117,18 +147,79 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                           aspect: styles.entries.elementAt(index),
                           tapForSelection: () {
                             setState(() {
-                              String newString =
+                              String newStyleString =
                                   Provider.of<ExerciseRepository>(context,
                                           listen: false)
                                       .syleKeys
                                       .elementAt(index);
-                              styles.update(newString, (value) => !isSelected);
-                              newString += ', ';
-                              stylesStringBuilder.write(
-                                  stylesStringBuilder.toString() + newString);
+                              styles.update(
+                                  newStyleString, (value) => !isSelected);
+                              newStyleString += ', ';
+                              if (stylesStringBuilder
+                                      .toString()
+                                      .contains(newStyleString) ==
+                                  false)
+                                stylesStringBuilder.write(newStyleString);
                             });
-                            print(stylesStringBuilder);
-                            print(styles);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+////////////////////////////
+////////////////////////////
+////////////////////////////
+////////////////////////////
+////////////////////////////
+////////////////////////////
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 99,
+                  child: ListView.builder(
+                    // addAutomaticKeepAlives: true,
+
+                    itemCount: targets.length,
+                    // itemExtent: 200,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      bool isSelected = targets.entries.elementAt(index).value;
+                      /////////
+                      ///targets.entries.elementAt(index)
+                      return Container(
+                        height: _size(
+                          context,
+                          Provider.of<ExerciseRepository>(context)
+                              .targetKeys[index],
+                        ).height,
+                        width: _size(
+                          context,
+                          Provider.of<ExerciseRepository>(context)
+                              .targetKeys[index],
+                        ).width,
+                        child: hehe(
+                          // context: context,
+                          targetFine: {},
+                          isSelected: isSelected,
+                          aspect: targets.entries.elementAt(index),
+                          tapForSelection: () {
+                            setState(() {
+                              String newTargetString =
+                                  Provider.of<ExerciseRepository>(context,
+                                          listen: false)
+                                      .targetKeys
+                                      .elementAt(index);
+                              targets.update(
+                                  newTargetString, (value) => !isSelected);
+                              newTargetString += ', ';
+                              if (targetStringBuilder
+                                      .toString()
+                                      .contains(newTargetString) ==
+                                  false)
+                                targetStringBuilder.write(newTargetString);
+                            });
                           },
                         ),
                       );
@@ -140,7 +231,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
           ),
         ],
       ),
-      floatingActionButton: _pFAB(context, txtCtrl.text, countForSets, styles),
+      floatingActionButton:
+          _pFAB(context, txtCtrl.text, countForSets, styles, targets),
     );
   }
 
@@ -157,15 +249,19 @@ Widget _pFAB(
   String text,
   int? countForSets,
   Map<String, bool> style,
+  Map<String, bool> targets,
 ) {
   final String styleString =
       Provider.of<ExerciseRepository>(context).eAspectToStringBuilder(style);
+  final String targetString =
+      Provider.of<ExerciseRepository>(context).eAspectToStringBuilder(targets);
   final Map<String, dynamic> result = {
     'id': null,
     'name': '$text',
     'totalCount': 0,
     'countForSets': countForSets ?? 0,
     'style': styleString,
+    'targets': targetString,
   };
   final repo = context.watch<ExerciseRepository>();
   return RoundTextButton(
@@ -180,13 +276,11 @@ Widget _pFAB(
 }
 
 Widget haha({
-  // required BuildContext context,
   required MapEntry<String, bool> aspect,
   required VoidCallback tapForSelection,
   required bool isSelected,
 }) {
   return AspectTile(
-    // buildContext: context,
     aspect: aspect,
     tapForSelection: tapForSelection,
     isSelected: isSelected,
@@ -194,15 +288,13 @@ Widget haha({
 }
 
 Widget hehe({
-  // required BuildContext context,
   required MapEntry aspect,
-  required Map<String, bool> targets,
+  required Map<String, bool> targetFine,
   required VoidCallback tapForSelection,
   required bool isSelected,
 }) {
   return AspectTile(
-    // buildContext: context,
-    isTargets: targets,
+    mapTargetFine: targetFine,
     aspect: aspect,
     tapForSelection: tapForSelection,
     isSelected: isSelected,

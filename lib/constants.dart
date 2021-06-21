@@ -38,16 +38,16 @@ const String kEquipsBench = 'equipsBench';
 const String kEquipsPullupBar = 'equipsPullupBar';
 const String kEquipsRaisedPlatform = 'equipsRaisedPlatform';
 const String kEquipsWeight = 'equipsWeight';
-const String kStylesAerobic = 'styleAerobic';
-const String kStylesAnaerobic = 'styleAnaerobic';
-const String kStylesWarmup = 'styleWarmup';
-const String kStylesStretch = 'styleStretch';
-const String kStylesStrength = 'styleStrength';
-const String kStylesIsometric = 'styleIsometric';
-const String kStylesCardio = 'styleCardio';
+const String kStylesAerobic = 'stylesAerobic';
+const String kStylesAnaerobic = 'stylesAnaerobic';
+const String kStylesWarmup = 'stylesWarmup';
+const String kStylesStretch = 'stylesStretch';
+const String kStylesStrength = 'stylesStrength';
+const String kStylesIsometric = 'stylesIsometric';
+const String kStylesCardio = 'stylesCardio';
 
 ///it's 6 letters but 5th index??
-const int kAspectStringSkip = 5;
+const int kAspectStringSkip = 6;
 
 const TextStyle kAspectTextStyle = TextStyle(
   fontFamily: 'Montserrat',

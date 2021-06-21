@@ -59,6 +59,10 @@ import '../../constants.dart';
 //   }
 // }
 
+String _title(String key) {
+  return key.characters.skip(kAspectStringSkip).toString();
+}
+
 class AspectTile extends StatelessWidget {
   const AspectTile({
     Key? key,
@@ -66,11 +70,11 @@ class AspectTile extends StatelessWidget {
     required this.aspect,
     required this.tapForSelection,
     required this.isSelected,
-    this.isTargets,
+    this.mapTargetFine,
   }) : super(key: key);
   // final BuildContext buildContext;
 
-  final Map<String, bool>? isTargets;
+  final Map<String, bool>? mapTargetFine;
   final MapEntry aspect;
   final VoidCallback tapForSelection;
 
@@ -79,7 +83,7 @@ class AspectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String key = aspect.key;
-    final String title = key.characters.skip(kAspectStringSkip).toString();
+
     /////////////////////////
     /////////////////////////
     /////////////////////////
@@ -109,7 +113,7 @@ class AspectTile extends StatelessWidget {
           left: 12,
           right: isSelected
               ? 12
-              : isTargets == null
+              : mapTargetFine == null
                   ? 12
                   : null,
           child: Container(
@@ -134,12 +138,12 @@ class AspectTile extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        title,
+                        _title(key),
                         style: kAspectTextStyle,
                       ),
                     ),
                     Visibility(
-                      visible: isSelected && isTargets != null,
+                      visible: isSelected && mapTargetFine != null,
                       replacement: const SizedBox.shrink(),
 
                       /// THIS IS DEPENDENT UPON Aspect.value
