@@ -1,63 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-// import 'package:flutter/rendering.dart';
-
-// Size _size(BuildContext context, String text) {
-//   text += '_____';
-//   return (TextPainter(
-//           text: TextSpan(text: text, style: kAspectTextStyle),
-//           maxLines: 1,
-//           textScaleFactor: MediaQuery.of(context).textScaleFactor,
-//           textDirection: TextDirection.ltr)
-//         ..layout())
-//       .size;
-// }
-
-// class AspectTileBuilder extends StatelessWidget {
-//   const AspectTileBuilder(
-//       {Key? key,
-//       this.context,
-//       required this.whichAspect,
-//       required this.stringsForSizing,
-//       required this.tapForSelection})
-//       : super(key: key);
-//   final BuildContext? context;
-//   final Map<String, bool> whichAspect;
-//   final List<String> stringsForSizing;
-//   final VoidCallback tapForSelection;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double textHeight(int index) =>
-//         _size(context, stringsForSizing[index]).height;
-//     double textWidth(int index) =>
-//         _size(context, stringsForSizing[index]).width;
-
-//     return ListView.builder(
-//       // addAutomaticKeepAlives: true,
-
-//       itemCount: whichAspect.length,
-//       scrollDirection: Axis.horizontal,
-//       itemBuilder: (context, index) {
-//         bool isSelected = whichAspect.entries.elementAt(index).value;
-//         /////////
-//         return Container(
-//           height: textHeight(index),
-//           width: textWidth(index),
-//           //Provider.of<ExerciseRepository>(context).syleKeys[index],
-
-//           child: AspectTile(
-//             // context: context,
-//             isSelected: isSelected,
-//             aspect: whichAspect.entries.elementAt(index),
-//             tapForSelection: tapForSelection,
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
 String _title(String key) {
   return key.characters.skip(kAspectStringSkip).toString();
@@ -66,20 +9,30 @@ String _title(String key) {
 class AspectTile extends StatelessWidget {
   const AspectTile({
     Key? key,
-    // required this.buildContext,
     required this.aspect,
     required this.tapForSelection,
     required this.isSelected,
     this.mapTargetFine,
+    this.height,
+    this.width,
+    this.updateInner,
+    this.updateOuter,
+    this.updateUpper,
+    this.updateLower,
   }) : super(key: key);
-  // final BuildContext buildContext;
 
   final Map<String, bool>? mapTargetFine;
   final MapEntry aspect;
   final VoidCallback tapForSelection;
 
-  final bool isSelected;
+  final VoidCallback? updateInner;
+  final VoidCallback? updateOuter;
+  final VoidCallback? updateUpper;
+  final VoidCallback? updateLower;
 
+  final Size? height;
+  final Size? width;
+  final bool isSelected;
   @override
   Widget build(BuildContext context) {
     final String key = aspect.key;
@@ -151,7 +104,15 @@ class AspectTile extends StatelessWidget {
                     Visibility(
                       visible: isSelected && mapTargetFine != null,
                       replacement: const SizedBox.shrink(),
-                      child: _targetIconRow(targetFine),
+                      child: targetFine.isEmpty
+                          ? const SizedBox.shrink()
+                          : _targetIconRow(
+                              targetFine: targetFine,
+                              inner: updateInner!,
+                              outer: updateOuter!,
+                              upper: updateUpper!,
+                              lower: updateLower!,
+                            ),
 
                       ///Text('BOO'),
                     ),
@@ -189,63 +150,58 @@ class AspectTile extends StatelessWidget {
   }
 }
 
-Widget _targetIcon({required IconData iconData, required bool isSelected}) {
+Widget _targetIcon({
+  required IconData iconData,
+  required MapEntry<String, bool> target,
+  required Function() targetFineSelect,
+}) {
   return Padding(
     padding: const EdgeInsets.all(2.0),
     child: Opacity(
-        opacity: isSelected ? 1 : 0.5,
+        opacity: target.value ? 1 : 0.5,
         child: GestureDetector(
+          onTap: targetFineSelect,
           child: Icon(
             iconData,
-            color: isSelected ? Colors.green : Colors.black,
+            color: target.value ? Colors.green : Colors.black,
           ),
         )),
   );
 }
 
-Widget _targetIconRow(Map<String, bool> isSelected) {
-  // bool inner =
-  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Inner')).value;
-  // bool outer =
-  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Outer')).value;
-  // bool upper =
-  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Upper')).value;
-  // bool lower =
-  //     isSelected.entries.firstWhere((e) => e.key.contains(r'*Lower')).value;
-
-  late bool inner;
-  late bool outer;
-  late bool upper;
-  late bool lower;
-  if (isSelected.isEmpty) {
-    inner = false;
-    outer = false;
-    upper = false;
-    lower = false;
-  } else if (isSelected.isNotEmpty) {
-    inner = isSelected.values.elementAt(0);
-    outer = isSelected.values.elementAt(1);
-    upper = isSelected.values.elementAt(2);
-    lower = isSelected.values.elementAt(3);
-  }
+Widget _targetIconRow({
+  required Map<String, bool> targetFine,
+  required Function() inner,
+  required Function() outer,
+  required Function() upper,
+  required Function() lower,
+}) {
+  // MapEntry<String, bool> e1 = targetFine.entries.elementAt(0);
+  // MapEntry<String, bool> e2 = targetFine.entries.elementAt(1);
+  // MapEntry<String, bool> e3 = targetFine.entries.elementAt(2);
+  // MapEntry<String, bool> e4 = targetFine.entries.elementAt(3);
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       _targetIcon(
         iconData: Icons.gps_fixed,
-        isSelected: inner,
+        target: targetFine.entries.elementAt(0),
+        targetFineSelect: inner,
       ),
       _targetIcon(
         iconData: Icons.all_out,
-        isSelected: outer,
+        target: targetFine.entries.elementAt(1),
+        targetFineSelect: outer,
       ),
       _targetIcon(
         iconData: Icons.keyboard_arrow_up,
-        isSelected: upper,
+        target: targetFine.entries.elementAt(2),
+        targetFineSelect: upper,
       ),
       _targetIcon(
         iconData: Icons.keyboard_arrow_down,
-        isSelected: lower,
+        target: targetFine.entries.elementAt(3),
+        targetFineSelect: lower,
       ),
     ],
   );
