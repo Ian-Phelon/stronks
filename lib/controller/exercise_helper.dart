@@ -66,7 +66,6 @@ class ExerciseHelper {
     return helper.toString();
   }
 
-  /// List [0]:targets, [1]:equip, [2]:style
   Map<String, bool> initializeTargetAspects() {
     final Map<String, bool> targets = {};
     for (var e in ExerciseKeys.ekeys.targets) {

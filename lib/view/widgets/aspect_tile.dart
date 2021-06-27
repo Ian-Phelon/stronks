@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 
 String _title(String key) {
-  return key.characters.skip(kAspectStringSkip).toString();
+  bool isTargets = key.startsWith(r'target');
+  String fromKey = key.characters.skip(kAspectStringSkip).toString();
+  if (isTargets) fromKey = fromKey.substring(0, fromKey.characters.length - 5);
+
+  return fromKey;
 }
 
 class AspectTile extends StatelessWidget {
@@ -36,28 +40,6 @@ class AspectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String key = aspect.key;
-
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
-    /////////////////////////
     late Map<String, bool> targetFine;
     if (mapTargetFine == null || mapTargetFine!.isEmpty) {
       targetFine = {};
@@ -96,9 +78,12 @@ class AspectTile extends StatelessWidget {
                       width: 28,
                     ),
                     Center(
-                      child: Text(
-                        _title(key),
-                        style: kAspectTextStyle,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
+                        child: Text(
+                          _title(key),
+                          style: kAspectTextStyle,
+                        ),
                       ),
                     ),
                     Visibility(
@@ -180,31 +165,35 @@ Widget _targetIconRow({
   // MapEntry<String, bool> e2 = targetFine.entries.elementAt(1);
   // MapEntry<String, bool> e3 = targetFine.entries.elementAt(2);
   // MapEntry<String, bool> e4 = targetFine.entries.elementAt(3);
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      _targetIcon(
-        iconData: Icons.gps_fixed,
-        target: targetFine.entries.elementAt(0),
-        targetFineSelect: inner,
-      ),
-      _targetIcon(
-        iconData: Icons.all_out,
-        target: targetFine.entries.elementAt(1),
-        targetFineSelect: outer,
-      ),
-      _targetIcon(
-        iconData: Icons.keyboard_arrow_up,
-        target: targetFine.entries.elementAt(2),
-        targetFineSelect: upper,
-      ),
-      _targetIcon(
-        iconData: Icons.keyboard_arrow_down,
-        target: targetFine.entries.elementAt(3),
-        targetFineSelect: lower,
-      ),
-    ],
-  );
+  Widget iconRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _targetIcon(
+          iconData: Icons.gps_fixed,
+          target: targetFine.entries.elementAt(0),
+          targetFineSelect: inner,
+        ),
+        _targetIcon(
+          iconData: Icons.all_out,
+          target: targetFine.entries.elementAt(1),
+          targetFineSelect: outer,
+        ),
+        _targetIcon(
+          iconData: Icons.keyboard_arrow_up,
+          target: targetFine.entries.elementAt(2),
+          targetFineSelect: upper,
+        ),
+        _targetIcon(
+          iconData: Icons.keyboard_arrow_down,
+          target: targetFine.entries.elementAt(3),
+          targetFineSelect: lower,
+        ),
+      ],
+    );
+  }
+
+  return targetFine.isEmpty ? const SizedBox.shrink() : iconRow();
 }
 
 // class SliverTilePiece extends SingleChildRenderObjectWidget {

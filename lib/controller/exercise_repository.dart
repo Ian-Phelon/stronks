@@ -54,12 +54,6 @@ class ExerciseRepository extends ChangeNotifier {
       'name',
       (value) => value == '' ? _userSkippedName() : value,
     );
-    // e.update('style', (value) => value);
-
-    // e.updateAll((key, value) => {
-    //       'name': value == '' ? _userSkippedName() : value,
-    //       'style': value,
-    //     });
 
     await dB.insert(table, e);
     await fetchAndSetData();
