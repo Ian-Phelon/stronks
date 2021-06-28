@@ -65,6 +65,11 @@ class ExerciseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeExerciseFromDB(Exercise e) async {
+    await _dbHelper.delete(e.id!, table);
+    notifyListeners();
+  }
+
   Future<void> updateSelectedExerciseName(String e) async {
     if (e == selectedExercise?.name || e == '') return;
     Exercise thisExercise = Exercise(
@@ -72,13 +77,8 @@ class ExerciseRepository extends ChangeNotifier {
         totalCount: selectedExercise!.totalCount,
         name: e,
         style: selectedExercise!.style);
-    await _dbHelper.update(thisExercise, table);
+    await _dbHelper.update(thisExercise.toMap(), table);
     selectExercise(thisExercise);
-    notifyListeners();
-  }
-
-  Future<void> removeExerciseUpdateView(Exercise e) async {
-    await _dbHelper.delete(e.id!, table);
     notifyListeners();
   }
 
@@ -87,30 +87,36 @@ class ExerciseRepository extends ChangeNotifier {
     int i = selectedExercise!.totalCount! + bump;
 
     Exercise thisExercise = e.copyWith(totalCount: i);
-    await _dbHelper.update(thisExercise, table);
+    await _dbHelper.update(thisExercise.toMap(), table);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
+  /// aka user is lazy
   String _userSkippedName() {
     int len = exerciseList.length + 1;
     String onComplete = 'Unnamed Exercise #$len';
     return onComplete;
   }
 
+  /// Like it's hot
   Future<void> dropDB() async {
     _dbHelper.dropDB();
     notifyListeners();
   }
 
+  /// Wrapper for widget access to user input
   Map<String, bool> eAspectForView({required String? input}) =>
       eHelper.eAspectForView(
         aspect: input ?? 'none',
       );
 
+  /// Wrapper for providing data we can actually store
   String eAspectToStringBuilder(Map<String, bool> aspectFromUser) =>
       eHelper.eAspectToString(aspectFromUser);
 
+  /// Access a list of strings for common use
   final List<String> syleKeys = ExerciseKeys.ekeys.style;
   final List<String> targetKeys = ExerciseKeys.ekeys.targets;
+  final List<String> equipKeys = ExerciseKeys.ekeys.equip;
 }

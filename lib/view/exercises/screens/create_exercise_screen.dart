@@ -8,12 +8,10 @@ import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
-MapEntry<String, bool> _changeMapValue(MapEntry<String, bool> entry) {
-  MapEntry<String, bool> updatedEntry =
-      MapEntry<String, bool>(entry.key, !entry.value);
-  return updatedEntry;
-}
-
+/// Recieves a Map of all possible targets and combines them into their major
+/// categories of Arms, Chest, Back, Core, and Legs.
+///
+/// arms[0], chest[1], back[2], core[3], legs[4]
 List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
   List<Map<String, bool>> targetFine = [{}, {}, {}, {}, {}];
   for (var target in allTargets.entries) {
@@ -47,6 +45,7 @@ List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
   return targetFine;
 }
 
+/// Returns a Map based on Styles input. Accepts a null or empty input to return a default map with all values set to false.
 Map<String, bool> _getStyleForView(BuildContext context, String? input) {
   return Provider.of<ExerciseRepository>(
     context,
@@ -54,6 +53,15 @@ Map<String, bool> _getStyleForView(BuildContext context, String? input) {
   ).eAspectForView(input: input == null || input == '' ? 'style' : input);
 }
 
+/// Returns a Map based on Equips input. Accepts a null or empty input to return a default map with all values set to false.
+Map<String, bool> _getEquipForView(BuildContext context, String? input) {
+  return Provider.of<ExerciseRepository>(
+    context,
+    listen: false,
+  ).eAspectForView(input: input == null || input == '' ? 'equip' : input);
+}
+
+/// Returns a Map based on Target input. Accepts a null or empty input to return a default map with all values set to false.
 Map<String, bool> _getTargetForView(BuildContext context, String? input) {
   return Provider.of<ExerciseRepository>(
     context,
@@ -61,14 +69,15 @@ Map<String, bool> _getTargetForView(BuildContext context, String? input) {
   ).eAspectForView(input: input == null || input == '' ? 'target' : input);
 }
 
+/// Provides a Size based on String length and Font Styling
 Size _size(BuildContext context, String text) {
   text += '_____';
   return (TextPainter(
-          text: TextSpan(text: text, style: kAspectTextStyle),
-          maxLines: 1,
-          textScaleFactor: MediaQuery.of(context).textScaleFactor,
-          textDirection: TextDirection.ltr)
-        ..layout())
+    text: TextSpan(text: text, style: kAspectTextStyle),
+    maxLines: 1,
+    textScaleFactor: MediaQuery.of(context).textScaleFactor,
+    textDirection: TextDirection.ltr,
+  )..layout())
       .size;
 }
 
@@ -80,6 +89,8 @@ class CreateExerciseScreen extends StatefulWidget {
 }
 
 class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
+  /// A set of boolean values to help determine if a part is selected, without
+  /// assuming the equivalent part's values in targetFine
 //////
   late bool addArms;
   late bool addChest;
@@ -87,51 +98,22 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   late bool addCore;
   late bool addLegs;
 ///////
+  /// The name of the exercise being made.
+  /// can be left blank, or empty.
   final TextEditingController txtCtrl = TextEditingController();
   int? countForSets;
   StringBuffer targetStringBuilder = StringBuffer();
   StringBuffer stylesStringBuilder = StringBuffer();
-  StringBuffer? equips;
+  StringBuffer equipsStringBuilder = StringBuffer();
   late final Map<String, bool> styles;
-
   late final Map<String, bool> allTargets;
+  late final Map<String, bool> equips;
 
   /// arms[0], chest[1], back[2], core[3], legs[4]
   late final List<Map<String, bool>> targetFine;
 
-  @override
-  void initState() {
-    super.initState();
-    // setState(() {
-    if (_targetFineSeletctions.isEmpty) {
-      addArms = false;
-      addChest = false;
-      addBack = false;
-      addCore = false;
-      addLegs = false;
-      _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
-    }
-    _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
-    stylesStringBuilder.writeAll(_getStyleForView(
-            super.context,
-            stylesStringBuilder.length < 1
-                ? 'style'
-                : stylesStringBuilder.toString())
-        .entries
-        .where((element) => element.value == true));
-    targetStringBuilder.writeAll(_getTargetForView(
-            super.context,
-            targetStringBuilder.length < 1
-                ? 'target'
-                : targetStringBuilder.toString())
-        .entries
-        .where((element) => element.value == true));
-    styles = _getStyleForView(context, stylesStringBuilder.toString());
-    allTargets = _getTargetForView(context, targetStringBuilder.toString());
-    targetFine = _mapTargetFine(allTargets);
-    // });
-  }
-
+  /// Uses the index of ListView.builder to determine which Major Target Group has
+  /// been selected by user
   void _tapForTargetSelection(int index) {
     setState(() {
       if (index == 0) addArms = !addArms;
@@ -143,11 +125,57 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     });
   }
 
+  /// Gets initialized with wether or not a Major Target Group has been
+  /// selected. Is passed into the CreateExerciseFAB to handle wether or not
+  /// user has selected any targetFine values.
   late List<bool> _targetFineSeletctions = [];
+  @override
+  void initState() {
+    /// When the screen is rebuilt, set all late values with user input using
+    /// the top-level functions
+    super.initState();
+    if (_targetFineSeletctions.isEmpty) {
+      addArms = false;
+      addChest = false;
+      addBack = false;
+      addCore = false;
+      addLegs = false;
+    }
+    _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
 
-  // void _tapTargetSpecific(int index, String key, bool value) {}
-  // Map<String, bool> _getTargetSpecific(){}
-  // MapEntry<String,bool> _getTargetSpecificEntry()
+    stylesStringBuilder.writeAll(_getStyleForView(
+            super.context,
+            stylesStringBuilder.length < 1
+                ? 'style'
+                : stylesStringBuilder.toString())
+        .entries
+        .where((element) => element.value == true));
+
+    targetStringBuilder.writeAll(_getTargetForView(
+            super.context,
+            targetStringBuilder.length < 1
+                ? 'target'
+                : targetStringBuilder.toString())
+        .entries
+        .where((element) => element.value == true));
+
+    equipsStringBuilder.writeAll(_getEquipForView(
+            super.context,
+            equipsStringBuilder.length < 1
+                ? 'equip'
+                : equipsStringBuilder.toString())
+        .entries
+        .where((element) => element.value == true));
+
+    styles = _getStyleForView(context, stylesStringBuilder.toString());
+
+    equips = _getEquipForView(context, equipsStringBuilder.toString());
+
+    allTargets = _getTargetForView(context, targetStringBuilder.toString());
+
+    targetFine = _mapTargetFine(allTargets);
+  }
+
   @override
   Widget build(BuildContext context) {
     final TutorialBar tutorialBar = TutorialBar(
@@ -158,14 +186,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       backgroundColor: colorExercisesBG,
       appBar: AppBar(
         title: Text('Create Exercise'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                debugPrint(
-                    'ALL TARGETS: $allTargets \n TARGET FINE: $targetFine \n STYLES: $styles');
-              },
-              icon: Icon(Icons.menu))
-        ],
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
       ),
       body: ListView(
         children: [
@@ -185,54 +206,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   onSubmitted: (value) => txtCtrl.text = value,
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 99,
-                  child: ListView.builder(
-                    itemCount: styles.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      bool isSelected = styles.entries.elementAt(index).value;
-                      MapEntry<String, bool> aspect =
-                          styles.entries.elementAt(index);
-
-                      Size sizeFromText = _size(
-                        context,
-                        Provider.of<ExerciseRepository>(context)
-                            .syleKeys[index],
-                      );
-                      return Container(
-                        height: sizeFromText.height,
-                        width: sizeFromText.width,
-                        child: haha(
-                          isSelected: isSelected,
-                          aspect: aspect,
-                          tapForSelection: () {
-                            setState(() {
-                              String newStyleString =
-                                  Provider.of<ExerciseRepository>(context,
-                                          listen: false)
-                                      .syleKeys
-                                      .elementAt(index);
-                              styles.update(
-                                  newStyleString, (value) => !isSelected);
-
-                              newStyleString += ', ';
-                              if (stylesStringBuilder
-                                      .toString()
-                                      .contains(newStyleString) ==
-                                  false)
-                                stylesStringBuilder.write(newStyleString);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -249,33 +222,21 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       final MapEntry e3 = specificTarget.entries.elementAt(2);
                       final MapEntry e4 = specificTarget.entries.elementAt(3);
 
-                      final List<bool> targetFineSeletctions =
-                          _targetFineSeletctions;
-                      //  = [
-                      //   addArms,
-                      //   addChest,
-                      //   addBack,
-                      //   addCore,
-                      //   addLegs
-                      // ];
-
                       Size sizeFromText = _size(
                         context,
                         specificTarget.keys.first,
                       );
 
-                      final MapEntry aspect = targetFine[index].entries.first;
+                      final MapEntry aspect = e1;
                       return Container(
                         height: sizeFromText.height,
-                        width: targetFineSeletctions[index] == true
+                        width: _targetFineSeletctions[index] == true
                             ? sizeFromText.width + 58
                             : sizeFromText.width - 58,
-                        child: hehe(
+                        child: AspectTile(
                           aspect: aspect,
-                          targetFine: specificTarget,
-                          tapForSelection: () {
-                            _tapForTargetSelection(index);
-                          },
+                          mapTargetFine: specificTarget,
+                          tapForSelection: () => _tapForTargetSelection(index),
                           isSelected: _targetFineSeletctions[index],
                           updateInner: () {
                             String thisKey = e1.key;
@@ -345,9 +306,99 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   ),
                 ),
               ),
-              //////////////////////////////////////
-              //////////////////////////////////////
-              //////////////////////////////////////
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 99,
+                  child: ListView.builder(
+                    itemCount: styles.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      bool isSelected = styles.entries.elementAt(index).value;
+                      MapEntry<String, bool> aspect =
+                          styles.entries.elementAt(index);
+
+                      Size sizeFromText = _size(
+                        context,
+                        Provider.of<ExerciseRepository>(context, listen: false)
+                            .syleKeys[index],
+                      );
+                      return Container(
+                        height: sizeFromText.height,
+                        width: sizeFromText.width,
+                        child: AspectTile(
+                          isSelected: isSelected,
+                          aspect: aspect,
+                          tapForSelection: () {
+                            setState(() {
+                              String newStyleString =
+                                  Provider.of<ExerciseRepository>(context,
+                                          listen: false)
+                                      .syleKeys
+                                      .elementAt(index);
+                              styles.update(
+                                  newStyleString, (value) => !isSelected);
+
+                              newStyleString += ', ';
+                              if (stylesStringBuilder
+                                      .toString()
+                                      .contains(newStyleString) ==
+                                  false)
+                                stylesStringBuilder.write(newStyleString);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 99,
+                  child: ListView.builder(
+                    itemCount: equips.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      bool isSelected = equips.entries.elementAt(index).value;
+                      MapEntry<String, bool> aspect =
+                          equips.entries.elementAt(index);
+
+                      Size sizeFromText = _size(
+                        context,
+                        Provider.of<ExerciseRepository>(context)
+                            .equipKeys[index],
+                      );
+                      return Container(
+                        width: sizeFromText.width,
+                        height: sizeFromText.height,
+                        child: AspectTile(
+                            aspect: aspect,
+                            tapForSelection: () {
+                              setState(() {
+                                String newEquipString =
+                                    Provider.of<ExerciseRepository>(context,
+                                            listen: false)
+                                        .equipKeys
+                                        .elementAt(index);
+                                equips.update(
+                                    newEquipString, (value) => !isSelected);
+
+                                newEquipString += ', ';
+                                if (equipsStringBuilder
+                                        .toString()
+                                        .contains(newEquipString) ==
+                                    false)
+                                  equipsStringBuilder.write(newEquipString);
+                              });
+                            },
+                            isSelected: isSelected),
+                      );
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ],
@@ -360,6 +411,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
         targetFine: targetFine,
         targetParts: _targetFineSeletctions,
         allTargets: allTargets,
+        equips: equips,
       ),
     );
   }
@@ -383,6 +435,7 @@ class AddExerciseFAB extends StatelessWidget {
     required this.targetFine,
     required this.targetParts,
     required this.allTargets,
+    required this.equips,
   }) : super(key: key);
   final String name;
   final int countForSets;
@@ -390,6 +443,7 @@ class AddExerciseFAB extends StatelessWidget {
   final List<Map<String, bool>> targetFine;
   final List<bool> targetParts;
   final Map<String, bool> allTargets;
+  final Map<String, bool> equips;
   // BuildContext context;
 
   Map<String, bool> _newTargets() {
@@ -406,17 +460,17 @@ class AddExerciseFAB extends StatelessWidget {
       }
     }
     return checkedForValues;
-    // debugPrint('$allTargets');
-    // return allTargets;
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, bool> getTargets() => _newTargets();
-    String styleString =
-        Provider.of<ExerciseRepository>(context).eAspectToStringBuilder(style);
-    String targetString = Provider.of<ExerciseRepository>(context)
-        .eAspectToStringBuilder(allTargets);
+    String styleString = Provider.of<ExerciseRepository>(context, listen: false)
+        .eAspectToStringBuilder(style);
+    String targetString =
+        Provider.of<ExerciseRepository>(context, listen: false)
+            .eAspectToStringBuilder(allTargets);
+    String equipString = Provider.of<ExerciseRepository>(context, listen: false)
+        .eAspectToStringBuilder(equips);
     Map<String, dynamic> result = {
       'id': null,
       'name': '$name',
@@ -424,9 +478,13 @@ class AddExerciseFAB extends StatelessWidget {
       'countForSets': countForSets,
       'style': styleString,
       'targets': targetString,
+      'equipment': equipString,
     };
     final repo = context.watch<ExerciseRepository>();
     void _addAndExit() {
+      /// Necessary to update here instead of creating $result with the updated
+      /// list, otherwise CreateExercises recognizes all targetFine as being
+      /// selected.
       result.update(
           'targets',
           (value) => Provider.of<ExerciseRepository>(context, listen: false)
@@ -442,41 +500,4 @@ class AddExerciseFAB extends StatelessWidget {
       elevation: 4.0,
     );
   }
-}
-
-Widget haha({
-  required MapEntry<String, bool> aspect,
-  required VoidCallback tapForSelection,
-  required bool isSelected,
-  // required Function(Map<String, bool>, MapEntry<String, bool>) targetFineSelect,
-}) {
-  return AspectTile(
-    aspect: aspect,
-    tapForSelection: tapForSelection,
-    isSelected: isSelected,
-    // targetFineSelect: targetFineSelect,
-  );
-}
-
-Widget hehe({
-  required MapEntry aspect,
-  required Map<String, bool> targetFine,
-  required VoidCallback tapForSelection,
-  required VoidCallback updateInner,
-  required VoidCallback updateOuter,
-  required VoidCallback updateUpper,
-  required VoidCallback updateLower,
-  required bool isSelected,
-}) {
-  return AspectTile(
-    mapTargetFine: targetFine,
-    aspect: aspect,
-    tapForSelection: tapForSelection,
-    isSelected: isSelected,
-    // targetFineSelect: targetFineSelect,
-    updateInner: updateInner,
-    updateOuter: updateOuter,
-    updateUpper: updateUpper,
-    updateLower: updateLower,
-  );
 }

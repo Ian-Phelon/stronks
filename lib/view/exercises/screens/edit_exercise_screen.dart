@@ -45,10 +45,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
     final repo = context.watch<ExerciseRepository>();
     // final repoRead = context.read<ExerciseRepository>();
     final exercise = repo.selectedExercise!;
-    // final AspectPanel targetPanel = AspectPanel(
-    //   pageContext: context,
-    //   exercise: exercise,
-    // );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${exercise.name}'),
@@ -137,7 +134,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                     ],
                   ),
                 ),
-                // targetPanel,
               ],
             ),
           ],

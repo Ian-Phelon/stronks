@@ -13,11 +13,10 @@ import 'migration/migration.dart';
 class DataHelper extends ChangeNotifier {
   DataHelper._();
 
-  // static final columnId = '_id';
-  // static final columnName = 'name';
-  // static final columnAge = 'age';
-  //We use the singleton pattern to ensure that
-  //we have only one class instance and provide a global point access to it
+  /// Static instances for commonly used strings in our DB
+  static final String exerciseTable = 'exercise';
+  static final String idColumn = 'id';
+
   static final DataHelper _dbAccess = DataHelper._();
   static final String _dbName = "stronks_user_mobile_device.db";
   static late Database _database;
@@ -38,8 +37,8 @@ class DataHelper extends ChangeNotifier {
         onOpen: (db) {}, onCreate: (Database db, int _) async {
       DbMigrator.migrations.keys.toList()
         ..sort()
-        ..forEach((k) async {
-          String? script = DbMigrator.migrations[k];
+        ..forEach((key) async {
+          String? script = DbMigrator.migrations[key];
           await db.execute('${script!}');
         });
     }, onUpgrade: (Database db, int _, int __) async {
@@ -70,12 +69,11 @@ class DataHelper extends ChangeNotifier {
   }
 
   Future<int> getCurrentDbVersion(Database db) async {
-    var res = await db.rawQuery('PRAGMA user_version;', null);
-    var version = res[0]['user_version'].toString();
+    var result = await db.rawQuery('PRAGMA user_version;', null);
+    var version = result[0]['user_version'].toString();
     return int.parse(version);
   }
 
-  /// how often do we actually do this?
   Future<void> dropDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _dbName);
@@ -87,43 +85,45 @@ class DataHelper extends ChangeNotifier {
     return await db.query(table);
   }
 
-  //   // Helper methods
+  /// Helper methods and helpful comments provided by Twitter user '@Suragch1'.
+  /// Check out the awesome tutorial on the sqflite package at
+  /// https://suragch.medium.com/simple-sqflite-database-example-in-flutter-e56a5aaa3f91
 
-  // Inserts a row in the database where each key in the Map is a column name
-  // and the value is the column value. The return value is the id of the
-  // inserted row.
+  /// Inserts a row in the database where each key in the Map is a column name
+  /// and the value is the column value. The return value is the id of the
+  /// inserted row.
   Future<int> insert(Map<String, dynamic> exercise, String table) async {
     Database db = await _dbAccess.database;
     return await db.insert(table, exercise,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  //The data present in the table is returned as a List of Map, where each
-  // row is of type map
+  /// The data present in the table is returned as a List of Map, where each row
+  /// is of type map
   Future<List<Map<String, dynamic>>> queryAllRows(String table) async {
     Database db = await _dbAccess.database;
     return await db.query(table);
   }
 
-  // All of the methods (insert, query, update, delete) can also be done using
-
-  // raw SQL commands. This method uses a raw query to give the row count.
+  /// All of the methods (insert, query, update, delete) can also be done using
+  /// raw SQL commands. This method uses a raw query to give the row count.
   Future<int?> queryRowCount(String table) async {
     Database db = await _dbAccess.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
-  // We are assuming here that the id column in the map is set. The other
-  // column values will be used to update the row.
-  Future<int> update(Exercise exercise, String table) async {
+  /// We are assuming here that the id column in the map is set. The other
+  /// column values will be used to update the row.
+  Future<int> update(Map<String, dynamic> exercise, String table) async {
     Database db = await _dbAccess.database;
-    return await db.update(table, exercise.toMap(),
-        where: 'id = ?', whereArgs: [exercise.id]);
+    int id = exercise['id'];
+    return await db
+        .update(table, exercise, where: '$idColumn = ?', whereArgs: [id]);
   }
 
-  // Deletes the row specified by the id. The number of affected rows is
-  // returned. This should be 1 as long as the row exists.
+  /// Deletes the row specified by the id. The number of affected rows is
+  /// returned. This should be 1 as long as the row exists.
   Future<int> delete(int id, String table) async {
     Database db = await _dbAccess.database;
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);

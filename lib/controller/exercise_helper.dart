@@ -1,6 +1,7 @@
 import '../constants.dart';
 
 /// methods to return parsed values for Exercise elements
+///
 class ExerciseHelper {
   const ExerciseHelper();
 
@@ -29,8 +30,14 @@ class ExerciseHelper {
   }
 
   /// facilitates visual representation by returning an Exercise's targets,
-  /// equipment, and style with booleanvalues. Strings accetpted are
-  /// 'target', 'equip, 'style'
+  /// equipment, and style with boolean values. Strings accetpted for
+  /// initializtion are 'target', 'equip, and 'style'; these will always return
+  /// a map with keys that are all of the equivalent ExerciseKeys beginning with
+  /// the initializtion string as well as all false values.
+  ///
+  /// Can also be given a comma separated string built elsewhere, which will
+  /// return the map with true vaules where substrings included match their
+  /// respective ExerciseKeys
   Map<String, bool> eAspectForView({required String aspect}) {
     final Set<String> aspectSet = _makeSet(exerciseAspect: aspect);
     bool contains(String key) => aspectSet.contains(key);
@@ -48,18 +55,21 @@ class ExerciseHelper {
   }
 
   //
-  /// helper method for this.eAspectsForView()
-  Set<String> _makeSet({required String? exerciseAspect}) {
-    exerciseAspect?.trim();
+  /// helper method for this.eAspectsForView() / creates an iterable to easily
+  //separate values from the input string. / By comparing this set of strings to
+  //a list of ExerciseKeys, we can / determine wether or not a value is true in
+  //an entry output from eAspectsForView()
+  Set<String> _makeSet({required String exerciseAspect}) {
+    exerciseAspect.trim();
     Set<String> setFromView = {};
-    setFromView.addAll(exerciseAspect!.split(r', '));
+    setFromView.addAll(exerciseAspect.split(r', '));
     return setFromView;
   }
 
-  ///  Storage only accepts a string, not a Map<String,bool>. eAspectFromUser()
+  ///  Storage only accepts a string, not a Map<String,bool>. eAspectUser()
   /// provides a string for repo to store
   String eAspectToString(Map<String, bool> aspectFromUser) {
-    var helper = StringBuffer();
+    StringBuffer helper = StringBuffer();
     aspectFromUser.forEach((key, value) {
       value == true ? helper.write(key + ', ') : helper = helper;
     });
@@ -79,7 +89,7 @@ class ExerciseHelper {
 
 class ExerciseKeys extends ExerciseHelper {
   const ExerciseKeys._();
-  static final ExerciseKeys ekeys = ExerciseKeys._();
+  static final ExerciseKeys ekeys = const ExerciseKeys._();
   factory ExerciseKeys() => ekeys;
   final List<String> none = const ['no aspect given'];
   final List<String> targets = const [

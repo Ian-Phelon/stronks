@@ -1,11 +1,28 @@
-import 'package:flutter/material.dart';
-
-import '../../constants.dart';
+part of 'aspect_panel.dart';
 
 String _title(String key) {
   bool isTargets = key.startsWith(r'target');
+  bool isEquips = key.startsWith(r'equips');
   String fromKey = key.characters.skip(kAspectStringSkip).toString();
   if (isTargets) fromKey = fromKey.substring(0, fromKey.characters.length - 5);
+  if (isEquips) {
+    switch (key) {
+      case kEquipsMachineCardio:
+        fromKey = kEquipsMachineCardioToText;
+        break;
+      case kEquipsMachineStrength:
+        fromKey = kEquipsMachineStrengthToText;
+        break;
+      case kEquipsRaisedPlatform:
+        fromKey = kEquipsRaisedPlatformToText;
+        break;
+      case kEquipsPullupBar:
+        fromKey = kEquipsPullupBarToText;
+        break;
+      default:
+        fromKey = fromKey;
+    }
+  }
 
   return fromKey;
 }
@@ -98,8 +115,6 @@ class AspectTile extends StatelessWidget {
                               upper: updateUpper!,
                               lower: updateLower!,
                             ),
-
-                      ///Text('BOO'),
                     ),
                   ],
                 ),

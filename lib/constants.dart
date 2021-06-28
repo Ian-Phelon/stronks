@@ -46,6 +46,11 @@ const String kStylesStrength = 'stylesStrength';
 const String kStylesIsometric = 'stylesIsometric';
 const String kStylesCardio = 'stylesCardio';
 
+const String kEquipsMachineCardioToText = 'Cardio Machine';
+const String kEquipsMachineStrengthToText = 'Strength Machine';
+const String kEquipsPullupBarToText = 'Pullup Bar';
+const String kEquipsRaisedPlatformToText = 'Raised Platform';
+
 ///it's 6 letters but 5th index??
 const int kAspectStringSkip = 6;
 

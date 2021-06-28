@@ -1,4 +1,6 @@
-import 'migration_scripts.dart';
+// import 'migration_scripts.dart';
+
+part 'migration_scripts.dart';
 
 /// Map for assembling our database by version number and acompanied script.
 class DbMigrator {

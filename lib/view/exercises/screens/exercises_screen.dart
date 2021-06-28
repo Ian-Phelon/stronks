@@ -14,7 +14,7 @@ class ExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<ExerciseRepository>().fetchAndSetData();
+    context.watch<ExerciseRepository>().fetchAndSetData();
     return Scaffold(
       appBar: AppBar(
         title: Text(runtimeType.toString()),
@@ -61,7 +61,7 @@ Widget _body(BuildContext context) {
             builder: (BuildContext context) =>
                 DeleteExercisePopup(deleteExerciseAndTile: () {
               Navigator.pop(context);
-              repo.removeExerciseUpdateView(exercise);
+              repo.removeExerciseFromDB(exercise);
             }),
           );
         },
