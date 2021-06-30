@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronks/controller/exercise_repository.dart'
     show ExerciseRepository;
+import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 import 'package:stronks/view/exercises/widgets/widgets.dart';
 
 import '../../../constants.dart';
@@ -101,7 +102,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   /// The name of the exercise being made.
   /// can be left blank, or empty.
   final TextEditingController txtCtrl = TextEditingController();
-  int? countForSets;
+  late int countForSets;
   StringBuffer targetStringBuilder = StringBuffer();
   StringBuffer stylesStringBuilder = StringBuffer();
   StringBuffer equipsStringBuilder = StringBuffer();
@@ -129,11 +130,21 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   /// selected. Is passed into the CreateExerciseFAB to handle wether or not
   /// user has selected any targetFine values.
   late List<bool> _targetFineSeletctions = [];
+
+  void updateCountForSets(int i) {
+    setState(() {
+      countForSets = i;
+    });
+  }
+
   @override
   void initState() {
     /// When the screen is rebuilt, set all late values with user input using
     /// the top-level functions
     super.initState();
+
+    countForSets = 0;
+
     if (_targetFineSeletctions.isEmpty) {
       addArms = false;
       addChest = false;
@@ -174,6 +185,12 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     allTargets = _getTargetForView(context, targetStringBuilder.toString());
 
     targetFine = _mapTargetFine(allTargets);
+  }
+
+  void setCountForSets(int i) {
+    setState(() {
+      countForSets = i;
+    });
   }
 
   @override
@@ -398,6 +415,33 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                     },
                   ),
                 ),
+              ),
+              /////  Count For Sets. we need a counter row, where each callback sets the state of int countForSets
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CountFinePopup(
+                                onCounterChanged: setCountForSets,
+                              ));
+                    },
+                    child: Text('$countForSets'),
+                  ),
+                  CounterRow(
+                    countOne: () {
+                      setCountForSets(1);
+                    },
+                    countFive: () {
+                      setCountForSets(5);
+                    },
+                    countTen: () {
+                      setCountForSets(10);
+                    },
+                  ),
+                ],
               )
             ],
           ),
@@ -406,7 +450,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       floatingActionButton: AddExerciseFAB(
         //  context,
         name: txtCtrl.text,
-        countForSets: 0,
+        countForSets: countForSets,
         style: styles,
         targetFine: targetFine,
         targetParts: _targetFineSeletctions,
@@ -418,10 +462,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
 
   @override
   void dispose() {
-    this.txtCtrl.dispose();
-    this.styles.clear();
-    this.allTargets.clear();
-
     super.dispose();
   }
 }

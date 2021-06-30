@@ -1,4 +1,5 @@
-part of 'aspect_panel.dart';
+import 'package:flutter/material.dart';
+import '../../constants.dart';
 
 String _title(String key) {
   bool isTargets = key.startsWith(r'target');

@@ -72,11 +72,7 @@ class ExerciseRepository extends ChangeNotifier {
 
   Future<void> updateSelectedExerciseName(String e) async {
     if (e == selectedExercise?.name || e == '') return;
-    Exercise thisExercise = Exercise(
-        id: selectedExercise!.id,
-        totalCount: selectedExercise!.totalCount,
-        name: e,
-        style: selectedExercise!.style);
+    Exercise thisExercise = selectedExercise!.copyWith(name: e);
     await _dbHelper.update(thisExercise.toMap(), table);
     selectExercise(thisExercise);
     notifyListeners();
@@ -85,7 +81,6 @@ class ExerciseRepository extends ChangeNotifier {
   Future<void> incrementExerciseCount(Exercise e, int bump) async {
     if (e.id != selectedExercise!.id) return;
     int i = selectedExercise!.totalCount! + bump;
-
     Exercise thisExercise = e.copyWith(totalCount: i);
     await _dbHelper.update(thisExercise.toMap(), table);
     selectExercise(thisExercise);

@@ -15,26 +15,22 @@ class CounterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        plusOne(context, countOne!),
-        plusFive(context, countFive!),
-        plusTen(context, countTen!)
-      ],
+      children: [plusOne(countOne!), plusFive(countFive!), plusTen(countTen!)],
     );
   }
 }
 
-Widget plusOne(BuildContext context, VoidCallback count) {
+Widget plusOne(VoidCallback count) {
   return RoundIconButton.asCounter(
       onPressed: count, size: 12.0, elevation: 4.0, countAmount: 1);
 }
 
-Widget plusFive(BuildContext context, VoidCallback count) {
+Widget plusFive(VoidCallback count) {
   return RoundIconButton.asCounter(
       onPressed: count, size: 12.0, elevation: 4.0, countAmount: 5);
 }
 
-Widget plusTen(BuildContext context, VoidCallback count) {
+Widget plusTen(VoidCallback count) {
   return RoundIconButton.asCounter(
       onPressed: count, size: 12.0, elevation: 4.0, countAmount: 10);
 }
