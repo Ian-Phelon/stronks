@@ -53,7 +53,7 @@ Widget _body(BuildContext context) {
         exercise: exercise,
         selectAndPush: () {
           repo.selectExercise(exercise);
-          RoutePageManager.of(context).toEditExerciseScreen(exercise);
+          RoutePageManager.of(context).toEditExerciseScreen();
         },
         deleteExercise: () {
           showDialog(

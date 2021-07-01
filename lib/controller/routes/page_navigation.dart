@@ -165,8 +165,8 @@ class RoutePageManager extends ChangeNotifier {
     setNewRoutePath(StronksPath.createExerciseScreen());
   }
 
-  void toEditExerciseScreen(Exercise e) {
-    setNewRoutePath(StronksPath.editExerciseScreen(e));
+  void toEditExerciseScreen() {
+    setNewRoutePath(StronksPath.editExerciseScreen());
   }
 
   void toCircuits() {
@@ -195,6 +195,8 @@ StronksPath parseRoute(Uri uri) {
   // Handle first path segment
   if (uri.pathSegments.length == 1) {
     if (uri.pathSegments[0] == 'exercises') return StronksPath.exercises();
+    if (uri.pathSegments[0] == 'edit_exercises')
+      return StronksPath.editExerciseScreen();
     if (uri.pathSegments[0] == 'circuits') return StronksPath.circuits();
     if (uri.pathSegments[0] == 'tp') return StronksPath.tp();
     if (uri.pathSegments[0] == 'stats') return StronksPath.stats();
@@ -218,6 +220,8 @@ class StronksRouteInformationParser
     if (config.isUnknownPage) RouteInformation(location: '/404');
     if (config.isDashPage) RouteInformation(location: '/');
     if (config.isExerciesPage) RouteInformation(location: '/exercises');
+    if (config.isEditExerciseScreenPage)
+      RouteInformation(location: '/edit_exercise');
     return RouteInformation(location: 'unknown');
   }
 }
@@ -228,7 +232,7 @@ class StronksPath {
   StronksPath.dash() : id = 'dash';
   StronksPath.exercises() : id = 'exercises';
   StronksPath.createExerciseScreen() : id = 'create_exercise';
-  StronksPath.editExerciseScreen(Exercise e) : id = 'edit_exercises';
+  StronksPath.editExerciseScreen() : id = 'edit_exercises';
   StronksPath.circuits() : id = 'circuits';
   StronksPath.createCricuit() : id = 'create_circuit';
   StronksPath.editCircuit() : id = 'edit_circuits';

@@ -543,7 +543,6 @@ class AddExerciseFAB extends StatelessWidget {
 
   Map<String, bool> _newTargets() {
     Map<String, bool> checkedForValues = {};
-    print('$targetParts');
     for (var i = 0; i < 5; i++) {
       bool emptyFine = targetFine[i].entries.every((e) => e.value == false) &&
           targetParts[i] == true;

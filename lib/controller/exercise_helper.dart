@@ -10,22 +10,36 @@ class ExerciseHelper {
   static List<String> _listVariableAspect(String aspect) {
     late final List<String> finalList;
 
-    switch (aspect) {
-      case r'target':
-        finalList = keys.targets;
-        break;
-      case r'equip':
-        finalList = keys.equip;
-        break;
-      case r'style':
-        finalList = keys.style;
-        break;
-      case r'none':
+    final bool isTargets = aspect.startsWith(r'target');
+    final bool isEquips = aspect.startsWith(r'equip');
+    final bool isStyle = aspect.startsWith(r'style');
 
-      default:
-        finalList = keys.none;
-        break;
+    if (isTargets) {
+      finalList = keys.targets;
+    } else if (isEquips) {
+      finalList = keys.equip;
+    } else if (isStyle) {
+      finalList = keys.style;
+    } else {
+      finalList = keys.none;
     }
+
+    // switch (aspect) {
+    //   case 'target':
+    //     finalList = keys.targets;
+    //     break;
+    //   case 'equip':
+    //     finalList = keys.equip;
+    //     break;
+    //   case 'style':
+    //     finalList = keys.style;
+    //     break;
+    //   case 'none':
+
+    //   default:
+    //     finalList = keys.none;
+    //     break;
+    // }
     return finalList;
   }
 

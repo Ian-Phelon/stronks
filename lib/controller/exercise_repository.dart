@@ -19,7 +19,7 @@ class ExerciseRepository extends ChangeNotifier {
 
   static late List<Exercise> exerciseList;
 
-  Exercise? selectedExercise;
+  late Exercise? selectedExercise;
 
   List<Exercise> getExercises() {
     fetchAndSetData();
@@ -84,6 +84,12 @@ class ExerciseRepository extends ChangeNotifier {
     Exercise thisExercise = e.copyWith(totalCount: i);
     await _dbHelper.update(thisExercise.toMap(), table);
     selectExercise(thisExercise);
+    notifyListeners();
+  }
+
+  Future<void> updateGeneral(Exercise e) async {
+    await _dbHelper.update(e.toMap(), table);
+    selectExercise(e);
     notifyListeners();
   }
 
