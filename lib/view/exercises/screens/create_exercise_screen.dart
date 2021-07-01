@@ -101,8 +101,10 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
 ///////
   /// The name of the exercise being made.
   /// can be left blank, or empty.
-  final TextEditingController txtCtrl = TextEditingController();
+  final TextEditingController nameTxtCtrl = TextEditingController();
+  final TextEditingController notesTxtCtrl = TextEditingController();
   late int countForSets;
+  late int countForResistance;
   StringBuffer targetStringBuilder = StringBuffer();
   StringBuffer stylesStringBuilder = StringBuffer();
   StringBuffer equipsStringBuilder = StringBuffer();
@@ -137,6 +139,12 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     });
   }
 
+  void updateCountForResistance(int i) {
+    setState(() {
+      countForResistance = i;
+    });
+  }
+
   @override
   void initState() {
     /// When the screen is rebuilt, set all late values with user input using
@@ -144,6 +152,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     super.initState();
 
     countForSets = 0;
+    countForResistance = 0;
 
     if (_targetFineSeletctions.isEmpty) {
       addArms = false;
@@ -187,9 +196,15 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     targetFine = _mapTargetFine(allTargets);
   }
 
-  void setCountForSets(int i) {
+  void incrementCountForSets(int i) {
     setState(() {
-      countForSets = i;
+      countForSets += i;
+    });
+  }
+
+  void incrementCountForResistance(int i) {
+    setState(() {
+      countForResistance += i;
     });
   }
 
@@ -219,8 +234,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                 padding: const EdgeInsets.all(18.0),
                 child: PurpleTextField(
                   keyboard: TextInputType.text,
-                  onChanged: (value) => txtCtrl.text = value,
-                  onSubmitted: (value) => txtCtrl.text = value,
+                  onChanged: (value) => nameTxtCtrl.text = value,
+                  onSubmitted: (value) => nameTxtCtrl.text = value,
                 ),
               ),
               Padding(
@@ -425,43 +440,79 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       showDialog(
                           context: context,
                           builder: (_) => CountFinePopup(
-                                onCounterChanged: setCountForSets,
+                                onCounterChanged: updateCountForSets,
                               ));
                     },
-                    child: Text('$countForSets'),
+                    child: Text('Sets: $countForSets'),
                   ),
                   CounterRow(
                     countOne: () {
-                      setCountForSets(1);
+                      incrementCountForSets(1);
                     },
                     countFive: () {
-                      setCountForSets(5);
+                      incrementCountForSets(5);
                     },
                     countTen: () {
-                      setCountForSets(10);
+                      incrementCountForSets(10);
                     },
                   ),
                 ],
-              )
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CountFinePopup(
+                                onCounterChanged: updateCountForResistance,
+                              ));
+                    },
+                    child: Text('Resistance: $countForResistance'),
+                  ),
+                  CounterRow(
+                    countOne: () {
+                      incrementCountForResistance(1);
+                    },
+                    countFive: () {
+                      incrementCountForResistance(5);
+                    },
+                    countTen: () {
+                      incrementCountForResistance(10);
+                    },
+                  ),
+                  TextField(
+                    maxLines: null,
+                    keyboardType: TextInputType.text,
+                    onChanged: (v) => notesTxtCtrl.text = v,
+                    onSubmitted: (v) => notesTxtCtrl.text = v,
+                  ),
+                ],
+              ),
             ],
           ),
         ],
       ),
       floatingActionButton: AddExerciseFAB(
         //  context,
-        name: txtCtrl.text,
+        name: nameTxtCtrl.text,
         countForSets: countForSets,
         style: styles,
         targetFine: targetFine,
         targetParts: _targetFineSeletctions,
         allTargets: allTargets,
         equips: equips,
+        countForResistance: countForResistance,
+        notes: notesTxtCtrl.text,
       ),
     );
   }
 
   @override
   void dispose() {
+    nameTxtCtrl.dispose();
+    notesTxtCtrl.dispose();
     super.dispose();
   }
 }
@@ -476,6 +527,8 @@ class AddExerciseFAB extends StatelessWidget {
     required this.targetParts,
     required this.allTargets,
     required this.equips,
+    required this.countForResistance,
+    required this.notes,
   }) : super(key: key);
   final String name;
   final int countForSets;
@@ -484,6 +537,8 @@ class AddExerciseFAB extends StatelessWidget {
   final List<bool> targetParts;
   final Map<String, bool> allTargets;
   final Map<String, bool> equips;
+  final int countForResistance;
+  final String notes;
   // BuildContext context;
 
   Map<String, bool> _newTargets() {
@@ -519,6 +574,8 @@ class AddExerciseFAB extends StatelessWidget {
       'style': styleString,
       'targets': targetString,
       'equipment': equipString,
+      'resistance': countForResistance,
+      'notes': notes,
     };
     final repo = context.watch<ExerciseRepository>();
     void _addAndExit() {

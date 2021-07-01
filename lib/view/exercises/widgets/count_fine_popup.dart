@@ -5,13 +5,10 @@ typedef void CounterCallback(int value);
 
 class CountFinePopup extends AlertDialog {
   const CountFinePopup({
-    this.editNumberFine,
     required this.onCounterChanged,
   });
 
   final CounterCallback onCounterChanged;
-
-  final VoidCallback? editNumberFine;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +54,7 @@ class CountFinePopup extends AlertDialog {
           onPressed: () {
             num n = num.tryParse(txt.text == '' ? '0' : txt.text)!;
             onCounterChanged(n.toInt());
-            print(n);
+            txt.dispose();
             Navigator.of(context).pop();
           },
           child: Text('Update Count'),
