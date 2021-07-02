@@ -2,37 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronks/controller/controller.dart'
     show ExerciseRepository, RoutePageManager;
+import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
 import '../widgets/widgets.dart' show RoundIconButton;
 import '../../../constants.dart';
 import '../../widgets/widgets.dart' show AspectTile, CounterRow, TutorialBar;
 import '../../../model/model.dart' show Exercise;
-
-Map<String, bool> _getTargetForView(BuildContext context, String? input) {
-  return Provider.of<ExerciseRepository>(
-    context,
-    listen: false,
-  ).eAspectForView(input: input == null || input == '' ? 'target' : input);
-}
-
-Exercise _setExercise(BuildContext context) {
-  return Provider.of<ExerciseRepository>(
-    context,
-    listen: false,
-  ).selectedExercise!;
-}
-
-/// Provides a Size based on String length and Font Styling
-Size _size(BuildContext context, String text) {
-  text += '_____';
-  return (TextPainter(
-    text: TextSpan(text: text, style: kAspectTextStyle),
-    maxLines: 1,
-    textScaleFactor: MediaQuery.of(context).textScaleFactor,
-    textDirection: TextDirection.ltr,
-  )..layout())
-      .size;
-}
 
 List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
   List<Map<String, bool>> targetFine = [{}, {}, {}, {}, {}];
@@ -77,7 +52,11 @@ class EditExerciseScreen extends StatefulWidget {
 }
 
 class _EditExerciseScreenState extends State<EditExerciseScreen> {
-  final TextEditingController txtCtrl = TextEditingController();
+  final TextEditingController nameTxtCtrl = TextEditingController();
+  final TextEditingController notesTxtCtrl = TextEditingController();
+  late final TextEditingController initialNotesCtrl;
+  late String initialNotes;
+  late int countForResistance;
 
   late bool editNameVisibility;
 
@@ -99,16 +78,22 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   @override
   void initState() {
     super.initState();
-    // setState(() {
     editNameVisibility = false;
-    // });
-    // exercise = _setExercise(super.context);
-    // allTargets = _getTargetForView(context, exercise.targets!);
     var repo = Provider.of<ExerciseRepository>(
       context,
       listen: false,
     );
     exercise = repo.selectedExercise!;
+    initialNotes = exercise.notes.toString();
+    countForResistance = exercise.resistance!;
+    initialNotesCtrl = TextEditingController(text: initialNotes);
+    notesTxtCtrl.addListener(() {
+      notesTxtCtrl.value = notesTxtCtrl.value.copyWith(
+        selection: TextSelection(
+            baseOffset: initialNotes.length, extentOffset: initialNotes.length),
+        // composing: TextRange.,
+      );
+    });
     om = exercise.toMap();
     styles = repo.eAspectForView(
         input: exercise.style == null || exercise.style == ''
@@ -152,7 +137,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
 
   @override
   void dispose() {
-    this.txtCtrl.dispose();
+    nameTxtCtrl.dispose();
+    notesTxtCtrl.dispose();
 
     // Provider.of<ExerciseRepository>(context, listen: false)
     //     .selectExercise(exercise);
@@ -206,10 +192,9 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
               icon: const Icon(Icons.menu))
         ],
       ),
-      body: Stack(
-        alignment: Alignment.topCenter,
+      backgroundColor: kcolorExercisesBG,
+      body: ListView(
         children: [
-          GradientBG(),
           TutorialBar(
             pageContext: context,
           ),
@@ -224,9 +209,23 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                     SizedBox(
                       width: 20.0,
                     ),
-                    Text(
-                      '${exerciseView.totalCount}',
-                      style: TextStyle(fontSize: 26),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => CountFinePopup(
+                                  onCounterChanged: (count) {
+                                    var e = exerciseView.copyWith(
+                                      totalCount: count,
+                                    );
+                                    repo.updateGeneral(e);
+                                  },
+                                ));
+                      },
+                      child: Text(
+                        '${exerciseView.totalCount}',
+                        style: TextStyle(fontSize: 26),
+                      ),
                     ),
                     RoundIconButton(
                       size: 12.0,
@@ -269,7 +268,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         final MapEntry aspect = e1;
 
                         Exercise eToSubmit;
-                        Size sizeFromText = _size(
+                        Size sizeFromText = repo.sizeFromText(
                           context,
                           specificTarget.keys.first,
                         );
@@ -353,7 +352,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       MapEntry<String, bool> aspect =
                           styles.entries.elementAt(index);
 
-                      Size sizeFromText = _size(
+                      Size sizeFromText = repo.sizeFromText(
                         context,
                         Provider.of<ExerciseRepository>(context, listen: false)
                             .syleKeys[index],
@@ -398,7 +397,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       MapEntry<String, bool> aspect =
                           equips.entries.elementAt(index);
 
-                      Size sizeFromText = _size(
+                      Size sizeFromText = repo.sizeFromText(
                         context,
                         Provider.of<ExerciseRepository>(context)
                             .equipKeys[index],
@@ -433,6 +432,60 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  maxLines: null,
+                  textDirection: TextDirection.ltr,
+                  keyboardType: TextInputType.text,
+                  controller: initialNotesCtrl,
+                  onChanged: (v) {
+                    notesTxtCtrl.text = v;
+                    var e = exerciseView.copyWith(notes: notesTxtCtrl.text);
+                    repo.updateGeneral(e);
+                  },
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CountFinePopup(
+                                onCounterChanged: (count) {
+                                  var e = exerciseView.copyWith(
+                                    resistance: count,
+                                  );
+                                  repo.updateGeneral(e);
+                                },
+                              ));
+                    },
+                    child: Text('Resistance: ${exerciseView.resistance}'),
+                  ),
+                  CounterRow(
+                    countOne: () {
+                      var e = exerciseView.copyWith(
+                          resistance: exerciseView.resistance! + 1);
+                      repo.updateGeneral(e);
+                      // incrementCountForResistance(1);
+                    },
+                    countFive: () {
+                      // incrementCountForResistance(5);
+                      var e = exerciseView.copyWith(
+                          resistance: exerciseView.resistance! + 5);
+                      repo.updateGeneral(e);
+                    },
+                    countTen: () {
+                      // incrementCountForResistance(10);
+                      var e = exerciseView.copyWith(
+                          resistance: exerciseView.resistance! + 10);
+                      repo.updateGeneral(e);
+                    },
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -458,12 +511,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   keyboard: TextInputType.text,
                   // autofocus: true,
                   onChanged: (value) {
-                    txtCtrl.text = value;
+                    nameTxtCtrl.text = value;
                   },
                   onSubmitted: (value) {
-                    // repo.updateSelectedExerciseName(txtCtrl.text);
+                    // repo.updateSelectedExerciseName(nameTxtCtrl.text);
                     // setState(() {
-                    Exercise e = exercise.copyWith(name: txtCtrl.text);
+                    Exercise e = exercise.copyWith(name: nameTxtCtrl.text);
                     repo.updateGeneral(e);
                     _triggerVisibility();
                     // });

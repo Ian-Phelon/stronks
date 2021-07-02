@@ -28,7 +28,7 @@ class ExercisesScreen extends StatelessWidget {
               icon: Icon(Icons.menu))
         ],
       ),
-      backgroundColor: colorExercisesBG,
+      backgroundColor: kcolorExercisesBG,
       body: _body(context),
       floatingActionButton: RoundIconButton(
         onPressed: () {
@@ -50,6 +50,7 @@ Widget _body(BuildContext context) {
     pageContext: context,
   );
   Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
+        titleSize: repo.sizeFromText(context, exercise.name!),
         exercise: exercise,
         selectAndPush: () {
           repo.selectExercise(exercise);

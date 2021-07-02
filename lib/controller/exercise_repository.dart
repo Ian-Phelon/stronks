@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 // import '../constants.dart';
+import '../constants.dart';
 import '../model/model.dart' show Exercise;
 import '../controller/controller.dart'
     show DataHelper, ExerciseHelper, ExerciseKeys;
@@ -24,6 +25,18 @@ class ExerciseRepository extends ChangeNotifier {
   List<Exercise> getExercises() {
     fetchAndSetData();
     return exerciseList;
+  }
+
+  /// Provides a Size based on String length and Font Styling
+  Size sizeFromText(BuildContext context, String text) {
+    if (context.toString() != 'ExerciseTile') text += '_____';
+    return (TextPainter(
+      text: TextSpan(text: text, style: kAspectTextStyle),
+      maxLines: 1,
+      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+      textDirection: TextDirection.ltr,
+    )..layout())
+        .size;
   }
 
   Future<void> fetchAndSetData() async {

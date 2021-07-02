@@ -9,10 +9,12 @@ class ExerciseTile extends StatelessWidget {
     required this.exercise,
     required this.selectAndPush,
     required this.deleteExercise,
+    required this.titleSize,
   }) : super(key: key);
   final Exercise exercise;
   final VoidCallback selectAndPush;
   final VoidCallback deleteExercise;
+  final Size titleSize;
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +24,15 @@ class ExerciseTile extends StatelessWidget {
         onTap: selectAndPush,
         onLongPress: deleteExercise,
         child: Material(
-          shadowColor: colorPurpleDark,
+          shadowColor: kcolorPurpleDark,
           borderOnForeground: true,
           elevation: 4,
-          color: colorPurpleLight,
+          color: kcolorPurpleLight,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
             side: BorderSide(
               width: 6.0,
-              color: colorPurpleDark,
+              color: kcolorPurpleDark,
             ),
           ),
           child: Padding(
@@ -38,9 +40,19 @@ class ExerciseTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  exercise.name!,
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900),
+                Container(
+                  height: titleSize.height,
+                  width:
+                      titleSize.width >= MediaQuery.of(context).size.width * 0.8
+                          ? MediaQuery.of(context).size.width * 0.3
+                          : titleSize.width,
+                  child: Text(
+                    exercise.name!,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900),
+                  ),
                 ),
                 SizedBox(
                   width: 8.0,

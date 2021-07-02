@@ -15,7 +15,7 @@ class App extends StatelessWidget {
         primaryColor: Colors.deepPurpleAccent,
         fontFamily: 'Montserrat',
         appBarTheme: AppBarTheme(
-          color: colorPurpleDark,
+          color: kcolorPurpleDark,
         ),
       ),
       routerDelegate: StronksRouterDelegate(),

@@ -215,7 +215,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     );
 
     return Scaffold(
-      backgroundColor: colorExercisesBG,
+      backgroundColor: kcolorExercisesBG,
       appBar: AppBar(
         title: Text('Create Exercise'),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
@@ -482,15 +482,20 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       incrementCountForResistance(10);
                     },
                   ),
-                  TextField(
-                    maxLines: null,
-                    keyboardType: TextInputType.text,
-                    onChanged: (v) => notesTxtCtrl.text = v,
-                    onSubmitted: (v) => notesTxtCtrl.text = v,
-                  ),
                 ],
               ),
             ],
+          ),
+          TextField(
+            maxLines: null,
+            keyboardType: TextInputType.text,
+            onChanged: (v) {
+              setState(() {
+                notesTxtCtrl.text = v;
+              });
+              print(notesTxtCtrl.text);
+            },
+            onSubmitted: (v) => notesTxtCtrl.text = v,
           ),
         ],
       ),
@@ -581,6 +586,7 @@ class AddExerciseFAB extends StatelessWidget {
       /// Necessary to update here instead of creating $result with the updated
       /// list, otherwise CreateExercises recognizes all targetFine as being
       /// selected.
+      print(notes);
       result.update(
           'targets',
           (value) => Provider.of<ExerciseRepository>(context, listen: false)

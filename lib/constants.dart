@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum Aspect {
-  targets,
-  equip,
-  style,
-  newExercise,
-}
-
 /// Easy member access for a lot of common strings
 const String kTargetArmsInner = 'targetArmsInner';
 const String kTargetArmsOuter = 'targetArmsOuter';
@@ -60,12 +53,12 @@ const TextStyle kAspectTextStyle = TextStyle(
   fontSize: 22,
 );
 
-const colorPurpleDark = Color(0xff6654d1);
-const colorPurpleLight = Color(0xff9286db);
+const kcolorPurpleDark = Color(0xff6654d1);
+const kcolorPurpleLight = Color(0xff9286db);
 
-const colorExercisesBG = Color(0xFFFF907C);
-const colorExercisesBGOG = Color(0xffdd7b69);
-const beer = Color(0xffFF583B);
+const kcolorExercisesBG = Color(0xFFFF907C);
+const kcolorExercisesBGOG = Color(0xffdd7b69);
+const kbeer = Color(0xffFF583B);
 
 const colorGradientBG = GradientBG();
 
@@ -83,10 +76,10 @@ class GradientBG extends StatelessWidget {
           end: Alignment.bottomCenter,
           stops: [0.25, 0.75, 0.90, 1.0],
           colors: [
-            colorExercisesBG,
-            colorExercisesBG.desaturate(10),
-            colorExercisesBG.saturate(33),
-            colorExercisesBG.desaturate(50),
+            kcolorExercisesBG,
+            kcolorExercisesBG.desaturate(10),
+            kcolorExercisesBG.saturate(33),
+            kcolorExercisesBG.desaturate(50),
           ],
         ),
       ),
