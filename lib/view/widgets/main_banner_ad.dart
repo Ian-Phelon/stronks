@@ -88,10 +88,13 @@ class _MainBannerAdState extends State<MainBannerAd> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: myBanner.size.height.toDouble(),
-      width: myBanner.size.width.toDouble(),
-      child: AdWidget(ad: myBanner),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: myBanner.size.height.toDouble(),
+        width: myBanner.size.width.toDouble(),
+        child: AdWidget(ad: myBanner),
+      ),
     );
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
 import 'controller/routes/page_navigation.dart';
-
-//import 'view/exercises/execise_view.dart';
+import 'constants.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -13,14 +11,16 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       theme: ThemeData(
         fontFamily: kFontFamily,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: kcolorPurpleDark,
         ),
-        textTheme: TextTheme(
-          headline2: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: kFontFamily,
-              color: Colors.black),
+        textTheme: const TextTheme(
+          headline2: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontFamily: kFontFamily,
+            color: Colors.black,
+          ),
+          headline6: const TextStyle(color: Colors.black),
         ),
       ),
       routerDelegate: StronksRouterDelegate(),

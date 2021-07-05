@@ -7,7 +7,7 @@ import '../../../controller/controller.dart'
 import '../../../model/model.dart';
 import '../widgets/widgets.dart'
     show ExerciseTile, RoundIconButton, DeleteExercisePopup;
-import '../../widgets/widgets.dart' show TutorialBar;
+import '../../widgets/widgets.dart' show MainBannerAd, TutorialBar;
 
 class ExercisesScreen extends StatelessWidget {
   const ExercisesScreen({Key? key}) : super(key: key);
@@ -21,7 +21,18 @@ class ExercisesScreen extends StatelessWidget {
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
       ),
       backgroundColor: kcolorExercisesBG,
-      body: _body(context),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 42, 0, 0),
+            child: _body(context),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TutorialBar(pageContext: context),
+          ),
+        ],
+      ),
       floatingActionButton: RoundIconButton(
         onPressed: () {
           RoutePageManager.of(context).toCreateExerciseScreen();
@@ -38,9 +49,9 @@ Widget _body(BuildContext context) {
   final repo = context.watch<ExerciseRepository>();
 
   final List<Exercise> repoList = repo.getExercises();
-  final TutorialBar bar = TutorialBar(
-    pageContext: context,
-  );
+  // final TutorialBar bar = TutorialBar(
+  //   pageContext: context,
+  // );
   Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
         titleSize: repo.sizeFromText(context, exercise.name!),
         exercise: exercise,
@@ -59,31 +70,57 @@ Widget _body(BuildContext context) {
           );
         },
       );
-
-  ///
-  ///
-
-  return CustomScrollView(
-    //shrinkWrap: true,
-    slivers: [
-      SliverToBoxAdapter(
-        child: bar,
-      ),
-      SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, index) {
-            if (repoList.isEmpty) {
-              return Text('nowidgets');
-            }
-            return _tile(
-              context,
-              repoList[index],
-            );
-          },
-          childCount: repoList.isEmpty ? 1 : repoList.length,
-          //repoList.isEmpty ? 1 : repoList.length,
-        ),
-      ),
-    ],
+  return ListView.separated(
+    itemCount: repoList.length,
+    separatorBuilder: (context, index) {
+      if (index % 4 == 0)
+        return MainBannerAd();
+      else
+        return SizedBox.shrink();
+    },
+    itemBuilder: (context, index) {
+      return _tile(
+        context,
+        repoList[index],
+      );
+    },
   );
+
+  ///
+  ///
+
+  // return CustomScrollView(
+  //   //shrinkWrap: true,
+  //   slivers: [
+  //     SliverToBoxAdapter(
+  //       child: bar,
+  //     ),
+  //     SliverList(
+
+  //       delegate: SliverChildBuilderDelegate(
+  //         (_, index) {
+  //           int adOffset = 4;
+  //           int shiftIndex;
+  //           if (repoList.isEmpty) {
+  //             return Text('nowidgets');
+  //           }
+  //           if (index % adOffset == 0) {
+  //             index = index + 1;
+  //             return Padding(
+  //               padding: const EdgeInsets.all(8.0),
+  //               child: MainBannerAd(),
+  //             );
+  //           }
+
+  //           return _tile(
+  //             context,
+  //             repoList[index],
+  //           );
+  //         },
+  //         childCount: repoList.isEmpty ? 1 : repoList.length,
+  //         //repoList.isEmpty ? 1 : repoList.length,
+  //       ),
+  //     ),
+  //   ],
+  // );
 }

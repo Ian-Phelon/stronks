@@ -52,6 +52,7 @@ class _TutorialBarState extends State<TutorialBar> {
     return tutorial.stringsFromContext();
   }
 
+  /// positive 1 for next, negative 1 back
   void updateTutorialIndex(int indicator) {
     if (indicator == 1 && tutorialIndex < tutorial!.length - 1) {
       setState(() {
@@ -76,7 +77,10 @@ class _TutorialBarState extends State<TutorialBar> {
           },
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Icon(Icons.help_outline), //  my_location_sharp  all_out
+            child: Icon(
+              Icons.help_outline,
+              size: 42,
+            ),
           ),
         ),
       ),
@@ -110,10 +114,8 @@ class _TutorialBarState extends State<TutorialBar> {
                   Opacity(
                     opacity: tutorialIndex == 0 ? 0.5 : 1,
                     child: GestureDetector(
-                      // key: Key('minus'),
                       child: Icon(Icons.chevron_left),
                       onTap: () {
-                        // buttonVisibility(widget.key);
                         updateTutorialIndex(-1);
                       },
                     ),
