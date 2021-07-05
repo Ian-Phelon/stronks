@@ -1,4 +1,3 @@
-export './advertisements.dart';
 export './exercise.dart';
 export './theme.dart';
 
