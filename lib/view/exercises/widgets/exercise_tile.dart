@@ -40,18 +40,16 @@ class ExerciseTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  height: titleSize.height,
-                  width:
-                      titleSize.width >= MediaQuery.of(context).size.width * 0.8
-                          ? MediaQuery.of(context).size.width * 0.3
-                          : titleSize.width,
-                  child: Text(
-                    exercise.name!,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      exercise.name!,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ),
                 SizedBox(

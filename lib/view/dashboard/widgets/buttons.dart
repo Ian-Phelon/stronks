@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-import 'package:stronks/controller/controller.dart';
-
 class DashButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? buttonText;
@@ -14,6 +11,7 @@ class DashButton extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.all(8.0),
       height: 84,
@@ -31,10 +29,7 @@ class DashButton extends StatelessWidget {
           child: Center(
             child: Text(
               '$buttonText',
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-              ),
+              style: textTheme.headline2,
             ),
           ),
         ),

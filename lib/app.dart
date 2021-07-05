@@ -12,10 +12,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: ThemeData(
-        primaryColor: Colors.deepPurpleAccent,
-        fontFamily: 'Montserrat',
+        fontFamily: kFontFamily,
         appBarTheme: AppBarTheme(
           color: kcolorPurpleDark,
+        ),
+        textTheme: TextTheme(
+          headline2: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: kFontFamily,
+              color: Colors.black),
         ),
       ),
       routerDelegate: StronksRouterDelegate(),

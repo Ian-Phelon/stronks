@@ -47,6 +47,7 @@ const String kEquipsRaisedPlatformToText = 'Raised Platform';
 ///it's 6 letters but 5th index??
 const int kAspectStringSkip = 6;
 
+const String kFontFamily = 'Montserrat';
 const TextStyle kAspectTextStyle = TextStyle(
   fontFamily: 'Montserrat',
   fontWeight: FontWeight.bold,
