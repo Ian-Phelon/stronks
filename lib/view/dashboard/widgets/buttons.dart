@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:stronks/controller/controller.dart';
+
 class DashButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? buttonText;
@@ -9,7 +12,6 @@ class DashButton extends StatelessWidget {
     @required this.onPressed,
     @required this.buttonText,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(

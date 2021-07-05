@@ -23,23 +23,6 @@ class ExerciseHelper {
     } else {
       finalList = keys.none;
     }
-
-    // switch (aspect) {
-    //   case 'target':
-    //     finalList = keys.targets;
-    //     break;
-    //   case 'equip':
-    //     finalList = keys.equip;
-    //     break;
-    //   case 'style':
-    //     finalList = keys.style;
-    //     break;
-    //   case 'none':
-
-    //   default:
-    //     finalList = keys.none;
-    //     break;
-    // }
     return finalList;
   }
 

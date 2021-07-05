@@ -18,15 +18,7 @@ class ExercisesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(runtimeType.toString()),
-        actions: [
-          IconButton(
-              onPressed: () {
-                /// TODO: delete dev print
-                final ok = context.read<ExerciseRepository>().getExercises();
-                print(ok.toString());
-              },
-              icon: Icon(Icons.menu))
-        ],
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
       ),
       backgroundColor: kcolorExercisesBG,
       body: _body(context),

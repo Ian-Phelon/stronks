@@ -234,8 +234,14 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                 padding: const EdgeInsets.all(18.0),
                 child: PurpleTextField(
                   keyboard: TextInputType.text,
-                  onChanged: (value) => nameTxtCtrl.text = value,
-                  onSubmitted: (value) => nameTxtCtrl.text = value,
+                  onChanged: (value) {
+                    setState(() {
+                      nameTxtCtrl.text = value;
+                    });
+                  },
+                  onSubmitted: (value) {
+                    nameTxtCtrl.text = value;
+                  },
                 ),
               ),
               Padding(

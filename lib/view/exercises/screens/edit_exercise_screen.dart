@@ -73,7 +73,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   /// arms[0], chest[1], back[2], core[3], legs[4]
   late List<Map<String, bool>> targetFine;
 
-  late Map om;
   late Exercise exercise;
   @override
   void initState() {
@@ -94,7 +93,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
         // composing: TextRange.,
       );
     });
-    om = exercise.toMap();
     styles = repo.eAspectForView(
         input: exercise.style == null || exercise.style == ''
             ? 'style'
@@ -140,9 +138,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
     nameTxtCtrl.dispose();
     notesTxtCtrl.dispose();
 
-    // Provider.of<ExerciseRepository>(context, listen: false)
-    //     .selectExercise(exercise);
-
     super.dispose();
   }
 
@@ -184,13 +179,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
             },
             child: Icon(Icons.arrow_back_ios)),
         title: Text('${repo.selectedExercise!.name}'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                print(targetFine);
-              },
-              icon: const Icon(Icons.menu))
-        ],
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
       ),
       backgroundColor: kcolorExercisesBG,
       body: ListView(
@@ -467,16 +456,13 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       var e = exerciseView.copyWith(
                           resistance: exerciseView.resistance! + 1);
                       repo.updateGeneral(e);
-                      // incrementCountForResistance(1);
                     },
                     countFive: () {
-                      // incrementCountForResistance(5);
                       var e = exerciseView.copyWith(
                           resistance: exerciseView.resistance! + 5);
                       repo.updateGeneral(e);
                     },
                     countTen: () {
-                      // incrementCountForResistance(10);
                       var e = exerciseView.copyWith(
                           resistance: exerciseView.resistance! + 10);
                       repo.updateGeneral(e);

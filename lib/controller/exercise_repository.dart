@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:stronks/view/exercises/widgets/exercise_tile.dart';
 
 // import '../constants.dart';
 import '../constants.dart';
@@ -27,7 +28,9 @@ class ExerciseRepository extends ChangeNotifier {
     return exerciseList;
   }
 
-  /// Provides a Size based on String length and Font Styling
+  /// Provides a Size based on String length and Font Styling IAN: this doesn't
+  /// belong here. get over it and make another provider, its why we wrapped the
+  /// app in a multiprovider
   Size sizeFromText(BuildContext context, String text) {
     if (context.toString() != 'ExerciseTile') text += '_____';
     return (TextPainter(
@@ -37,6 +40,74 @@ class ExerciseRepository extends ChangeNotifier {
       textDirection: TextDirection.ltr,
     )..layout())
         .size;
+  }
+
+  int allExercisesTotalCount() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      totalCount += e.totalCount!;
+    }
+    return totalCount;
+  }
+
+  int allExercisesTotalCountArms() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      Map target = eAspectForView(input: e.targets);
+      target.removeWhere(
+          (key, value) => !key.toString().startsWith(r'targetArms'));
+      bool valid = target.values.any((e) => e == true);
+      if (valid) totalCount += e.totalCount!;
+    }
+    return totalCount;
+  }
+
+  int allExercisesTotalCountChest() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      Map target = eAspectForView(input: e.targets);
+      target.removeWhere(
+          (key, value) => !key.toString().startsWith(r'targetChest'));
+      bool valid = target.values.any((e) => e == true);
+      if (valid) totalCount += e.totalCount!;
+    }
+    return totalCount;
+  }
+
+  int allExercisesTotalCountBack() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      Map target = eAspectForView(input: e.targets);
+      target.removeWhere(
+          (key, value) => !key.toString().startsWith(r'targetBack'));
+      bool valid = target.values.any((e) => e == true);
+      if (valid) totalCount += e.totalCount!;
+    }
+    return totalCount;
+  }
+
+  int allExercisesTotalCountCore() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      Map target = eAspectForView(input: e.targets);
+      target.removeWhere(
+          (key, value) => !key.toString().startsWith(r'targetCore'));
+      bool valid = target.values.any((e) => e == true);
+      if (valid) totalCount += e.totalCount!;
+    }
+    return totalCount;
+  }
+
+  int allExercisesTotalCountLegs() {
+    int totalCount = 0;
+    for (var e in exerciseList) {
+      Map target = eAspectForView(input: e.targets);
+      target.removeWhere(
+          (key, value) => !key.toString().startsWith(r'targetLegs'));
+      bool valid = target.values.any((e) => e == true);
+      if (valid) totalCount += e.totalCount!;
+    }
+    return totalCount;
   }
 
   Future<void> fetchAndSetData() async {
