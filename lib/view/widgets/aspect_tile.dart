@@ -78,12 +78,12 @@ class AspectTile extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.all(2.0),
             child: Material(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   width: 4,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.primaryVariant,
                 ),
               ),
               child: Padding(
@@ -98,10 +98,12 @@ class AspectTile extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
-                        child: Text(
-                          _title(key),
-                          style: kAspectTextStyle,
-                        ),
+                        child: Text(_title(key),
+                            style: Theme.of(context).textTheme.headline6
+                            // kAspectTextStyle
+                            // .copyWith(
+                            //     color: Theme.of(context).colorScheme.onSurface),
+                            ),
                       ),
                     ),
                     Visibility(
@@ -115,6 +117,7 @@ class AspectTile extends StatelessWidget {
                               outer: updateOuter!,
                               upper: updateUpper!,
                               lower: updateLower!,
+                              context: context,
                             ),
                     ),
                   ],
@@ -131,15 +134,17 @@ class AspectTile extends StatelessWidget {
               shape: CircleBorder(
                 side: BorderSide(
                   width: 6,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.primaryVariant,
                 ),
               ),
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               child: Padding(
                 padding: const EdgeInsets.all(11.0),
                 child: Icon(
                   Icons.check,
-                  color: isSelected ? Colors.green : Colors.black,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primaryVariant,
                   size: 29,
                 ),
               ),
@@ -155,6 +160,7 @@ Widget _targetIcon({
   required IconData iconData,
   required MapEntry<String, bool> target,
   required Function() targetFineSelect,
+  BuildContext? context,
 }) {
   return Padding(
     padding: const EdgeInsets.all(2.0),
@@ -164,7 +170,9 @@ Widget _targetIcon({
           onTap: targetFineSelect,
           child: Icon(
             iconData,
-            color: target.value ? Colors.green : Colors.black,
+            color: target.value
+                ? Theme.of(context!).colorScheme.error
+                : Theme.of(context!).colorScheme.primaryVariant,
           ),
         )),
   );
@@ -176,6 +184,7 @@ Widget _targetIconRow({
   required Function() outer,
   required Function() upper,
   required Function() lower,
+  BuildContext? context,
 }) {
   // MapEntry<String, bool> e1 = targetFine.entries.elementAt(0);
   // MapEntry<String, bool> e2 = targetFine.entries.elementAt(1);
@@ -186,25 +195,25 @@ Widget _targetIconRow({
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _targetIcon(
-          iconData: Icons.gps_fixed,
-          target: targetFine.entries.elementAt(0),
-          targetFineSelect: inner,
-        ),
+            iconData: Icons.gps_fixed,
+            target: targetFine.entries.elementAt(0),
+            targetFineSelect: inner,
+            context: context),
         _targetIcon(
-          iconData: Icons.all_out,
-          target: targetFine.entries.elementAt(1),
-          targetFineSelect: outer,
-        ),
+            iconData: Icons.all_out,
+            target: targetFine.entries.elementAt(1),
+            targetFineSelect: outer,
+            context: context),
         _targetIcon(
-          iconData: Icons.keyboard_arrow_up,
-          target: targetFine.entries.elementAt(2),
-          targetFineSelect: upper,
-        ),
+            iconData: Icons.keyboard_arrow_up,
+            target: targetFine.entries.elementAt(2),
+            targetFineSelect: upper,
+            context: context),
         _targetIcon(
-          iconData: Icons.keyboard_arrow_down,
-          target: targetFine.entries.elementAt(3),
-          targetFineSelect: lower,
-        ),
+            iconData: Icons.keyboard_arrow_down,
+            target: targetFine.entries.elementAt(3),
+            targetFineSelect: lower,
+            context: context),
       ],
     );
   }

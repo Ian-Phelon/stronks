@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' show VoidCallback;
 
+import '../../constants.dart';
+
 class SquareButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? buttonText;
@@ -31,69 +33,80 @@ class SquareButton extends StatelessWidget {
 /// a circle button
 class RoundIconButton extends StatelessWidget {
   final IconData? icon;
-  final VoidCallback? onPressed;
+  final VoidCallback onTap;
   final double? size;
   final double? elevation;
   final int? countAmount;
-  final bool isCounter;
-
-  // final Row? iconRow;
-  //final Color color;
 
   const RoundIconButton({
     Key? key,
-    @required this.icon,
-    @required this.onPressed,
-    @required this.size,
-    @required this.elevation,
-    this.countAmount = 0,
-    this.isCounter = false,
-  }) : super(key: key);
-  const RoundIconButton.asCounter({
-    Key? key,
+    required this.onTap,
     this.icon,
-    @required this.onPressed,
-    @required this.size,
-    @required this.elevation,
-    @required this.countAmount,
-    this.isCounter = true,
+    this.size,
+    this.elevation,
+    this.countAmount,
   }) : super(key: key);
+
+  double _size({IconData? icon}) {
+    double diameter;
+    diameter = size ?? 50.0;
+    double? i;
+    if (icon != null && icon == Icons.edit) i = 40.0;
+
+    return i ?? diameter;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: RawMaterialButton(
-        constraints: BoxConstraints(
-          minHeight: size!,
-          minWidth: size!,
-        ),
-        child: isCounter
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Icon(Icons.add),
-                    SizedBox(
-                      width: 4.0,
-                    ),
-                    Text(
-                      '$countAmount',
-                    ),
-                  ],
-                ),
-              )
-            : Icon(
-                icon,
-                size: size,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: _size() == 50.0 && size != null ? size! : _size(),
+          width: _size() == 50.0 && size != null ? size! : _size(),
+          child: Material(
+            elevation: elevation ?? 0,
+            color: Theme.of(context).colorScheme.surface,
+            shape: CircleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.onSurface,
+                width: 8.0,
               ),
-        padding: const EdgeInsets.all(8.0),
-        onPressed: onPressed,
-        shape: CircleBorder(),
-        fillColor: Colors.blueGrey,
-        elevation: elevation!,
+            ),
+            child: icon == null
+                ? Center(
+                    child: Text(
+                      '$countAmount',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  )
+                : Center(
+                    child: Icon(
+                      icon,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: size ?? _size(icon: icon) - 8.0,
+                    ),
+                  ),
+            // ? Center(
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: icon == null
+            //           ? Text(
+
+            //             )
+
+            //       // ],
+            //       // ),
+            //     ),
+            //   )
+            // : Icon(
+            //     icon,
+            //     size: _size(icon: icon),
+            //     color: Theme.of(context).colorScheme.onSurface,
+            //   ),
+          ),
+        ),
       ),
     );
   }

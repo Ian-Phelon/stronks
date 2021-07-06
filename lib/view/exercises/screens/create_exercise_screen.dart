@@ -215,7 +215,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     );
 
     return Scaffold(
-      backgroundColor: kcolorExercisesBG,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text('Create Exercise'),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
@@ -232,8 +232,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(18.0),
-                child: PurpleTextField(
-                  keyboard: TextInputType.text,
+                child: TextField(
+                  keyboardType: TextInputType.text,
                   onChanged: (value) {
                     setState(() {
                       nameTxtCtrl.text = value;

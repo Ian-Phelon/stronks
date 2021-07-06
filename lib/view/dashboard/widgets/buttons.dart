@@ -11,25 +11,25 @@ class DashButton extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.all(8.0),
       height: 84,
       child: GestureDetector(
         onTap: onPressed,
         child: Material(
+          color: Theme.of(context).colorScheme.surface,
           shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(9),
             borderSide: BorderSide(
               width: 8,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.primary,
               style: BorderStyle.solid,
             ),
           ),
           child: Center(
             child: Text(
               '$buttonText',
-              style: textTheme.headline2,
+              style: Theme.of(context).textTheme.headline2,
             ),
           ),
         ),

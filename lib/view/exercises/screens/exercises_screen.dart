@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants.dart';
 import '../../../controller/controller.dart'
     show ExerciseRepository, RoutePageManager;
 import '../../../model/model.dart';
@@ -20,7 +19,7 @@ class ExercisesScreen extends StatelessWidget {
         title: Text(runtimeType.toString()),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
       ),
-      backgroundColor: kcolorExercisesBG,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
           Padding(
@@ -33,12 +32,13 @@ class ExercisesScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: RoundIconButton(
-        onPressed: () {
+        onTap: () {
           RoutePageManager.of(context).toCreateExerciseScreen();
         },
         icon: Icons.add,
-        size: 80,
+        size: 120,
         elevation: 4.0,
       ),
     );

@@ -80,6 +80,7 @@ class _TutorialBarState extends State<TutorialBar> {
             child: Icon(
               Icons.help_outline,
               size: 42,
+              color: Theme.of(context).colorScheme.primaryVariant,
             ),
           ),
         ),
@@ -88,9 +89,15 @@ class _TutorialBarState extends State<TutorialBar> {
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: Material(
+          elevation: 18.0,
+          shadowColor: Theme.of(context).colorScheme.error,
+          color: Theme.of(context).colorScheme.surface,
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.zero,
-            side: BorderSide(color: Colors.black, width: 0.9),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.primaryVariant,
+              width: 2.9,
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -100,11 +107,18 @@ class _TutorialBarState extends State<TutorialBar> {
                 onTap: () {
                   triggerVisibility();
                 },
-                child: Icon(Icons.close),
+                child: Icon(
+                  Icons.close,
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                ),
               ),
               Flexible(
-                child: Text(
-                  '${tutorial![tutorialIndex].trim()}',
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    '${tutorial![tutorialIndex].trim()}',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
               ),
               Row(
@@ -114,7 +128,10 @@ class _TutorialBarState extends State<TutorialBar> {
                   Opacity(
                     opacity: tutorialIndex == 0 ? 0.5 : 1,
                     child: GestureDetector(
-                      child: Icon(Icons.chevron_left),
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
                       onTap: () {
                         updateTutorialIndex(-1);
                       },
@@ -123,7 +140,10 @@ class _TutorialBarState extends State<TutorialBar> {
                   Opacity(
                     opacity: tutorialIndex == tutorial!.length - 1 ? 0.5 : 1,
                     child: GestureDetector(
-                      child: Icon(Icons.chevron_right),
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
                       onTap: () {
                         updateTutorialIndex(1);
                       },

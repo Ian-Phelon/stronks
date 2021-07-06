@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:stronks/view/exercises/widgets/exercise_tile.dart';
 
 // import '../constants.dart';
 import '../constants.dart';

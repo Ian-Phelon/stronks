@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import '../../../model/exercise.dart';
 
 class ExerciseTile extends StatelessWidget {
@@ -24,15 +23,14 @@ class ExerciseTile extends StatelessWidget {
         onTap: selectAndPush,
         onLongPress: deleteExercise,
         child: Material(
-          shadowColor: kcolorPurpleDark,
           borderOnForeground: true,
           elevation: 4,
-          color: kcolorPurpleLight,
+          color: Theme.of(context).colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
             side: BorderSide(
               width: 6.0,
-              color: kcolorPurpleDark,
+              color: Theme.of(context).colorScheme.primaryVariant,
             ),
           ),
           child: Padding(
@@ -48,7 +46,10 @@ class ExerciseTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                       style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.w900),
+                        // fontSize: 20.0,
+                        fontWeight: FontWeight.w900,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
                     ),
                   ),
                 ),

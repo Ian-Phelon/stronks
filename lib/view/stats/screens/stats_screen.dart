@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:stronks/controller/exercise_repository.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants.dart';
-
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final repo = context.watch<ExerciseRepository>();
     return Scaffold(
-      backgroundColor: kcolorExercisesBG,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text('Stats'),
         actions: [

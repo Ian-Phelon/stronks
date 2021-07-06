@@ -5,7 +5,6 @@ import 'package:stronks/controller/controller.dart'
 import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
 import '../widgets/widgets.dart' show RoundIconButton;
-import '../../../constants.dart';
 import '../../widgets/widgets.dart' show AspectTile, CounterRow, TutorialBar;
 import '../../../model/model.dart' show Exercise;
 
@@ -181,7 +180,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
         title: Text('${repo.selectedExercise!.name}'),
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
       ),
-      backgroundColor: kcolorExercisesBG,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: ListView(
         children: [
           TutorialBar(
@@ -217,12 +216,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       ),
                     ),
                     RoundIconButton(
-                      size: 12.0,
                       icon: Icons.add,
-                      onPressed: () {
+                      onTap: () {
                         repo.incrementExerciseCount(exercise, 1);
                       },
-                      elevation: 4.0,
                     ),
                     CounterRow(
                       countOne: () {
@@ -482,19 +479,18 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       '${repo.selectedExercise!.name}',
                     ),
                     RoundIconButton(
-                      size: 12.0,
-                      icon: Icons.edit,
-                      onPressed: () => _triggerVisibility(),
-                      elevation: 4.0,
-                    ),
+                        icon: Icons.edit,
+                        onTap: () {
+                          _triggerVisibility();
+                        }),
                   ],
                 ),
               ),
               Visibility(
                 replacement: const SizedBox.shrink(),
                 visible: editNameVisibility,
-                child: PurpleTextField(
-                  keyboard: TextInputType.text,
+                child: TextField(
+                  keyboardType: TextInputType.text,
                   // autofocus: true,
                   onChanged: (value) {
                     nameTxtCtrl.text = value;

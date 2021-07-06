@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart';
 import '../../controller/controller.dart';
 import 'widgets/widgets.dart';
 import '../widgets/widgets.dart' show TutorialBar, MainBannerAd;
@@ -9,7 +8,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kcolorExercisesBG,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text(super.runtimeType.toString()),
       ),
