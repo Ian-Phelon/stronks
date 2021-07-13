@@ -31,7 +31,7 @@ class ExerciseRepository extends ChangeNotifier {
   /// belong here. get over it and make another provider, its why we wrapped the
   /// app in a multiprovider
   Size sizeFromText(BuildContext context, String text) {
-    if (context.toString() != 'ExerciseTile') text += '_____';
+    text += '______';
     return (TextPainter(
       text: TextSpan(text: text, style: kAspectTextStyle),
       maxLines: 1,

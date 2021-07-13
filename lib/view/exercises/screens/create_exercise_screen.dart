@@ -71,8 +71,8 @@ Map<String, bool> _getTargetForView(BuildContext context, String? input) {
 }
 
 /// Provides a Size based on String length and Font Styling
+/// entirely similar to repo.sizefromtext minus the formatting
 Size _size(BuildContext context, String text) {
-  text += '_____';
   return (TextPainter(
     text: TextSpan(text: text, style: kAspectTextStyle),
     maxLines: 1,
@@ -99,6 +99,9 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   late bool addCore;
   late bool addLegs;
 ///////
+  bool editNameVisibility = false;
+  bool editNoteVisibility = false;
+
   /// The name of the exercise being made.
   /// can be left blank, or empty.
   final TextEditingController nameTxtCtrl = TextEditingController();
@@ -208,11 +211,22 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     });
   }
 
+  void _triggerNameVisibility() {
+    setState(() {
+      editNameVisibility = !editNameVisibility;
+    });
+  }
+
+  void _triggerNoteVisibility() {
+    editNoteVisibility = !editNoteVisibility;
+  }
+
   @override
   Widget build(BuildContext context) {
     final TutorialBar tutorialBar = TutorialBar(
       pageContext: context,
     );
+    final repo = context.watch<ExerciseRepository>();
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -223,27 +237,42 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       body: ListView(
         children: [
           tutorialBar,
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .20,
-          ),
+          MainBannerAd(),
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    setState(() {
-                      nameTxtCtrl.text = value;
-                    });
-                  },
-                  onSubmitted: (value) {
-                    nameTxtCtrl.text = value;
+                padding: EdgeInsets.all(32.0),
+                child: Text(
+                  '${nameTxtCtrl.text}',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StronksTextButton(
+                  text: 'Name it!',
+                  onTap: () {
+                    _triggerNameVisibility();
                   },
                 ),
               ),
+              Visibility(
+                replacement: const SizedBox.shrink(),
+                visible: editNameVisibility,
+                child: TextField(
+                  autofocus: true,
+                  keyboardType: TextInputType.text,
+                  style: Theme.of(context).textTheme.headline6,
+                  onChanged: (value) => nameTxtCtrl.text = value,
+                  onSubmitted: (value) {
+                    nameTxtCtrl.text = value;
+                    _triggerNameVisibility();
+                  },
+                ),
+              ),
+              ///////////////////////
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -260,7 +289,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       final MapEntry e3 = specificTarget.entries.elementAt(2);
                       final MapEntry e4 = specificTarget.entries.elementAt(3);
 
-                      Size sizeFromText = _size(
+                      Size sizeFromText = repo.sizeFromText(
                         context,
                         specificTarget.keys.first,
                       );
@@ -279,19 +308,21 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                           updateInner: () {
                             String thisKey = e1.key;
                             final bool isSelected = e1.value;
-                            setState(() {
-                              allTargets.update(
-                                  thisKey, (value) => !isSelected);
-                              targetFine
-                                  .elementAt(index)
-                                  .update(thisKey, (value) => !isSelected);
+                            setState(
+                              () {
+                                allTargets.update(
+                                    thisKey, (value) => !isSelected);
+                                targetFine
+                                    .elementAt(index)
+                                    .update(thisKey, (value) => !isSelected);
 
-                              thisKey += ', ';
-                              if (targetStringBuilder
-                                      .toString()
-                                      .contains(thisKey) ==
-                                  false) targetStringBuilder.write(thisKey);
-                            });
+                                thisKey += ', ';
+                                if (targetStringBuilder
+                                        .toString()
+                                        .contains(thisKey) ==
+                                    false) targetStringBuilder.write(thisKey);
+                              },
+                            );
                           },
                           updateOuter: () {
                             String key = e2.key;
@@ -356,7 +387,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       MapEntry<String, bool> aspect =
                           styles.entries.elementAt(index);
 
-                      Size sizeFromText = _size(
+                      Size sizeFromText = repo.sizeFromText(
                         context,
                         Provider.of<ExerciseRepository>(context, listen: false)
                             .syleKeys[index],
@@ -403,7 +434,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                       MapEntry<String, bool> aspect =
                           equips.entries.elementAt(index);
 
-                      Size sizeFromText = _size(
+                      Size sizeFromText = repo.sizeFromText(
                         context,
                         Provider.of<ExerciseRepository>(context)
                             .equipKeys[index],
@@ -412,110 +443,151 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         width: sizeFromText.width,
                         height: sizeFromText.height,
                         child: AspectTile(
-                            aspect: aspect,
-                            tapForSelection: () {
-                              setState(() {
-                                String newEquipString =
-                                    Provider.of<ExerciseRepository>(context,
-                                            listen: false)
-                                        .equipKeys
-                                        .elementAt(index);
-                                equips.update(
-                                    newEquipString, (value) => !isSelected);
+                          aspect: aspect,
+                          tapForSelection: () {
+                            setState(() {
+                              String newEquipString =
+                                  Provider.of<ExerciseRepository>(context,
+                                          listen: false)
+                                      .equipKeys
+                                      .elementAt(index);
+                              equips.update(
+                                  newEquipString, (value) => !isSelected);
 
-                                newEquipString += ', ';
-                                if (equipsStringBuilder
-                                        .toString()
-                                        .contains(newEquipString) ==
-                                    false)
-                                  equipsStringBuilder.write(newEquipString);
-                              });
-                            },
-                            isSelected: isSelected),
+                              newEquipString += ', ';
+                              if (equipsStringBuilder
+                                      .toString()
+                                      .contains(newEquipString) ==
+                                  false)
+                                equipsStringBuilder.write(newEquipString);
+                            });
+                          },
+                          isSelected: isSelected,
+                        ),
                       );
                     },
                   ),
                 ),
               ),
+              MainBannerAd(),
               /////  Count For Sets. we need a counter row, where each callback sets the state of int countForSets
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => CountFinePopup(
-                                onCounterChanged: updateCountForSets,
-                              ));
-                    },
-                    child: Text('Sets: $countForSets'),
-                  ),
-                  CounterRow(
-                    countOne: () {
-                      incrementCountForSets(1);
-                    },
-                    countFive: () {
-                      incrementCountForSets(5);
-                    },
-                    countTen: () {
-                      incrementCountForSets(10);
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Reps in a Set:',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => CountFinePopup(
+                                  whichCount: countForSets,
+                                  onCounterChanged: updateCountForSets,
+                                ));
+                      },
+                      child: Text(
+                        '$countForSets',
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                    ),
+                    // CounterRow(
+                    //   countOne: () {
+                    //     incrementCountForSets(1);
+                    //   },
+                    //   countFive: () {
+                    //     incrementCountForSets(5);
+                    //   },
+                    //   countTen: () {
+                    //     incrementCountForSets(10);
+                    //   },
+                    // ),
+                  ],
+                ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => CountFinePopup(
-                                onCounterChanged: updateCountForResistance,
-                              ));
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Weight:',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => CountFinePopup(
+                                  whichCount: countForResistance,
+                                  onCounterChanged: updateCountForResistance,
+                                ));
+                      },
+                      child: Text(
+                        '$countForResistance',
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                    ),
+                    // CounterRow(
+                    //   countOne: () {
+                    //     incrementCountForResistance(1);
+                    //   },
+                    //   countFive: () {
+                    //     incrementCountForResistance(5);
+                    //   },
+                    //   countTen: () {
+                    //     incrementCountForResistance(10);
+                    //   },
+                    // ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StronksTextButton(
+                  text: 'Notes',
+                  onTap: () {
+                    _triggerNoteVisibility();
+                  },
+                ),
+              ),
+              Visibility(
+                replacement: const SizedBox.shrink(),
+                visible: editNoteVisibility,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    autofocus: true,
+                    style: Theme.of(context).textTheme.headline6,
+                    onChanged: (v) {
+                      setState(() {
+                        notesTxtCtrl.text = v;
+                      });
                     },
-                    child: Text('Resistance: $countForResistance'),
+                    onSubmitted: (v) => notesTxtCtrl.text = v,
                   ),
-                  CounterRow(
-                    countOne: () {
-                      incrementCountForResistance(1);
-                    },
-                    countFive: () {
-                      incrementCountForResistance(5);
-                    },
-                    countTen: () {
-                      incrementCountForResistance(10);
-                    },
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-          TextField(
-            maxLines: null,
-            keyboardType: TextInputType.text,
-            onChanged: (v) {
-              setState(() {
-                notesTxtCtrl.text = v;
-              });
-              print(notesTxtCtrl.text);
-            },
-            onSubmitted: (v) => notesTxtCtrl.text = v,
+          AddExerciseButton(
+            //  context,
+            name: nameTxtCtrl.text,
+            countForSets: countForSets,
+            style: styles,
+            targetFine: targetFine,
+            targetParts: _targetFineSeletctions,
+            allTargets: allTargets,
+            equips: equips,
+            countForResistance: countForResistance,
+            notes: notesTxtCtrl.text,
           ),
         ],
-      ),
-      floatingActionButton: AddExerciseFAB(
-        //  context,
-        name: nameTxtCtrl.text,
-        countForSets: countForSets,
-        style: styles,
-        targetFine: targetFine,
-        targetParts: _targetFineSeletctions,
-        allTargets: allTargets,
-        equips: equips,
-        countForResistance: countForResistance,
-        notes: notesTxtCtrl.text,
       ),
     );
   }
@@ -528,8 +600,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   }
 }
 
-class AddExerciseFAB extends StatelessWidget {
-  const AddExerciseFAB({
+class AddExerciseButton extends StatelessWidget {
+  const AddExerciseButton({
     Key? key,
     required this.name,
     this.countForSets = 0,
@@ -592,7 +664,6 @@ class AddExerciseFAB extends StatelessWidget {
       /// Necessary to update here instead of creating $result with the updated
       /// list, otherwise CreateExercises recognizes all targetFine as being
       /// selected.
-      print(notes);
       result.update(
           'targets',
           (value) => Provider.of<ExerciseRepository>(context, listen: false)
@@ -601,10 +672,11 @@ class AddExerciseFAB extends StatelessWidget {
       RoutePageManager.of(context).toExercises();
     }
 
-    return RoundTextButton(
-      onPressed: () => _addAndExit(),
-      size: 42,
+    return RoundIconButton(
+      onTap: () => _addAndExit(),
+      // size: _size(context, 'Make It').width, //Size(0, 0),
       text: 'Make It!',
+
       elevation: 4.0,
     );
   }

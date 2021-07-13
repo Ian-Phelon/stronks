@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stronks/controller/exercise_repository.dart';
+import 'package:stronks/controller/controller.dart';
 import 'package:provider/provider.dart';
+
+import '../../widgets/widgets.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
@@ -10,13 +12,13 @@ class StatsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Text('Stats'),
+        title: const Text('Stats'),
         actions: [
           IconButton(
               onPressed: () {
                 repo.dropDB();
               },
-              icon: Icon(Icons.menu))
+              icon: const Icon(Icons.menu))
         ],
       ),
       body: Center(
@@ -24,12 +26,45 @@ class StatsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Total Count: ${repo.allExercisesTotalCount().toString()}'),
-              Text('Arms: ${repo.allExercisesTotalCountArms().toString()}'),
-              Text('Chest: ${repo.allExercisesTotalCountChest().toString()}'),
-              Text('Back: ${repo.allExercisesTotalCountBack().toString()}'),
-              Text('Core: ${repo.allExercisesTotalCountCore().toString()}'),
-              Text('Legs: ${repo.allExercisesTotalCountLegs().toString()}'),
+              MainBannerAd(),
+              Text(
+                'Total Exercise Count: ${repo.allExercisesTotalCount().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const Divider(),
+              Text(
+                'Arm Exercises: ${repo.allExercisesTotalCountArms().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                'Chest Exercises: ${repo.allExercisesTotalCountChest().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                'Back Exercises: ${repo.allExercisesTotalCountBack().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                'Core Exercises: ${repo.allExercisesTotalCountCore().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                'Leg Exercises: ${repo.allExercisesTotalCountLegs().toString()}',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              MainBannerAd(),
             ],
           ),
         ),

@@ -200,9 +200,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                     GestureDetector(
                       onTap: () {
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (_) => CountFinePopup(
+                                  whichCount: exerciseView.totalCount!,
                                   onCounterChanged: (count) {
+                                    count += exerciseView.totalCount!;
                                     var e = exerciseView.copyWith(
                                       totalCount: count,
                                     );
@@ -212,7 +215,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       },
                       child: Text(
                         '${exerciseView.totalCount}',
-                        style: TextStyle(fontSize: 26),
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                     ),
                     RoundIconButton(
@@ -419,6 +422,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  style: Theme.of(context).textTheme.headline6,
                   maxLines: null,
                   textDirection: TextDirection.ltr,
                   keyboardType: TextInputType.text,
@@ -436,9 +440,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   GestureDetector(
                     onTap: () {
                       showDialog(
+                          barrierDismissible: false,
                           context: context,
                           builder: (_) => CountFinePopup(
+                                whichCount: exerciseView.resistance!,
                                 onCounterChanged: (count) {
+                                  count += exerciseView.resistance!;
                                   var e = exerciseView.copyWith(
                                     resistance: count,
                                   );
@@ -446,7 +453,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 },
                               ));
                     },
-                    child: Text('Resistance: ${exerciseView.resistance}'),
+                    child: Text(
+                      'Resistance: ${exerciseView.resistance}',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ),
                   CounterRow(
                     countOne: () {
@@ -477,6 +487,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                     ),
                     Text(
                       '${repo.selectedExercise!.name}',
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     RoundIconButton(
                         icon: Icons.edit,
@@ -490,18 +501,21 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 replacement: const SizedBox.shrink(),
                 visible: editNameVisibility,
                 child: TextField(
+                  autofocus: true,
                   keyboardType: TextInputType.text,
-                  // autofocus: true,
-                  onChanged: (value) {
-                    nameTxtCtrl.text = value;
-                  },
+                  style: Theme.of(context).textTheme.headline6,
+                  onChanged: (value) => nameTxtCtrl.text = value,
                   onSubmitted: (value) {
-                    // repo.updateSelectedExerciseName(nameTxtCtrl.text);
-                    // setState(() {
-                    Exercise e = exercise.copyWith(name: nameTxtCtrl.text);
+                    ///
+                    ///
+                    ///
+                    /// This indicates we can get rid of exerciseView
+                    ///
+                    ///
+                    ///
+                    var e = exercise.copyWith(name: nameTxtCtrl.text);
                     repo.updateGeneral(e);
                     _triggerVisibility();
-                    // });
                   },
                 ),
               ),

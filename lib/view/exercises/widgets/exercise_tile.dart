@@ -45,11 +45,7 @@ class ExerciseTile extends StatelessWidget {
                       exercise.name!,
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
-                      style: TextStyle(
-                        // fontSize: 20.0,
-                        fontWeight: FontWeight.w900,
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                      ),
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
                 ),
@@ -58,6 +54,10 @@ class ExerciseTile extends StatelessWidget {
                 ),
                 Text(
                   'Shares: ${exercise.totalCount}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontStyle: FontStyle.italic),
                 ),
               ],
             ),

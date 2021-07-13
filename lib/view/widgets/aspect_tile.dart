@@ -97,7 +97,7 @@ class AspectTile extends StatelessWidget {
                     ),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
+                        padding: const EdgeInsets.fromLTRB(22, 0, 20, 0),
                         child: Text(_title(key),
                             style: Theme.of(context).textTheme.headline6
                             // kAspectTextStyle

@@ -5,6 +5,13 @@ import 'package:stronks/constants.dart';
 
 final bool isIos = io.Platform.isIOS;
 
+const TextStyle kCommonLightThemeTextStyle = TextStyle(
+  color: kcolorPrimaryDark,
+  fontFamily: kFontFamily,
+  fontWeight: FontWeight.bold,
+);
+
+/// Light Mode
 const kcolorPrimary = Color(0xff6654d1);
 const kcolorPrimaryLight = Color(0xff9982FF);
 const kcolorPrimaryDark = Color(0xff2A2B9F);
@@ -13,19 +20,22 @@ const kcolorSecondaryLight = Color(0xffFFF2FE);
 const kcolorSecondaryDark = Color(0xffCB8E9A);
 const kcolorError = Color(0xffF55454);
 
+/// Dark Mode
+/// lul
+
 class StronksTheme {
   static ThemeData get lightMode {
     TextTheme textTheme = const TextTheme(
+      headline1: kCommonLightThemeTextStyle,
       headline2: const TextStyle(
         fontWeight: FontWeight.w600,
         fontFamily: kFontFamily,
         color: kcolorPrimaryDark,
       ),
-      headline6: const TextStyle(
-        color: kcolorPrimaryDark,
-        fontFamily: kFontFamily,
-        fontWeight: FontWeight.bold,
-      ),
+      headline3: kCommonLightThemeTextStyle,
+      headline4: kCommonLightThemeTextStyle,
+      headline5: kCommonLightThemeTextStyle,
+      headline6: kCommonLightThemeTextStyle,
     );
     return ThemeData(
       // toggleButtonsTheme: ToggleButtonsThemeData(),

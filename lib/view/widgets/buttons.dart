@@ -1,34 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' show VoidCallback;
-
 import '../../constants.dart';
-
-class SquareButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final String? buttonText;
-  final Color? color;
-
-  const SquareButton({
-    Key? key,
-    @required this.onPressed,
-    @required this.buttonText,
-    @required this.color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(buttonText!),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          color,
-        ),
-        elevation: MaterialStateProperty.all(2.0),
-      ),
-    );
-  }
-}
 
 /// a circle button
 class RoundIconButton extends StatelessWidget {
@@ -37,6 +9,7 @@ class RoundIconButton extends StatelessWidget {
   final double? size;
   final double? elevation;
   final int? countAmount;
+  final String? text;
 
   const RoundIconButton({
     Key? key,
@@ -45,14 +18,16 @@ class RoundIconButton extends StatelessWidget {
     this.size,
     this.elevation,
     this.countAmount,
+    this.text,
   }) : super(key: key);
 
-  double _size({IconData? icon}) {
+  double _size({
+    IconData? icon,
+  }) {
     double diameter;
     diameter = size ?? 50.0;
     double? i;
     if (icon != null && icon == Icons.edit) i = 40.0;
-
     return i ?? diameter;
   }
 
@@ -63,22 +38,23 @@ class RoundIconButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: _size() == 50.0 && size != null ? size! : _size(),
-          width: _size() == 50.0 && size != null ? size! : _size(),
+          height: size != null ? size! : _size(),
+          width: size != null ? size! : _size(),
           child: Material(
             elevation: elevation ?? 0,
             color: Theme.of(context).colorScheme.surface,
             shape: CircleBorder(
               side: BorderSide(
                 color: Theme.of(context).colorScheme.onSurface,
-                width: 8.0,
+                width: 6.0,
               ),
             ),
             child: icon == null
                 ? Center(
                     child: Text(
-                      '$countAmount',
+                      '${text ?? countAmount}',
                       style: Theme.of(context).textTheme.headline6,
+                      softWrap: false,
                     ),
                   )
                 : Center(
@@ -88,23 +64,6 @@ class RoundIconButton extends StatelessWidget {
                       size: size ?? _size(icon: icon) - 8.0,
                     ),
                   ),
-            // ? Center(
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: icon == null
-            //           ? Text(
-
-            //             )
-
-            //       // ],
-            //       // ),
-            //     ),
-            //   )
-            // : Icon(
-            //     icon,
-            //     size: _size(icon: icon),
-            //     color: Theme.of(context).colorScheme.onSurface,
-            //   ),
           ),
         ),
       ),
@@ -112,39 +71,52 @@ class RoundIconButton extends StatelessWidget {
   }
 }
 
-class RoundTextButton extends StatelessWidget {
+class StronksTextButton extends StatelessWidget {
   final String? text;
-  final VoidCallback? onPressed;
+  final VoidCallback? onTap;
   final Function? onPressedFunction;
-  final double? size;
+  final Size? size;
   final double? elevation;
-  //final Color color;
 
-  const RoundTextButton(
-      {Key? key,
-      @required this.text,
-      @required this.onPressed,
-      @required this.size,
-      @required this.elevation,
-      this.onPressedFunction})
-      : super(key: key);
+  const StronksTextButton({
+    Key? key,
+    required this.onTap,
+    this.text,
+    this.onPressedFunction,
+    this.size,
+    this.elevation,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      constraints: BoxConstraints(
-        minHeight: size!,
-        minWidth: size!,
+    return GestureDetector(
+      child: Container(
+        // height: size?.height ?? 49,
+        width: size?.width ?? MediaQuery.of(context).size.width * 0.29,
+        child: Material(
+          elevation: elevation ?? 0,
+          color: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(9.0),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.onSurface,
+              width: 6.0,
+            ),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Text(
+                '$text',
+                style: Theme.of(context).textTheme.headline6,
+                softWrap: true,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(22.0),
-        child: Text('$text'),
-      ),
-      padding: const EdgeInsets.all(8.0),
-      onPressed: onPressed,
-      shape: CircleBorder(),
-      fillColor: Colors.blueGrey,
-      elevation: elevation!,
+      onTap: onTap,
     );
   }
 }
