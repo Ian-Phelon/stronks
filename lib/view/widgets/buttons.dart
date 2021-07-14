@@ -91,8 +91,8 @@ class StronksTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        // height: size?.height ?? 49,
-        width: size?.width ?? MediaQuery.of(context).size.width * 0.29,
+        height: size?.height ?? MediaQuery.of(context).size.height * 0.069,
+        width: size?.width ?? MediaQuery.of(context).size.width * 0.40,
         child: Material(
           elevation: elevation ?? 0,
           color: Theme.of(context).colorScheme.surface,
@@ -109,7 +109,7 @@ class StronksTextButton extends StatelessWidget {
               child: Text(
                 '$text',
                 style: Theme.of(context).textTheme.headline6,
-                softWrap: true,
+                // softWrap: true,
                 textAlign: TextAlign.center,
               ),
             ),

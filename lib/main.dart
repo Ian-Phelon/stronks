@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:stronks/view/widgets/main_banner_ad.dart';
 
 import 'app.dart';
 import 'controller/controller.dart';
@@ -9,13 +10,15 @@ import 'controller/controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  DataHelper(); //.initDB();
+  MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: [AdHelper.bannerAdUnitId]));
+  var db = DataHelper(); //.initDB();
   ExerciseRepository();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<DataHelper>(
-          create: (_) => DataHelper(),
+          create: (_) => db, //DataHelper(),
         ),
         ChangeNotifierProvider<ExerciseRepository>(
           create: (_) => ExerciseRepository(),

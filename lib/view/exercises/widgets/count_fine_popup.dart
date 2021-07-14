@@ -59,7 +59,7 @@ class CountFinePopup extends AlertDialog {
             txt.dispose();
             Navigator.pop(context);
           },
-          child: Text('back'),
+          child: Text('Back'),
         ),
         TextButton(
           onPressed: () {
@@ -71,9 +71,6 @@ class CountFinePopup extends AlertDialog {
           child: Text('Update Count'),
         ),
       ],
-      // height: 80.0,
-      // width: 60.0,
-      // color: Colors.deepPurpleAccent,
     );
   }
 }

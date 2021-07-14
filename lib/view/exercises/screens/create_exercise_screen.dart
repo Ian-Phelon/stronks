@@ -470,7 +470,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                 ),
               ),
               MainBannerAd(),
-              /////  Count For Sets. we need a counter row, where each callback sets the state of int countForSets
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
