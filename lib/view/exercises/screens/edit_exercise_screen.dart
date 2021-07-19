@@ -352,7 +352,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 child: MainBannerAd(),
               ),
               StronksTextButton(
-                text: editTargetVisibility ? 'Update' : 'Targets',
+                textWidget: Text(
+                  editTargetVisibility ? 'Update' : 'Targets',
+                  style: Theme.of(context).textTheme.headline6,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                ),
                 onTap: () {
                   if (editTargetVisibility)
                     repo.updateGeneral(repo.selectedExercise!.copyWith(
@@ -470,7 +475,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
               ),
               StronksTextButton(
-                  text: editStyleVisibility ? 'Update' : 'Style',
+                  textWidget: Text(
+                    editStyleVisibility ? 'Update' : 'Style',
+                    style: Theme.of(context).textTheme.headline6,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
                   onTap: () {
                     if (editStyleVisibility)
                       repo.updateGeneral(repo.selectedExercise!.copyWith(
@@ -528,7 +538,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
               ),
               StronksTextButton(
-                  text: editEquipVisibility ? 'Update' : 'Equipment',
+                  textWidget: Text(
+                    editEquipVisibility ? 'Update' : 'Equipment',
+                    style: Theme.of(context).textTheme.headline6,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
                   onTap: () {
                     if (editEquipVisibility)
                       repo.updateGeneral(repo.selectedExercise!.copyWith(
@@ -557,7 +572,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                           Provider.of<ExerciseRepository>(context)
                               .equipKeys[index],
                         );
-                        Exercise eToSubmit;
                         return Container(
                           width: sizeFromText.width,
                           height: sizeFromText.height,

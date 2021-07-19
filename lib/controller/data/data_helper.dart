@@ -38,7 +38,8 @@ class DataHelper extends ChangeNotifier {
         ..sort()
         ..forEach((key) async {
           String? script = DbMigrator.migrations[key];
-          await db.execute('${script!}');
+          await db.transaction((txn) => txn.execute('${script!}'));
+          // execute('${script!}');
         });
     }, onUpgrade: (Database db, int _, int __) async {
       var currentDbVersion = await getCurrentDbVersion(db);
@@ -95,8 +96,10 @@ class DataHelper extends ChangeNotifier {
   /// inserted row.
   Future<int> insert(Map<String, dynamic> exercise, String table) async {
     Database db = await _dbAccess.database;
-    return await db.insert(table, exercise,
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.transaction((txn) => txn.insert(table, exercise,
+        conflictAlgorithm: ConflictAlgorithm.replace));
+    // insert(table, exercise,
+    //     conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// The data present in the table is returned as a List of Map, where each row
@@ -112,8 +115,9 @@ class DataHelper extends ChangeNotifier {
   /// raw SQL commands. This method uses a raw query to give the row count.
   Future<int?> queryRowCount(String table) async {
     Database db = await _dbAccess.database;
-    return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM $table'));
+    return Sqflite.firstIntValue(await db
+        .transaction((txn) => txn.rawQuery('SELECT COUNT(*) FROM $table')));
+    //rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
   /// We are assuming here that the id column in the map is set. The other
@@ -121,14 +125,17 @@ class DataHelper extends ChangeNotifier {
   Future<int> update(Map<String, dynamic> exercise, String table) async {
     Database db = await _dbAccess.database;
     int id = exercise['id'];
-    return await db
-        .update(table, exercise, where: '$idColumn = ?', whereArgs: [id]);
+    return await db.transaction((txn) =>
+        txn.update(table, exercise, where: '$idColumn = ?', whereArgs: [id]));
+    // .update(table, exercise, where: '$idColumn = ?', whereArgs: [id]);
   }
 
   /// Deletes the row specified by the id. The number of affected rows is
   /// returned. This should be 1 as long as the row exists.
   Future<int> delete(int id, String table) async {
     Database db = await _dbAccess.database;
-    return await db.delete(table, where: 'id = ?', whereArgs: [id]);
+    return await db.transaction(
+        (txn) => txn.delete(table, where: 'id = ?', whereArgs: [id]));
+    // db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }

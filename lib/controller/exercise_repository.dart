@@ -149,6 +149,7 @@ class ExerciseRepository extends ChangeNotifier {
 
   Future<void> removeExerciseFromDB(Exercise e) async {
     await _dbHelper.delete(e.id!, table);
+    getExercises();
     notifyListeners();
   }
 
