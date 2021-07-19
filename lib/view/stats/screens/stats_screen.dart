@@ -3,6 +3,7 @@ import 'package:stronks/controller/controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/widgets.dart';
+import '../../exercises/widgets/widgets.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
@@ -26,6 +27,18 @@ class StatsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return CountFinePopupTotalCount(
+                            onCounterChanged: (v) {},
+                          );
+                        });
+                  },
+                  child: Text('ok')),
+              // CountFinePopupSets(onCounterChanged: (v) {}),
               MainBannerAd(),
               Text(
                 'Total Exercise Count: ${repo.allExercisesTotalCount().toString()}',

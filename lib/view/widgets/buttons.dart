@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' show VoidCallback;
-import '../../constants.dart';
+
+typedef Type Name(params);
 
 /// a circle button
 class RoundIconButton extends StatelessWidget {
@@ -41,6 +42,7 @@ class RoundIconButton extends StatelessWidget {
           height: size != null ? size! : _size(),
           width: size != null ? size! : _size(),
           child: Material(
+            shadowColor: Theme.of(context).colorScheme.primary,
             elevation: elevation ?? 0,
             color: Theme.of(context).colorScheme.surface,
             shape: CircleBorder(
@@ -74,21 +76,33 @@ class RoundIconButton extends StatelessWidget {
 class StronksTextButton extends StatelessWidget {
   final String? text;
   final VoidCallback? onTap;
-  final Function? onPressedFunction;
   final Size? size;
   final double? elevation;
+  final bool? isSelected;
 
   const StronksTextButton({
     Key? key,
     required this.onTap,
     this.text,
-    this.onPressedFunction,
+    this.isSelected,
     this.size,
     this.elevation,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color getIsSelectedColor() {
+      bool value;
+      if (isSelected == null)
+        value = false;
+      else {
+        value = isSelected!;
+      }
+      return value
+          ? Theme.of(context).colorScheme.primaryVariant
+          : Theme.of(context).colorScheme.primary;
+    }
+
     return GestureDetector(
       child: Container(
         height: size?.height ?? MediaQuery.of(context).size.height * 0.069,
@@ -99,7 +113,7 @@ class StronksTextButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(9.0),
             side: BorderSide(
-              color: Theme.of(context).colorScheme.onSurface,
+              color: getIsSelectedColor(),
               width: 6.0,
             ),
           ),

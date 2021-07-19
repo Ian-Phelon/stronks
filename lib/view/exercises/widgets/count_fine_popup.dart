@@ -1,52 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'widgets.dart';
 
 typedef void CounterCallback(int value);
+typedef void AsSetsCallback(bool value);
 
 class CountFinePopup extends AlertDialog {
   const CountFinePopup({
     required this.onCounterChanged,
-    required this.whichCount,
+    this.titleText,
+    this.countAsSets,
+    this.addCountForSets,
   });
 
   final CounterCallback onCounterChanged;
-  final int whichCount;
+  final AsSetsCallback? countAsSets;
+  final String? titleText;
+  final int? addCountForSets;
+
+  Widget plusWidget() => SizedBox.shrink();
+  bool isPlus() => false;
 
   @override
   Widget build(BuildContext context) {
-    // int? changedCount;
-
-    TextEditingController txt = TextEditingController();
+    final TextEditingController numberTxt = TextEditingController();
+    bool isTotalCount = titleText == 'Total Count';
     return AlertDialog(
       contentTextStyle: Theme.of(context).textTheme.headline4,
       titleTextStyle: Theme.of(context).textTheme.headline4,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text('Add To $whichCount'),
+      title: Text(titleText ?? 'Oops'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add),
-              SizedBox(
-                width: 29,
-              ),
+              plusWidget(),
+              isPlus()
+                  ? SizedBox(
+                      width: 29.0,
+                    )
+                  : SizedBox.shrink(),
               Container(
                 width: 69,
                 child: TextField(
-                  textAlign: TextAlign.justify,
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
                   textDirection: TextDirection.ltr,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   onChanged: (v) {
-                    txt.text = v;
-                    // n = num.tryParse(txt.text == '' ? '0' : txt.text)!;
+                    numberTxt.text = v;
                   },
-                  onSubmitted: (v) => txt.text = v,
+                  onSubmitted: (v) => numberTxt.text = v,
                 ),
               ),
             ],
@@ -56,21 +66,53 @@ class CountFinePopup extends AlertDialog {
       actions: [
         TextButton(
           onPressed: () {
-            txt.dispose();
+            numberTxt.dispose();
             Navigator.pop(context);
           },
-          child: Text('Back'),
+          child: Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
-            num n = num.tryParse(txt.text == '' ? '0' : txt.text)!;
+            num n = num.tryParse(numberTxt.text == '' ? '0' : numberTxt.text)!;
             onCounterChanged(n.toInt());
-            txt.dispose();
+            numberTxt.dispose();
             Navigator.of(context).pop();
           },
-          child: Text('Update Count'),
+          child: Text('Update'),
         ),
       ],
     );
   }
+}
+
+class CountFinePopupSets extends CountFinePopup {
+  CountFinePopupSets({required this.onCounterChanged})
+      : super(
+          onCounterChanged: onCounterChanged,
+          titleText: 'How many Reps in a Set?',
+        );
+  final Function(int) onCounterChanged;
+}
+
+class CountFinePopupTotalCount extends CountFinePopup {
+  CountFinePopupTotalCount({required this.onCounterChanged})
+      : super(
+          onCounterChanged: onCounterChanged,
+          titleText: 'Update Total Count',
+        );
+  final Function(int) onCounterChanged;
+  @override
+  Widget plusWidget() => Icon(Icons.add);
+
+  @override
+  bool isPlus() => true;
+}
+
+class CountFinePopupResistance extends CountFinePopup {
+  CountFinePopupResistance({required this.onCounterChanged})
+      : super(
+          onCounterChanged: onCounterChanged,
+          titleText: 'How much Resistance?',
+        );
+  final Function(int) onCounterChanged;
 }

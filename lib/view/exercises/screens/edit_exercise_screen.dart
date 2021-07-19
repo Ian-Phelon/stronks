@@ -80,44 +80,32 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   late Exercise exercise;
 
   void _tapForTargetSelection(int index) {
-    setState(() {
-      if (index == 0) addArms = !addArms;
-      if (index == 1) addChest = !addChest;
-      if (index == 2) addBack = !addBack;
-      if (index == 3) addCore = !addCore;
-      if (index == 4) addLegs = !addLegs;
-      _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
-    });
+    if (index == 0) addArms = !addArms;
+    if (index == 1) addChest = !addChest;
+    if (index == 2) addBack = !addBack;
+    if (index == 3) addCore = !addCore;
+    if (index == 4) addLegs = !addLegs;
+    _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
   }
 
   void _triggerNameVisibility() {
-    setState(() {
-      editNameVisibility = !editNameVisibility;
-    });
+    editNameVisibility = !editNameVisibility;
   }
 
   void _triggerTargetVisibility() {
-    setState(() {
-      editTargetVisibility = !editTargetVisibility;
-    });
+    editTargetVisibility = !editTargetVisibility;
   }
 
   void _triggerStyleVisibility() {
-    setState(() {
-      editStyleVisibility = !editStyleVisibility;
-    });
+    editStyleVisibility = !editStyleVisibility;
   }
 
   void _triggerEquipVisibility() {
-    setState(() {
-      editEquipVisibility = !editEquipVisibility;
-    });
+    editEquipVisibility = !editEquipVisibility;
   }
 
   void _triggerNoteFieldVisibility() {
-    setState(() {
-      editNoteFieldVisibility = !editNoteFieldVisibility;
-    });
+    editNoteFieldVisibility = !editNoteFieldVisibility;
   }
 
   Map<String, bool> _newTargets() {
@@ -185,11 +173,18 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
     _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
   }
 
+  void _onTargetUpdate() {
+    var repo = Provider.of<ExerciseRepository>(context, listen: false);
+    Exercise ex = repo.selectedExercise!
+        .copyWith(targets: repo.eAspectToStringBuilder(_newTargets()));
+
+    repo.updateGeneral(ex);
+  }
+
   @override
   void dispose() {
     nameTxtCtrl.dispose();
     notesTxtCtrl.dispose();
-
     super.dispose();
   }
 
@@ -206,9 +201,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                var newTargets = _newTargets();
-                Exercise ex = repo.selectedExercise!
-                    .copyWith(targets: repo.eAspectToStringBuilder(newTargets));
+                Exercise ex = repo.selectedExercise!.copyWith(
+                    targets: repo.eAspectToStringBuilder(_newTargets()));
                 repo.updateGeneral(ex);
                 RoutePageManager.of(context).toExercises();
               },
@@ -233,8 +227,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   showDialog(
                       barrierDismissible: false,
                       context: context,
-                      builder: (_) => CountFinePopup(
-                            whichCount: exerciseView.totalCount!,
+                      builder: (_) => CountFinePopupTotalCount(
                             onCounterChanged: (count) {
                               count += exercise.totalCount!;
                               var e = exercise.copyWith(
@@ -261,50 +254,50 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: MainBannerAd(),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Material(
-                  color: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(
-                      color: editNoteFieldVisibility
-                          ? Colors.transparent
-                          : Theme.of(context).colorScheme.onBackground,
-                      width: 2.0,
+              GestureDetector(
+                onTap: _triggerNoteFieldVisibility,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(
+                        color: editNoteFieldVisibility
+                            ? Colors.transparent
+                            : Theme.of(context).colorScheme.onBackground,
+                        width: 2.0,
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Visibility(
-                      visible: editNoteFieldVisibility,
-                      replacement: GestureDetector(
-                        onTap: _triggerNoteFieldVisibility,
-                        child: Text(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Visibility(
+                        visible: editNoteFieldVisibility,
+                        replacement: Text(
                           '${initialNotesCtrl.text}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                      ),
-                      child: TextField(
-                        style: Theme.of(context).textTheme.headline6,
-                        maxLines: null,
-                        autofocus: true,
-                        textDirection: TextDirection.ltr,
-                        keyboardType: TextInputType.text,
-                        controller: initialNotesCtrl,
-                        onChanged: (v) {
-                          notesTxtCtrl.text = v;
-                          var e =
-                              exerciseView.copyWith(notes: notesTxtCtrl.text);
-                          repo.updateGeneral(e);
-                        },
-                        onSubmitted: (v) {
-                          notesTxtCtrl.text = v;
-                          var e =
-                              exerciseView.copyWith(notes: notesTxtCtrl.text);
-                          repo.updateGeneral(e);
-                          _triggerNoteFieldVisibility();
-                        },
+                        child: TextField(
+                          style: Theme.of(context).textTheme.headline6,
+                          maxLines: null,
+                          autofocus: true,
+                          textDirection: TextDirection.ltr,
+                          keyboardType: TextInputType.text,
+                          controller: initialNotesCtrl,
+                          onChanged: (v) {
+                            notesTxtCtrl.text = v;
+                            var e =
+                                exerciseView.copyWith(notes: notesTxtCtrl.text);
+                            repo.updateGeneral(e);
+                          },
+                          onSubmitted: (v) {
+                            notesTxtCtrl.text = v;
+                            var e =
+                                exerciseView.copyWith(notes: notesTxtCtrl.text);
+                            repo.updateGeneral(e);
+                            _triggerNoteFieldVisibility();
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -315,10 +308,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   showDialog(
                       barrierDismissible: false,
                       context: context,
-                      builder: (_) => CountFinePopup(
-                            whichCount: exerciseView.resistance!,
+                      builder: (_) => CountFinePopupResistance(
                             onCounterChanged: (count) {
-                              count += exerciseView.resistance!;
                               var e = exerciseView.copyWith(
                                 resistance: count,
                               );
@@ -327,18 +318,49 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                           ));
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Resistance: ${exerciseView.resistance == 0 ? 'n/a' : exerciseView.resistance}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
               ),
-              StronksTextButton(
-                text: 'Targets',
+              GestureDetector(
                 onTap: () {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (_) => CountFinePopupSets(
+                            onCounterChanged: (count) {
+                              var e = exerciseView.copyWith(
+                                countForSets: count,
+                              );
+                              repo.updateGeneral(e);
+                            },
+                          ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Reps in a Set: ${exerciseView.countForSets == 0 ? 'n/a' : exerciseView.countForSets}',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: MainBannerAd(),
+              ),
+              StronksTextButton(
+                text: editTargetVisibility ? 'Update' : 'Targets',
+                onTap: () {
+                  if (editTargetVisibility)
+                    repo.updateGeneral(repo.selectedExercise!.copyWith(
+                      targets: repo.eAspectToStringBuilder(_newTargets()),
+                    ));
                   _triggerTargetVisibility();
                 },
+                isSelected: editTargetVisibility,
               ),
               Visibility(
                 replacement: const SizedBox(
@@ -346,7 +368,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
                 visible: editTargetVisibility,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(18.0),
                   child: Container(
                     height: 120,
                     child: ListView.builder(
@@ -356,18 +378,18 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         itemBuilder: (context, index) {
                           final Map<String, bool> specificTarget =
                               targetFine[index];
-                          final MapEntry e1 =
+                          final MapEntry<String, bool> e1 =
                               specificTarget.entries.elementAt(0);
-                          final MapEntry e2 =
+                          final MapEntry<String, bool> e2 =
                               specificTarget.entries.elementAt(1);
-                          final MapEntry e3 =
+                          final MapEntry<String, bool> e3 =
                               specificTarget.entries.elementAt(2);
-                          final MapEntry e4 =
+                          final MapEntry<String, bool> e4 =
                               specificTarget.entries.elementAt(3);
 
-                          final MapEntry aspect = e1;
+                          final MapEntry<String, bool> aspect = e1;
 
-                          Exercise eToSubmit;
+                          // Exercise eToSubmit;
                           Size sizeFromText = repo.sizeFromText(
                             context,
                             specificTarget.keys.first,
@@ -380,8 +402,14 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             child: AspectTile(
                               aspect: aspect,
                               isSelected: _targetFineSeletctions[index],
-                              tapForSelection: () =>
-                                  _tapForTargetSelection(index),
+                              tapForSelection: () {
+                                setState(() {
+                                  _tapForTargetSelection(index);
+                                  if (_targetFineSeletctions[index] == false)
+                                    targetFine[index]
+                                        .updateAll((key, value) => false);
+                                });
+                              },
                               mapTargetFine: specificTarget,
                               updateInner: () {
                                 String thisKey = e1.key;
@@ -391,10 +419,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 targetFine
                                     .elementAt(index)
                                     .update(thisKey, (value) => !isSelected);
-                                eToSubmit = repo.selectedExercise!.copyWith(
-                                    targets: repo
-                                        .eAspectToStringBuilder(allTargets));
-                                repo.updateGeneral(eToSubmit);
+                                // eToSubmit = repo.selectedExercise!.copyWith(
+                                //     targets: repo
+                                //         .eAspectToStringBuilder(allTargets));
+                                // repo.updateGeneral(eToSubmit);
                               },
                               updateOuter: () {
                                 String thisKey = e2.key;
@@ -404,10 +432,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 targetFine
                                     .elementAt(index)
                                     .update(thisKey, (value) => !isSelected);
-                                eToSubmit = repo.selectedExercise!.copyWith(
-                                    targets: repo
-                                        .eAspectToStringBuilder(allTargets));
-                                repo.updateGeneral(eToSubmit);
+                                // eToSubmit = repo.selectedExercise!.copyWith(
+                                //     targets: repo
+                                //         .eAspectToStringBuilder(allTargets));
+                                // repo.updateGeneral(eToSubmit);
                               },
                               updateUpper: () {
                                 String thisKey = e3.key;
@@ -417,10 +445,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 targetFine
                                     .elementAt(index)
                                     .update(thisKey, (value) => !isSelected);
-                                eToSubmit = repo.selectedExercise!.copyWith(
-                                    targets: repo
-                                        .eAspectToStringBuilder(allTargets));
-                                repo.updateGeneral(eToSubmit);
+                                // eToSubmit = repo.selectedExercise!.copyWith(
+                                //     targets: repo
+                                //         .eAspectToStringBuilder(allTargets));
+                                // repo.updateGeneral(eToSubmit);
                               },
                               updateLower: () {
                                 String thisKey = e4.key;
@@ -430,10 +458,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 targetFine
                                     .elementAt(index)
                                     .update(thisKey, (value) => !isSelected);
-                                eToSubmit = repo.selectedExercise!.copyWith(
-                                    targets: repo
-                                        .eAspectToStringBuilder(allTargets));
-                                repo.updateGeneral(eToSubmit);
+                                // eToSubmit = repo.selectedExercise!.copyWith(
+                                //     targets: repo
+                                //         .eAspectToStringBuilder(allTargets));
+                                // repo.updateGeneral(eToSubmit);
                               },
                             ),
                           );
@@ -442,8 +470,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
               ),
               StronksTextButton(
-                  text: 'Style',
+                  text: editStyleVisibility ? 'Update' : 'Style',
                   onTap: () {
+                    if (editStyleVisibility)
+                      repo.updateGeneral(repo.selectedExercise!.copyWith(
+                        style: repo.eAspectToStringBuilder(styles),
+                      ));
                     _triggerStyleVisibility();
                   }),
               Visibility(
@@ -484,9 +516,9 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                       .elementAt(index);
                               styles.update(
                                   newStyleString, (value) => !isSelected);
-                              eToSubmit = exerciseView.copyWith(
-                                  style: repo.eAspectToStringBuilder(styles));
-                              repo.updateGeneral(eToSubmit);
+                              // eToSubmit = exerciseView.copyWith(
+                              //     style: repo.eAspectToStringBuilder(styles));
+                              // repo.updateGeneral(eToSubmit);
                             },
                           ),
                         );
@@ -496,8 +528,11 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 ),
               ),
               StronksTextButton(
-                  text: 'Equipment',
+                  text: editEquipVisibility ? 'Update' : 'Equipment',
                   onTap: () {
+                    if (editEquipVisibility)
+                      repo.updateGeneral(repo.selectedExercise!.copyWith(
+                          equipment: repo.eAspectToStringBuilder(equips)));
                     _triggerEquipVisibility();
                   }),
               Visibility(
@@ -537,12 +572,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                         .elementAt(index);
                                 equips.update(
                                     newEquipString, (value) => !isSelected);
-                                eToSubmit = exerciseView.copyWith(
-                                    equipment:
-                                        repo.eAspectToStringBuilder(equips));
-                                repo.updateGeneral(eToSubmit);
-
-                                // });
                               },
                               isSelected: isSelected),
                         );
@@ -554,20 +583,27 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 20.0,
-                    ),
-                    Text(
-                      '${repo.selectedExercise!.name}',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
                     RoundIconButton(
                         icon: Icons.edit,
                         onTap: () {
                           _triggerNameVisibility();
                         }),
+                    Spacer(
+                      flex: 3,
+                    ),
+                    Flexible(
+                      flex: 16,
+                      child: Text(
+                        '${repo.selectedExercise!.name}',
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    Spacer(
+                      flex: 5,
+                    ),
                   ],
                 ),
               ),

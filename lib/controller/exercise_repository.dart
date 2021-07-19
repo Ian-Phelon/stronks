@@ -137,10 +137,9 @@ class ExerciseRepository extends ChangeNotifier {
       'name',
       (value) => value == '' ? _userSkippedName() : value,
     );
-
-    await dB.insert(table, e);
+    await dB.transaction((txn) => txn.insert(table, e));
+    // await dB.insert(table, e);
     await fetchAndSetData();
-    print(exerciseList);
   }
 
   void selectExercise(Exercise e) {

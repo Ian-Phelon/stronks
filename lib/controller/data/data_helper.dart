@@ -81,7 +81,9 @@ class DataHelper extends ChangeNotifier {
 
   Future<List<Map<String, dynamic>>> getDataForRepo(String table) async {
     Database db = await _dbAccess.database;
-    return await db.query(table);
+    // var txn =
+    return await db.transaction((txn) => txn.query(table));
+    // return await db.query(table);
   }
 
   /// Helper methods and helpful comments provided by Twitter user '@Suragch1'.
@@ -101,7 +103,9 @@ class DataHelper extends ChangeNotifier {
   /// is of type map
   Future<List<Map<String, dynamic>>> queryAllRows(String table) async {
     Database db = await _dbAccess.database;
-    return await db.query(table);
+
+    return await db.transaction((txn) => txn.query(table));
+    // db.query(table);
   }
 
   /// All of the methods (insert, query, update, delete) can also be done using

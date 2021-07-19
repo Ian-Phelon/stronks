@@ -83,7 +83,9 @@ class AspectTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   width: 4,
-                  color: Theme.of(context).colorScheme.primaryVariant,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primaryVariant
+                      : Theme.of(context).colorScheme.primary,
                 ),
               ),
               child: Padding(
@@ -134,7 +136,9 @@ class AspectTile extends StatelessWidget {
               shape: CircleBorder(
                 side: BorderSide(
                   width: 6,
-                  color: Theme.of(context).colorScheme.primaryVariant,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primaryVariant
+                      : Theme.of(context).colorScheme.primary,
                 ),
               ),
               color: Theme.of(context).colorScheme.surface,
