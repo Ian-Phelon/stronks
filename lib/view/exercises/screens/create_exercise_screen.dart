@@ -252,12 +252,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: StronksTextButton(
-                  textWidget: Text(
-                    'Name it!',
-                    style: Theme.of(context).textTheme.headline6,
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                  ),
+                  text: 'Name it!',
                   onTap: () {
                     _triggerNameVisibility();
                   },
@@ -543,12 +538,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: StronksTextButton(
-                  textWidget: Text(
-                    'Notes',
-                    style: Theme.of(context).textTheme.headline6,
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                  ),
+                  text: 'Notes',
                   onTap: () {
                     _triggerNoteVisibility();
                   },

@@ -55,7 +55,8 @@ class DataHelper extends ChangeNotifier {
         ..sort()
         ..forEach((k) async {
           var script = upgradeScripts[k];
-          await db.execute(script!);
+          await db.transaction((txn) => txn.execute(script!));
+          // execute(script!);
         });
 
       _upgradeDbVersion(db, maxMigratedDbVersion);

@@ -76,7 +76,6 @@ class RoundIconButton extends StatelessWidget {
 class StronksTextButton extends StatelessWidget {
   final String? text;
   final VoidCallback? onTap;
-  final Size? size;
   final double? elevation;
   final bool? isSelected;
 
@@ -85,7 +84,6 @@ class StronksTextButton extends StatelessWidget {
     required this.onTap,
     this.text,
     this.isSelected,
-    this.size,
     this.elevation,
   }) : super(key: key);
 
@@ -103,10 +101,15 @@ class StronksTextButton extends StatelessWidget {
           : Theme.of(context).colorScheme.primary;
     }
 
+    var mquery = MediaQuery.of(context);
     return GestureDetector(
       child: Container(
-        height: size?.height ?? MediaQuery.of(context).size.height * 0.069,
-        width: size?.width ?? MediaQuery.of(context).size.width * 0.40,
+        height: mquery.orientation == Orientation.landscape
+            ? mquery.size.width * 0.079
+            : mquery.size.height * 0.069,
+        width: mquery.orientation == Orientation.landscape
+            ? mquery.size.width * 0.50
+            : mquery.size.width * 0.40,
         child: Material(
           elevation: elevation ?? 0,
           color: Theme.of(context).colorScheme.surface,
@@ -118,14 +121,10 @@ class StronksTextButton extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text(
-                '$text',
-                style: Theme.of(context).textTheme.headline6,
-                // softWrap: true,
-                textAlign: TextAlign.center,
-              ),
+            child: Text(
+              '$text',
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
             ),
           ),
         ),
