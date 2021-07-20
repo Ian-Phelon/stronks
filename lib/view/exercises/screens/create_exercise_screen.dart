@@ -246,7 +246,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                 padding: EdgeInsets.all(32.0),
                 child: Text(
                   '${nameTxtCtrl.text}',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               Padding(
@@ -258,22 +258,24 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   },
                 ),
               ),
-              Visibility(
-                replacement: const SizedBox.shrink(),
-                visible: editNameVisibility,
-                child: TextField(
-                  autofocus: true,
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.text,
-                  style: Theme.of(context).textTheme.headline6,
-                  onChanged: (value) => nameTxtCtrl.text = value,
-                  onSubmitted: (value) {
-                    nameTxtCtrl.text = value;
-                    _triggerNameVisibility();
-                  },
+              Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Visibility(
+                  replacement: const SizedBox.shrink(),
+                  visible: editNameVisibility,
+                  child: TextField(
+                    autofocus: true,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.text,
+                    style: Theme.of(context).textTheme.headline6,
+                    onChanged: (value) => nameTxtCtrl.text = value,
+                    onSubmitted: (value) {
+                      nameTxtCtrl.text = value;
+                      _triggerNameVisibility();
+                    },
+                  ),
                 ),
               ),
-              ///////////////////////
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -494,21 +496,9 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
-                    // CounterRow(
-                    //   countOne: () {
-                    //     incrementCountForSets(1);
-                    //   },
-                    //   countFive: () {
-                    //     incrementCountForSets(5);
-                    //   },
-                    //   countTen: () {
-                    //     incrementCountForSets(10);
-                    //   },
-                    // ),
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -535,6 +525,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                   ],
                 ),
               ),
+              MainBannerAd(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: StronksTextButton(
@@ -548,12 +539,13 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                 replacement: const SizedBox.shrink(),
                 visible: editNoteVisibility,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(28.0),
                   child: TextField(
                     maxLines: null,
                     keyboardType: TextInputType.text,
                     autofocus: true,
                     style: Theme.of(context).textTheme.headline6,
+                    textAlign: TextAlign.center,
                     onChanged: (v) {
                       setState(() {
                         notesTxtCtrl.text = v;

@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'widgets.dart';
 
 typedef void CounterCallback(int value);
-typedef void AsSetsCallback(bool value);
+typedef bool SubtractCallback(bool value);
 
 class CountFinePopup extends AlertDialog {
   const CountFinePopup({
     required this.onCounterChanged,
     this.titleText,
-    this.countAsSets,
-    this.addCountForSets,
   });
 
   final CounterCallback onCounterChanged;
-  final AsSetsCallback? countAsSets;
   final String? titleText;
-  final int? addCountForSets;
 
-  Widget plusWidget() => SizedBox.shrink();
-  bool isPlus() => false;
+  Widget addOrSubtract() => SizedBox.shrink();
+
+  bool isTotalCount() => false;
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController numberTxt = TextEditingController();
-    bool isTotalCount = titleText == 'Total Count';
     return AlertDialog(
       contentTextStyle: Theme.of(context).textTheme.headline4,
       titleTextStyle: Theme.of(context).textTheme.headline4,
@@ -36,8 +31,10 @@ class CountFinePopup extends AlertDialog {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              plusWidget(),
-              isPlus()
+              Flexible(
+                child: addOrSubtract(),
+              ),
+              isTotalCount()
                   ? SizedBox(
                       width: 29.0,
                     )
@@ -74,6 +71,7 @@ class CountFinePopup extends AlertDialog {
         TextButton(
           onPressed: () {
             num n = num.tryParse(numberTxt.text == '' ? '0' : numberTxt.text)!;
+
             onCounterChanged(n.toInt());
             numberTxt.dispose();
             Navigator.of(context).pop();
@@ -94,20 +92,6 @@ class CountFinePopupSets extends CountFinePopup {
   final Function(int) onCounterChanged;
 }
 
-class CountFinePopupTotalCount extends CountFinePopup {
-  CountFinePopupTotalCount({required this.onCounterChanged})
-      : super(
-          onCounterChanged: onCounterChanged,
-          titleText: 'Update Total Count',
-        );
-  final Function(int) onCounterChanged;
-  @override
-  Widget plusWidget() => Icon(Icons.add);
-
-  @override
-  bool isPlus() => true;
-}
-
 class CountFinePopupResistance extends CountFinePopup {
   CountFinePopupResistance({required this.onCounterChanged})
       : super(
@@ -115,4 +99,72 @@ class CountFinePopupResistance extends CountFinePopup {
           titleText: 'How much Resistance?',
         );
   final Function(int) onCounterChanged;
+}
+
+class CountFinePopupTotalCount extends CountFinePopup {
+  CountFinePopupTotalCount({
+    required this.onCounterChanged,
+    required this.ok,
+  }) : super(
+          onCounterChanged: onCounterChanged,
+          titleText: 'Update Total Count',
+        );
+  final Function(int) onCounterChanged;
+  final bool Function(bool) ok;
+
+  @override
+  Widget addOrSubtract() {
+    return Icon(Icons.add);
+
+    ///fuckit
+    // return AddOrSubtract(
+    //   ok: ok,
+    // );
+  }
+
+  @override
+  bool isTotalCount() => true;
+}
+
+class AddOrSubtract extends StatefulWidget {
+  const AddOrSubtract({
+    Key? key,
+    required this.ok,
+  }) : super(key: key);
+  final SubtractCallback ok;
+  @override
+  _AddOrSubtractState createState() => _AddOrSubtractState();
+}
+
+class _AddOrSubtractState extends State<AddOrSubtract> {
+  Icon? icon;
+  final Icon addIcon = Icon(Icons.add);
+  final Icon subtractIcon = Icon(Icons.remove);
+
+  /// plus == true, minus == false.
+  late bool iconToggle;
+
+  void changeIcon() {
+    setState(() {
+      iconToggle = !iconToggle;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    iconToggle = true;
+  }
+
+  bool getok() => !iconToggle;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        changeIcon();
+        widget.ok(getok());
+      },
+      child: iconToggle ? addIcon : subtractIcon,
+    );
+  }
 }

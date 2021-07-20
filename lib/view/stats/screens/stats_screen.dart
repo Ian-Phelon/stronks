@@ -27,17 +27,18 @@ class StatsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return CountFinePopupTotalCount(
-                            onCounterChanged: (v) {},
-                          );
-                        });
-                  },
-                  child: Text('ok')),
+              ///testing
+              // TextButton(
+              //     onPressed: () {
+              //       showDialog(
+              //           context: context,
+              //           builder: (_) {
+              //             return CountFinePopupTotalCount(
+              //               onCounterChanged: (v) {},
+              //             );
+              //           });
+              //     },
+              //     child: Text('ok')),
               // CountFinePopupSets(onCounterChanged: (v) {}),
               MainBannerAd(),
               Text(

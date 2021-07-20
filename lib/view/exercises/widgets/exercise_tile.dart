@@ -6,22 +6,20 @@ class ExerciseTile extends StatelessWidget {
   const ExerciseTile({
     Key? key,
     required this.exercise,
-    required this.selectAndPush,
-    required this.deleteExercise,
-    required this.titleSize,
+    required this.selectAndPushToEdit,
+    required this.quickCountPopup,
   }) : super(key: key);
   final Exercise exercise;
-  final VoidCallback selectAndPush;
-  final VoidCallback deleteExercise;
-  final Size titleSize;
+  final VoidCallback selectAndPushToEdit;
+  final VoidCallback quickCountPopup;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: GestureDetector(
-        onTap: selectAndPush,
-        onLongPress: deleteExercise,
+        onTap: selectAndPushToEdit,
+        onLongPress: quickCountPopup,
         child: Material(
           borderOnForeground: true,
           elevation: 4,

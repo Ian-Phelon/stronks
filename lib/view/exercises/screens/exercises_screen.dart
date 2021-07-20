@@ -5,7 +5,7 @@ import '../../../controller/controller.dart'
     show ExerciseRepository, RoutePageManager;
 import '../../../model/model.dart';
 import '../widgets/widgets.dart'
-    show ExerciseTile, RoundIconButton, DeleteExercisePopup;
+    show ExerciseTile, RoundIconButton, CountFinePopupTotalCount;
 import '../../widgets/widgets.dart' show MainBannerAd, TutorialBar;
 
 class ExercisesScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class ExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<ExerciseRepository>().fetchAndSetData();
+    // context.watch<ExerciseRepository>().fetchAndSetData();
     return Scaffold(
       appBar: AppBar(
         title: Text(runtimeType.toString()),
@@ -53,30 +53,34 @@ Widget _body(BuildContext context) {
   //   pageContext: context,
   // );
   Widget _tile(BuildContext context, Exercise exercise) => ExerciseTile(
-        titleSize: repo.sizeFromText(context, exercise.name!),
         exercise: exercise,
-        selectAndPush: () {
+        selectAndPushToEdit: () {
           repo.selectExercise(exercise);
           RoutePageManager.of(context).toEditExerciseScreen();
         },
-        deleteExercise: () {
+        quickCountPopup: () {
+          var initialCount = exercise.totalCount!;
           showDialog(
             context: context,
-            builder: (BuildContext context) =>
-                DeleteExercisePopup(deleteExerciseAndTile: () {
-              Navigator.pop(context);
-              repo.removeExerciseFromDB(exercise);
-            }),
+            builder: (BuildContext context) => CountFinePopupTotalCount(
+              ok: (v) => v,
+              onCounterChanged: (v) {
+                var e = exercise.copyWith(
+                  totalCount: initialCount + v,
+                );
+                repo.updateGeneral(e);
+              },
+            ),
           );
         },
       );
+  // repo.removeExerciseFromDB(exercise);
   return ListView.separated(
     itemCount: repoList.length,
     separatorBuilder: (context, index) {
-      if (index % 4 == 0)
-        return MainBannerAd();
-      else
-        return SizedBox.shrink();
+      if (index % 2 == 0) return MainBannerAd();
+
+      return SizedBox.shrink();
     },
     itemBuilder: (context, index) {
       return _tile(
