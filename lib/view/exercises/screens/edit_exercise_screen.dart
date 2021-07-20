@@ -6,7 +6,7 @@ import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
 import '../widgets/widgets.dart' show RoundIconButton;
 import '../../widgets/widgets.dart'
-    show AspectTile, CounterRow, MainBannerAd, StronksTextButton, TutorialBar;
+    show AspectTile, MainBannerAd, StronksTextButton, TutorialBar;
 import '../../../model/model.dart' show Exercise;
 
 List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
@@ -77,6 +77,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   /// arms[0], chest[1], back[2], core[3], legs[4]
   late List<Map<String, bool>> targetFine;
 
+  /// used as a control variable since we cant access context outside of
+  /// initState or build methods
   late Exercise exercise;
 
   void _tapForTargetSelection(int index) {
@@ -132,11 +134,11 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   @override
   void initState() {
     super.initState();
-    editNameVisibility = false;
     var repo = Provider.of<ExerciseRepository>(
       context,
       listen: false,
     );
+    editNameVisibility = false;
     exercise = repo.selectedExercise!;
     countForResistance = exercise.resistance!;
     initialNotes = exercise.notes.toString();
@@ -183,434 +185,435 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final repo = context.watch<ExerciseRepository>();
-    var exerciseView = repo.selectedExercise!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${repo.selectedExercise!.name}'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                Exercise ex = repo.selectedExercise!.copyWith(
-                    targets: repo.eAspectToStringBuilder(_newTargets()));
-                repo.updateGeneral(ex);
-                RoutePageManager.of(context).toExercises();
-              },
-              child: const Icon(
-                Icons.add,
+    // var exerciseView = repo.selectedExercise!;
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('${repo.selectedExercise!.name}'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  Exercise ex = repo.selectedExercise!.copyWith(
+                      targets: repo.eAspectToStringBuilder(_newTargets()));
+                  repo.updateGeneral(ex);
+                  RoutePageManager.of(context).toExercises();
+                },
+                child: const Icon(
+                  Icons.add,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: ListView(
-        children: [
-          TutorialBar(
-            pageContext: context,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  bool fine;
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (_) => CountFinePopupTotalCount(
-                            ok: (v) {
-                              return fine = v;
-                            },
-                            onCounterChanged: (count) {
-                              count += exercise.totalCount!;
-                              var e = exercise.copyWith(
-                                totalCount: count,
-                              );
-                              repo.updateGeneral(e);
-                            },
-                          ));
-                },
-                child: Text(
-                  '${repo.selectedExercise!.totalCount}',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Text(
-                  '${repo.selectedExercise!.name} Total Count',
-                  style: Theme.of(context).textTheme.headline5,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MainBannerAd(),
-              ),
-              GestureDetector(
-                onTap: _triggerNoteFieldVisibility,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                    color: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(
-                        color: editNoteFieldVisibility
-                            ? Colors.transparent
-                            : Theme.of(context).colorScheme.onBackground,
-                        width: 2.0,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Visibility(
-                        visible: editNoteFieldVisibility,
-                        replacement: Text(
-                          '${initialNotesCtrl.text}',
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        ),
-                        child: TextField(
-                          style: Theme.of(context).textTheme.headline6,
-                          maxLines: null,
-                          autofocus: true,
-                          textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.text,
-                          controller: initialNotesCtrl,
-                          onChanged: (v) {
-                            notesTxtCtrl.text = v;
-                            var e =
-                                exerciseView.copyWith(notes: notesTxtCtrl.text);
-                            repo.updateGeneral(e);
-                          },
-                          onSubmitted: (v) {
-                            notesTxtCtrl.text = v;
-                            var e =
-                                exerciseView.copyWith(notes: notesTxtCtrl.text);
-                            repo.updateGeneral(e);
-                            _triggerNoteFieldVisibility();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (_) => CountFinePopupResistance(
-                            onCounterChanged: (count) {
-                              var e = exerciseView.copyWith(
-                                resistance: count,
-                              );
-                              repo.updateGeneral(e);
-                            },
-                          ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+          ],
+        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: ListView(
+          children: [
+            TutorialBar(
+              pageContext: context,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => CountFinePopupTotalCount(
+                              ok: (v) => v,
+                              onCounterChanged: (count) {
+                                count += exercise.totalCount!;
+                                var e = exercise.copyWith(
+                                  totalCount: count,
+                                );
+                                repo.updateGeneral(e);
+                              },
+                            ));
+                  },
                   child: Text(
-                    'Resistance: ${exerciseView.resistance == 0 ? 'n/a' : exerciseView.resistance}',
-                    style: Theme.of(context).textTheme.headline4,
+                    '${repo.selectedExercise!.totalCount}',
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (_) => CountFinePopupSets(
-                            onCounterChanged: (count) {
-                              var e = exerciseView.copyWith(
-                                countForSets: count,
-                              );
-                              repo.updateGeneral(e);
-                            },
-                          ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Reps in a Set: ${exerciseView.countForSets == 0 ? 'n/a' : exerciseView.countForSets}',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: MainBannerAd(),
-              ),
-              StronksTextButton(
-                text: editTargetVisibility ? 'Update' : 'Targets',
-                onTap: () {
-                  if (editTargetVisibility)
-                    repo.updateGeneral(repo.selectedExercise!.copyWith(
-                      targets: repo.eAspectToStringBuilder(_newTargets()),
-                    ));
-                  _triggerTargetVisibility();
-                },
-                isSelected: editTargetVisibility,
-              ),
-              Visibility(
-                replacement: const SizedBox(
-                  height: 18.0,
-                ),
-                visible: editTargetVisibility,
-                child: Padding(
+                Padding(
                   padding: const EdgeInsets.all(18.0),
-                  child: Container(
-                    height: 120,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: targetFine.length,
-                        itemBuilder: (context, index) {
-                          final Map<String, bool> specificTarget =
-                              targetFine[index];
-                          final MapEntry<String, bool> e1 =
-                              specificTarget.entries.elementAt(0);
-                          final MapEntry<String, bool> e2 =
-                              specificTarget.entries.elementAt(1);
-                          final MapEntry<String, bool> e3 =
-                              specificTarget.entries.elementAt(2);
-                          final MapEntry<String, bool> e4 =
-                              specificTarget.entries.elementAt(3);
+                  child: Text(
+                    '${repo.selectedExercise!.name} Total Count',
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MainBannerAd(),
+                ),
+                GestureDetector(
+                  onTap: _triggerNoteFieldVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Material(
+                      color: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(
+                          color: editNoteFieldVisibility
+                              ? Colors.transparent
+                              : Theme.of(context).colorScheme.onBackground,
+                          width: 2.0,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Visibility(
+                          visible: editNoteFieldVisibility,
+                          replacement: Text(
+                            '${initialNotesCtrl.text}',
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
+                          ),
+                          child: TextField(
+                            style: Theme.of(context).textTheme.headline6,
+                            maxLines: null,
+                            autofocus: true,
+                            textDirection: TextDirection.ltr,
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.text,
+                            controller: initialNotesCtrl,
+                            onChanged: (v) {
+                              notesTxtCtrl.text = v;
+                              var e = repo.selectedExercise!
+                                  .copyWith(notes: notesTxtCtrl.text);
+                              repo.updateGeneral(e);
+                            },
+                            onSubmitted: (v) {
+                              notesTxtCtrl.text = v;
+                              var e = repo.selectedExercise!
+                                  .copyWith(notes: notesTxtCtrl.text);
+                              repo.updateGeneral(e);
+                              _triggerNoteFieldVisibility();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => CountFinePopupResistance(
+                              onCounterChanged: (count) {
+                                var e = repo.selectedExercise!.copyWith(
+                                  resistance: count,
+                                );
+                                repo.updateGeneral(e);
+                              },
+                            ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Resistance: ${repo.selectedExercise!.resistance == 0 ? 'n/a' : repo.selectedExercise!.resistance}',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => CountFinePopupSets(
+                              onCounterChanged: (count) {
+                                var e = repo.selectedExercise!.copyWith(
+                                  countForSets: count,
+                                );
+                                repo.updateGeneral(e);
+                              },
+                            ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Reps in a Set: ${repo.selectedExercise!.countForSets == 0 ? 'n/a' : repo.selectedExercise!.countForSets}',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: MainBannerAd(),
+                ),
+                StronksTextButton(
+                  text: editTargetVisibility ? 'Update' : 'Targets',
+                  onTap: () {
+                    if (editTargetVisibility)
+                      repo.updateGeneral(repo.selectedExercise!.copyWith(
+                        targets: repo.eAspectToStringBuilder(_newTargets()),
+                      ));
+                    _triggerTargetVisibility();
+                  },
+                  isSelected: editTargetVisibility,
+                ),
+                Visibility(
+                  replacement: const SizedBox(
+                    height: 18.0,
+                  ),
+                  visible: editTargetVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Container(
+                      height: 120,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: targetFine.length,
+                          itemBuilder: (context, index) {
+                            final Map<String, bool> specificTarget =
+                                targetFine[index];
+                            final MapEntry<String, bool> e1 =
+                                specificTarget.entries.elementAt(0);
+                            final MapEntry<String, bool> e2 =
+                                specificTarget.entries.elementAt(1);
+                            final MapEntry<String, bool> e3 =
+                                specificTarget.entries.elementAt(2);
+                            final MapEntry<String, bool> e4 =
+                                specificTarget.entries.elementAt(3);
 
-                          final MapEntry<String, bool> aspect = e1;
+                            final MapEntry<String, bool> aspect = e1;
+
+                            Size sizeFromText = repo.sizeFromText(
+                              context,
+                              specificTarget.keys.first,
+                            );
+                            return Container(
+                              height: sizeFromText.height,
+                              width: _targetFineSeletctions[index] == true
+                                  ? sizeFromText.width + 58
+                                  : sizeFromText.width - 58,
+                              child: AspectTile(
+                                aspect: aspect,
+                                isSelected: _targetFineSeletctions[index],
+                                tapForSelection: () {
+                                  setState(() {
+                                    _tapForTargetSelection(index);
+                                    if (_targetFineSeletctions[index] == false)
+                                      targetFine[index]
+                                          .updateAll((key, value) => false);
+                                  });
+                                },
+                                mapTargetFine: specificTarget,
+                                updateInner: () {
+                                  String thisKey = e1.key;
+                                  final bool isSelected = e1.value;
+                                  allTargets.update(
+                                      thisKey, (value) => !isSelected);
+                                  targetFine
+                                      .elementAt(index)
+                                      .update(thisKey, (value) => !isSelected);
+                                },
+                                updateOuter: () {
+                                  String thisKey = e2.key;
+                                  final bool isSelected = e2.value;
+                                  allTargets.update(
+                                      thisKey, (value) => !isSelected);
+                                  targetFine
+                                      .elementAt(index)
+                                      .update(thisKey, (value) => !isSelected);
+                                },
+                                updateUpper: () {
+                                  String thisKey = e3.key;
+                                  final bool isSelected = e3.value;
+                                  allTargets.update(
+                                      thisKey, (value) => !isSelected);
+                                  targetFine
+                                      .elementAt(index)
+                                      .update(thisKey, (value) => !isSelected);
+                                },
+                                updateLower: () {
+                                  String thisKey = e4.key;
+                                  final bool isSelected = e4.value;
+                                  allTargets.update(
+                                      thisKey, (value) => !isSelected);
+                                  targetFine
+                                      .elementAt(index)
+                                      .update(thisKey, (value) => !isSelected);
+                                },
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
+                ),
+                StronksTextButton(
+                  text: editStyleVisibility ? 'Update' : 'Style',
+                  onTap: () {
+                    if (editStyleVisibility)
+                      repo.updateGeneral(repo.selectedExercise!.copyWith(
+                        style: repo.eAspectToStringBuilder(styles),
+                      ));
+                    _triggerStyleVisibility();
+                  },
+                  isSelected: editStyleVisibility,
+                ),
+                Visibility(
+                  replacement: const SizedBox(
+                    height: 18.0,
+                  ),
+                  visible: editStyleVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 99,
+                      child: ListView.builder(
+                        itemCount: styles.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          bool isSelected =
+                              styles.entries.elementAt(index).value;
+                          MapEntry<String, bool> aspect =
+                              styles.entries.elementAt(index);
 
                           Size sizeFromText = repo.sizeFromText(
                             context,
-                            specificTarget.keys.first,
+                            Provider.of<ExerciseRepository>(context,
+                                    listen: false)
+                                .syleKeys[index],
                           );
                           return Container(
                             height: sizeFromText.height,
-                            width: _targetFineSeletctions[index] == true
-                                ? sizeFromText.width + 58
-                                : sizeFromText.width - 58,
+                            width: sizeFromText.width,
                             child: AspectTile(
+                              isSelected: isSelected,
                               aspect: aspect,
-                              isSelected: _targetFineSeletctions[index],
                               tapForSelection: () {
-                                setState(() {
-                                  _tapForTargetSelection(index);
-                                  if (_targetFineSeletctions[index] == false)
-                                    targetFine[index]
-                                        .updateAll((key, value) => false);
-                                });
-                              },
-                              mapTargetFine: specificTarget,
-                              updateInner: () {
-                                String thisKey = e1.key;
-                                final bool isSelected = e1.value;
-                                allTargets.update(
-                                    thisKey, (value) => !isSelected);
-                                targetFine
-                                    .elementAt(index)
-                                    .update(thisKey, (value) => !isSelected);
-                              },
-                              updateOuter: () {
-                                String thisKey = e2.key;
-                                final bool isSelected = e2.value;
-                                allTargets.update(
-                                    thisKey, (value) => !isSelected);
-                                targetFine
-                                    .elementAt(index)
-                                    .update(thisKey, (value) => !isSelected);
-                              },
-                              updateUpper: () {
-                                String thisKey = e3.key;
-                                final bool isSelected = e3.value;
-                                allTargets.update(
-                                    thisKey, (value) => !isSelected);
-                                targetFine
-                                    .elementAt(index)
-                                    .update(thisKey, (value) => !isSelected);
-                              },
-                              updateLower: () {
-                                String thisKey = e4.key;
-                                final bool isSelected = e4.value;
-                                allTargets.update(
-                                    thisKey, (value) => !isSelected);
-                                targetFine
-                                    .elementAt(index)
-                                    .update(thisKey, (value) => !isSelected);
+                                String newStyleString =
+                                    Provider.of<ExerciseRepository>(context,
+                                            listen: false)
+                                        .syleKeys
+                                        .elementAt(index);
+                                styles.update(
+                                    newStyleString, (value) => !isSelected);
                               },
                             ),
                           );
-                        }),
-                  ),
-                ),
-              ),
-              StronksTextButton(
-                text: editStyleVisibility ? 'Update' : 'Style',
-                onTap: () {
-                  if (editStyleVisibility)
-                    repo.updateGeneral(repo.selectedExercise!.copyWith(
-                      style: repo.eAspectToStringBuilder(styles),
-                    ));
-                  _triggerStyleVisibility();
-                },
-                isSelected: editStyleVisibility,
-              ),
-              Visibility(
-                replacement: const SizedBox(
-                  height: 18.0,
-                ),
-                visible: editStyleVisibility,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 99,
-                    child: ListView.builder(
-                      itemCount: styles.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        bool isSelected = styles.entries.elementAt(index).value;
-                        MapEntry<String, bool> aspect =
-                            styles.entries.elementAt(index);
-
-                        Size sizeFromText = repo.sizeFromText(
-                          context,
-                          Provider.of<ExerciseRepository>(context,
-                                  listen: false)
-                              .syleKeys[index],
-                        );
-                        return Container(
-                          height: sizeFromText.height,
-                          width: sizeFromText.width,
-                          child: AspectTile(
-                            isSelected: isSelected,
-                            aspect: aspect,
-                            tapForSelection: () {
-                              String newStyleString =
-                                  Provider.of<ExerciseRepository>(context,
-                                          listen: false)
-                                      .syleKeys
-                                      .elementAt(index);
-                              styles.update(
-                                  newStyleString, (value) => !isSelected);
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              StronksTextButton(
-                text: editEquipVisibility ? 'Update' : 'Equipment',
-                onTap: () {
-                  if (editEquipVisibility)
-                    repo.updateGeneral(repo.selectedExercise!.copyWith(
-                        equipment: repo.eAspectToStringBuilder(equips)));
-                  _triggerEquipVisibility();
-                },
-                isSelected: editEquipVisibility,
-              ),
-              Visibility(
-                replacement: const SizedBox(
-                  height: 18.0,
-                ),
-                visible: editEquipVisibility,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 99,
-                    child: ListView.builder(
-                      itemCount: equips.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        bool isSelected = equips.entries.elementAt(index).value;
-                        MapEntry<String, bool> aspect =
-                            equips.entries.elementAt(index);
-
-                        Size sizeFromText = repo.sizeFromText(
-                          context,
-                          Provider.of<ExerciseRepository>(context,
-                                  listen: false)
-                              .equipKeys[index],
-                        );
-                        return Container(
-                          width: sizeFromText.width,
-                          height: sizeFromText.height,
-                          child: AspectTile(
-                              aspect: aspect,
-                              tapForSelection: () {
-                                String newEquipString =
-                                    Provider.of<ExerciseRepository>(context,
-                                            listen: false)
-                                        .equipKeys
-                                        .elementAt(index);
-                                equips.update(
-                                    newEquipString, (value) => !isSelected);
-                              },
-                              isSelected: isSelected),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              MainBannerAd(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    RoundIconButton(
-                        icon: Icons.edit,
-                        onTap: () {
-                          _triggerNameVisibility();
-                        }),
-                    Spacer(
-                      flex: 3,
-                    ),
-                    Flexible(
-                      flex: 16,
-                      child: Text(
-                        '${repo.selectedExercise!.name}',
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
+                        },
                       ),
                     ),
-                    Spacer(
-                      flex: 5,
-                    ),
-                  ],
-                ),
-              ),
-              Visibility(
-                replacement: const SizedBox.shrink(),
-                visible: editNameVisibility,
-                child: Padding(
-                  padding: const EdgeInsets.all(28.0),
-                  child: TextField(
-                    autofocus: true,
-                    keyboardType: TextInputType.text,
-                    style: Theme.of(context).textTheme.headline6,
-                    textAlign: TextAlign.center,
-                    onChanged: (value) => nameTxtCtrl.text = value,
-                    onSubmitted: (value) {
-                      var e = exercise.copyWith(name: nameTxtCtrl.text);
-                      repo.updateGeneral(e);
-                      _triggerNameVisibility();
-                    },
                   ),
                 ),
-              ),
-              MainBannerAd(),
-            ],
-          ),
-        ],
+                StronksTextButton(
+                  text: editEquipVisibility ? 'Update' : 'Equipment',
+                  onTap: () {
+                    if (editEquipVisibility)
+                      repo.updateGeneral(repo.selectedExercise!.copyWith(
+                          equipment: repo.eAspectToStringBuilder(equips)));
+                    _triggerEquipVisibility();
+                  },
+                  isSelected: editEquipVisibility,
+                ),
+                Visibility(
+                  replacement: const SizedBox(
+                    height: 18.0,
+                  ),
+                  visible: editEquipVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 99,
+                      child: ListView.builder(
+                        itemCount: equips.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          bool isSelected =
+                              equips.entries.elementAt(index).value;
+                          MapEntry<String, bool> aspect =
+                              equips.entries.elementAt(index);
+
+                          Size sizeFromText = repo.sizeFromText(
+                            context,
+                            Provider.of<ExerciseRepository>(context,
+                                    listen: false)
+                                .equipKeys[index],
+                          );
+                          return Container(
+                            width: sizeFromText.width,
+                            height: sizeFromText.height,
+                            child: AspectTile(
+                                aspect: aspect,
+                                tapForSelection: () {
+                                  String newEquipString =
+                                      Provider.of<ExerciseRepository>(context,
+                                              listen: false)
+                                          .equipKeys
+                                          .elementAt(index);
+                                  equips.update(
+                                      newEquipString, (value) => !isSelected);
+                                },
+                                isSelected: isSelected),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                MainBannerAd(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      RoundIconButton(
+                          icon: Icons.edit,
+                          onTap: () {
+                            _triggerNameVisibility();
+                          }),
+                      Spacer(
+                        flex: 3,
+                      ),
+                      Flexible(
+                        flex: 16,
+                        child: Text(
+                          '${repo.selectedExercise!.name}',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline6,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Spacer(
+                        flex: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  replacement: const SizedBox.shrink(),
+                  visible: editNameVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(28.0),
+                    child: TextField(
+                      autofocus: true,
+                      keyboardType: TextInputType.text,
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) => nameTxtCtrl.text = value,
+                      onSubmitted: (value) {
+                        var e = exercise.copyWith(name: nameTxtCtrl.text);
+                        repo.updateGeneral(e);
+                        _triggerNameVisibility();
+                      },
+                    ),
+                  ),
+                ),
+                MainBannerAd(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -51,7 +51,7 @@ class ExerciseTile extends StatelessWidget {
                   width: 8.0,
                 ),
                 Text(
-                  'Shares: ${exercise.totalCount}',
+                  '${exercise.totalCount}',
                   style: Theme.of(context)
                       .textTheme
                       .headline6!

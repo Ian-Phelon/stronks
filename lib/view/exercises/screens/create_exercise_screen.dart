@@ -5,7 +5,6 @@ import 'package:stronks/controller/exercise_repository.dart'
 import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 import 'package:stronks/view/exercises/widgets/widgets.dart';
 
-import '../../../constants.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
@@ -68,18 +67,6 @@ Map<String, bool> _getTargetForView(BuildContext context, String? input) {
     context,
     listen: false,
   ).eAspectForView(input: input == null || input == '' ? 'target' : input);
-}
-
-/// Provides a Size based on String length and Font Styling
-/// entirely similar to repo.sizefromtext minus the formatting
-Size _size(BuildContext context, String text) {
-  return (TextPainter(
-    text: TextSpan(text: text, style: kAspectTextStyle),
-    maxLines: 1,
-    textScaleFactor: MediaQuery.of(context).textScaleFactor,
-    textDirection: TextDirection.ltr,
-  )..layout())
-      .size;
 }
 
 class CreateExerciseScreen extends StatefulWidget {
@@ -228,349 +215,352 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     );
     final repo = context.watch<ExerciseRepository>();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: Text('Create Exercise'),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
-      ),
-      body: ListView(
-        children: [
-          tutorialBar,
-          MainBannerAd(),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Text(
-                  '${nameTxtCtrl.text}',
-                  style: Theme.of(context).textTheme.headline4,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(
+          title: Text('Create Exercise'),
+        ),
+        body: ListView(
+          children: [
+            tutorialBar,
+            MainBannerAd(),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: Text(
+                    '${nameTxtCtrl.text}',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StronksTextButton(
-                  text: 'Name it!',
-                  onTap: () {
-                    _triggerNameVisibility();
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(28.0),
-                child: Visibility(
-                  replacement: const SizedBox.shrink(),
-                  visible: editNameVisibility,
-                  child: TextField(
-                    autofocus: true,
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.text,
-                    style: Theme.of(context).textTheme.headline6,
-                    onChanged: (value) => nameTxtCtrl.text = value,
-                    onSubmitted: (value) {
-                      nameTxtCtrl.text = value;
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StronksTextButton(
+                    text: 'Name it!',
+                    onTap: () {
                       _triggerNameVisibility();
                     },
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 99,
-                  child: ListView.builder(
-                    itemCount: targetFine.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final Map<String, bool> specificTarget =
-                          targetFine[index];
+                Padding(
+                  padding: const EdgeInsets.all(28.0),
+                  child: Visibility(
+                    replacement: const SizedBox.shrink(),
+                    visible: editNameVisibility,
+                    child: TextField(
+                      autofocus: true,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.text,
+                      style: Theme.of(context).textTheme.headline6,
+                      onChanged: (value) => nameTxtCtrl.text = value,
+                      onSubmitted: (value) {
+                        nameTxtCtrl.text = value;
+                        _triggerNameVisibility();
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 99,
+                    child: ListView.builder(
+                      itemCount: targetFine.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final Map<String, bool> specificTarget =
+                            targetFine[index];
 
-                      final MapEntry e1 = specificTarget.entries.elementAt(0);
-                      final MapEntry e2 = specificTarget.entries.elementAt(1);
-                      final MapEntry e3 = specificTarget.entries.elementAt(2);
-                      final MapEntry e4 = specificTarget.entries.elementAt(3);
+                        final MapEntry e1 = specificTarget.entries.elementAt(0);
+                        final MapEntry e2 = specificTarget.entries.elementAt(1);
+                        final MapEntry e3 = specificTarget.entries.elementAt(2);
+                        final MapEntry e4 = specificTarget.entries.elementAt(3);
 
-                      Size sizeFromText = repo.sizeFromText(
-                        context,
-                        specificTarget.keys.first,
-                      );
+                        Size sizeFromText = repo.sizeFromText(
+                          context,
+                          specificTarget.keys.first,
+                        );
 
-                      final MapEntry aspect = e1;
-                      return Container(
-                        height: sizeFromText.height,
-                        width: _targetFineSeletctions[index] == true
-                            ? sizeFromText.width + 58
-                            : sizeFromText.width - 58,
-                        child: AspectTile(
-                          aspect: aspect,
-                          mapTargetFine: specificTarget,
-                          tapForSelection: () => _tapForTargetSelection(index),
-                          isSelected: _targetFineSeletctions[index],
-                          updateInner: () {
-                            String thisKey = e1.key;
-                            final bool isSelected = e1.value;
-                            setState(
-                              () {
-                                allTargets.update(
-                                    thisKey, (value) => !isSelected);
+                        final MapEntry aspect = e1;
+                        return Container(
+                          height: sizeFromText.height,
+                          width: _targetFineSeletctions[index] == true
+                              ? sizeFromText.width + 58
+                              : sizeFromText.width - 58,
+                          child: AspectTile(
+                            aspect: aspect,
+                            mapTargetFine: specificTarget,
+                            tapForSelection: () =>
+                                _tapForTargetSelection(index),
+                            isSelected: _targetFineSeletctions[index],
+                            updateInner: () {
+                              String thisKey = e1.key;
+                              final bool isSelected = e1.value;
+                              setState(
+                                () {
+                                  allTargets.update(
+                                      thisKey, (value) => !isSelected);
+                                  targetFine
+                                      .elementAt(index)
+                                      .update(thisKey, (value) => !isSelected);
+
+                                  thisKey += ', ';
+                                  if (targetStringBuilder
+                                          .toString()
+                                          .contains(thisKey) ==
+                                      false) targetStringBuilder.write(thisKey);
+                                },
+                              );
+                            },
+                            updateOuter: () {
+                              String key = e2.key;
+                              final bool isSelected = e2.value;
+                              setState(() {
+                                allTargets.update(key, (value) => !isSelected);
                                 targetFine
                                     .elementAt(index)
-                                    .update(thisKey, (value) => !isSelected);
-
-                                thisKey += ', ';
+                                    .update(key, (value) => !isSelected);
+                                key += ', ';
                                 if (targetStringBuilder
                                         .toString()
-                                        .contains(thisKey) ==
-                                    false) targetStringBuilder.write(thisKey);
-                              },
-                            );
-                          },
-                          updateOuter: () {
-                            String key = e2.key;
-                            final bool isSelected = e2.value;
-                            setState(() {
-                              allTargets.update(key, (value) => !isSelected);
-                              targetFine
-                                  .elementAt(index)
-                                  .update(key, (value) => !isSelected);
-                              key += ', ';
-                              if (targetStringBuilder
-                                      .toString()
-                                      .contains(key) ==
-                                  false) targetStringBuilder.write(key);
-                            });
-                          },
-                          updateUpper: () {
-                            String key = e3.key;
-                            final bool isSelected = e3.value;
-                            setState(() {
-                              allTargets.update(key, (value) => !isSelected);
-                              targetFine
-                                  .elementAt(index)
-                                  .update(key, (value) => !isSelected);
-                              key += ', ';
-                              if (targetStringBuilder
-                                      .toString()
-                                      .contains(key) ==
-                                  false) targetStringBuilder.write(key);
-                            });
-                          },
-                          updateLower: () {
-                            String key = e4.key;
-                            final bool isSelected = e4.value;
-                            setState(() {
-                              allTargets.update(key, (value) => !isSelected);
-                              targetFine
-                                  .elementAt(index)
-                                  .update(key, (value) => !isSelected);
-                              key += ', ';
-                              if (targetStringBuilder
-                                      .toString()
-                                      .contains(key) ==
-                                  false) targetStringBuilder.write(key);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 99,
-                  child: ListView.builder(
-                    itemCount: styles.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      bool isSelected = styles.entries.elementAt(index).value;
-                      MapEntry<String, bool> aspect =
-                          styles.entries.elementAt(index);
-
-                      Size sizeFromText = repo.sizeFromText(
-                        context,
-                        Provider.of<ExerciseRepository>(context, listen: false)
-                            .syleKeys[index],
-                      );
-                      return Container(
-                        height: sizeFromText.height,
-                        width: sizeFromText.width,
-                        child: AspectTile(
-                          isSelected: isSelected,
-                          aspect: aspect,
-                          tapForSelection: () {
-                            setState(() {
-                              String newStyleString =
-                                  Provider.of<ExerciseRepository>(context,
-                                          listen: false)
-                                      .syleKeys
-                                      .elementAt(index);
-                              styles.update(
-                                  newStyleString, (value) => !isSelected);
-
-                              newStyleString += ', ';
-                              if (stylesStringBuilder
-                                      .toString()
-                                      .contains(newStyleString) ==
-                                  false)
-                                stylesStringBuilder.write(newStyleString);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 99,
-                  child: ListView.builder(
-                    itemCount: equips.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      bool isSelected = equips.entries.elementAt(index).value;
-                      MapEntry<String, bool> aspect =
-                          equips.entries.elementAt(index);
-
-                      Size sizeFromText = repo.sizeFromText(
-                        context,
-                        Provider.of<ExerciseRepository>(context)
-                            .equipKeys[index],
-                      );
-                      return Container(
-                        width: sizeFromText.width,
-                        height: sizeFromText.height,
-                        child: AspectTile(
-                          aspect: aspect,
-                          tapForSelection: () {
-                            setState(() {
-                              String newEquipString =
-                                  Provider.of<ExerciseRepository>(context,
-                                          listen: false)
-                                      .equipKeys
-                                      .elementAt(index);
-                              equips.update(
-                                  newEquipString, (value) => !isSelected);
-
-                              newEquipString += ', ';
-                              if (equipsStringBuilder
-                                      .toString()
-                                      .contains(newEquipString) ==
-                                  false)
-                                equipsStringBuilder.write(newEquipString);
-                            });
-                          },
-                          isSelected: isSelected,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              MainBannerAd(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Reps in a Set:',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => CountFinePopup(
-                                  titleText: 'How many reps in a set?',
-                                  onCounterChanged: updateCountForSets,
-                                ));
+                                        .contains(key) ==
+                                    false) targetStringBuilder.write(key);
+                              });
+                            },
+                            updateUpper: () {
+                              String key = e3.key;
+                              final bool isSelected = e3.value;
+                              setState(() {
+                                allTargets.update(key, (value) => !isSelected);
+                                targetFine
+                                    .elementAt(index)
+                                    .update(key, (value) => !isSelected);
+                                key += ', ';
+                                if (targetStringBuilder
+                                        .toString()
+                                        .contains(key) ==
+                                    false) targetStringBuilder.write(key);
+                              });
+                            },
+                            updateLower: () {
+                              String key = e4.key;
+                              final bool isSelected = e4.value;
+                              setState(() {
+                                allTargets.update(key, (value) => !isSelected);
+                                targetFine
+                                    .elementAt(index)
+                                    .update(key, (value) => !isSelected);
+                                key += ', ';
+                                if (targetStringBuilder
+                                        .toString()
+                                        .contains(key) ==
+                                    false) targetStringBuilder.write(key);
+                              });
+                            },
+                          ),
+                        );
                       },
-                      child: Text(
-                        '$countForSets',
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Resistance:',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => CountFinePopup(
-                                  titleText: 'How much Resistance?',
-                                  onCounterChanged: updateCountForResistance,
-                                ));
-                      },
-                      child: Text(
-                        '$countForResistance',
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              MainBannerAd(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StronksTextButton(
-                  text: 'Notes',
-                  onTap: () {
-                    _triggerNoteVisibility();
-                  },
-                ),
-              ),
-              Visibility(
-                replacement: const SizedBox.shrink(),
-                visible: editNoteVisibility,
-                child: Padding(
-                  padding: const EdgeInsets.all(28.0),
-                  child: TextField(
-                    maxLines: null,
-                    keyboardType: TextInputType.text,
-                    autofocus: true,
-                    style: Theme.of(context).textTheme.headline6,
-                    textAlign: TextAlign.center,
-                    onChanged: (v) {
-                      setState(() {
-                        notesTxtCtrl.text = v;
-                      });
-                    },
-                    onSubmitted: (v) => notesTxtCtrl.text = v,
                   ),
                 ),
-              ),
-            ],
-          ),
-          AddExerciseButton(
-            //  context,
-            name: nameTxtCtrl.text,
-            countForSets: countForSets,
-            style: styles,
-            targetFine: targetFine,
-            targetParts: _targetFineSeletctions,
-            allTargets: allTargets,
-            equips: equips,
-            countForResistance: countForResistance,
-            notes: notesTxtCtrl.text,
-          ),
-          MainBannerAd(),
-        ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 99,
+                    child: ListView.builder(
+                      itemCount: styles.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        bool isSelected = styles.entries.elementAt(index).value;
+                        MapEntry<String, bool> aspect =
+                            styles.entries.elementAt(index);
+
+                        Size sizeFromText = repo.sizeFromText(
+                          context,
+                          Provider.of<ExerciseRepository>(context,
+                                  listen: false)
+                              .syleKeys[index],
+                        );
+                        return Container(
+                          height: sizeFromText.height,
+                          width: sizeFromText.width,
+                          child: AspectTile(
+                            isSelected: isSelected,
+                            aspect: aspect,
+                            tapForSelection: () {
+                              setState(() {
+                                String newStyleString =
+                                    Provider.of<ExerciseRepository>(context,
+                                            listen: false)
+                                        .syleKeys
+                                        .elementAt(index);
+                                styles.update(
+                                    newStyleString, (value) => !isSelected);
+
+                                newStyleString += ', ';
+                                if (stylesStringBuilder
+                                        .toString()
+                                        .contains(newStyleString) ==
+                                    false)
+                                  stylesStringBuilder.write(newStyleString);
+                              });
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 99,
+                    child: ListView.builder(
+                      itemCount: equips.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        bool isSelected = equips.entries.elementAt(index).value;
+                        MapEntry<String, bool> aspect =
+                            equips.entries.elementAt(index);
+
+                        Size sizeFromText = repo.sizeFromText(
+                          context,
+                          Provider.of<ExerciseRepository>(context)
+                              .equipKeys[index],
+                        );
+                        return Container(
+                          width: sizeFromText.width,
+                          height: sizeFromText.height,
+                          child: AspectTile(
+                            aspect: aspect,
+                            tapForSelection: () {
+                              setState(() {
+                                String newEquipString =
+                                    Provider.of<ExerciseRepository>(context,
+                                            listen: false)
+                                        .equipKeys
+                                        .elementAt(index);
+                                equips.update(
+                                    newEquipString, (value) => !isSelected);
+
+                                newEquipString += ', ';
+                                if (equipsStringBuilder
+                                        .toString()
+                                        .contains(newEquipString) ==
+                                    false)
+                                  equipsStringBuilder.write(newEquipString);
+                              });
+                            },
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                MainBannerAd(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Reps in a Set:',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => CountFinePopup(
+                                    titleText: 'How many reps in a set?',
+                                    onCounterChanged: updateCountForSets,
+                                  ));
+                        },
+                        child: Text(
+                          '$countForSets',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Resistance:',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => CountFinePopup(
+                                    titleText: 'How much Resistance?',
+                                    onCounterChanged: updateCountForResistance,
+                                  ));
+                        },
+                        child: Text(
+                          '$countForResistance',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                MainBannerAd(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StronksTextButton(
+                    text: 'Notes',
+                    onTap: () {
+                      _triggerNoteVisibility();
+                    },
+                  ),
+                ),
+                Visibility(
+                  replacement: const SizedBox.shrink(),
+                  visible: editNoteVisibility,
+                  child: Padding(
+                    padding: const EdgeInsets.all(28.0),
+                    child: TextField(
+                      maxLines: null,
+                      keyboardType: TextInputType.text,
+                      autofocus: true,
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
+                      onChanged: (v) {
+                        setState(() {
+                          notesTxtCtrl.text = v;
+                        });
+                      },
+                      onSubmitted: (v) => notesTxtCtrl.text = v,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            AddExerciseButton(
+              //  context,
+              name: nameTxtCtrl.text,
+              countForSets: countForSets,
+              style: styles,
+              targetFine: targetFine,
+              targetParts: _targetFineSeletctions,
+              allTargets: allTargets,
+              equips: equips,
+              countForResistance: countForResistance,
+              notes: notesTxtCtrl.text,
+            ),
+            MainBannerAd(),
+          ],
+        ),
       ),
     );
   }
