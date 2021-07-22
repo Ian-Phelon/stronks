@@ -179,6 +179,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   void dispose() {
     nameTxtCtrl.dispose();
     notesTxtCtrl.dispose();
+    initialNotesCtrl.dispose();
     super.dispose();
   }
 
@@ -250,7 +251,9 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   child: MainBannerAd(),
                 ),
                 GestureDetector(
-                  onTap: _triggerNoteFieldVisibility,
+                  onTap: () {
+                    _triggerNoteFieldVisibility();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(

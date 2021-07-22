@@ -11,18 +11,21 @@ class Exercise {
   String? steps;
   String? style;
   String? notes;
+  int? holdTime;
 
-  Exercise(
-      {this.id,
-      this.totalCount,
-      this.name,
-      this.countForSets,
-      this.targets,
-      this.resistance,
-      this.equipment,
-      this.steps,
-      this.style,
-      this.notes}) {
+  Exercise({
+    this.id,
+    this.totalCount,
+    this.name,
+    this.countForSets,
+    this.targets,
+    this.resistance,
+    this.equipment,
+    this.steps,
+    this.style,
+    this.notes,
+    this.holdTime,
+  }) {
     totalCount = totalCount ?? 0;
     name = name ?? '';
     countForSets = countForSets ?? 0;
@@ -32,6 +35,7 @@ class Exercise {
     steps = steps ?? '';
     style = style ?? '';
     notes = notes ?? '';
+    holdTime = holdTime ?? 0;
   }
 
   Exercise copyWith({
@@ -45,6 +49,7 @@ class Exercise {
     String? steps,
     String? style,
     String? notes,
+    int? holdTime,
   }) {
     return Exercise(
       id: id ?? this.id,
@@ -57,6 +62,7 @@ class Exercise {
       steps: steps ?? this.steps,
       style: style ?? this.style,
       notes: notes ?? this.notes,
+      holdTime: holdTime ?? this.holdTime,
     );
   }
 
@@ -72,6 +78,7 @@ class Exercise {
       'steps': steps,
       'style': style,
       'notes': notes,
+      'holdTime': holdTime,
     };
   }
 
@@ -87,6 +94,7 @@ class Exercise {
       steps: map['steps'],
       style: map['style'],
       notes: map['notes'],
+      holdTime: map['holdTime'],
     );
   }
   String toJson() => json.encode(toMap());
@@ -95,7 +103,7 @@ class Exercise {
       Exercise.fromMap(json.decode(source));
 
   String toString() {
-    return 'Exercise(id: $id, totalCount: $totalCount, name: $name, countForSets: $countForSets, targets: $targets, resistance: $resistance, equipment: $equipment, steps: $steps, style: $style, notes: $notes)';
+    return 'Exercise(id: $id, totalCount: $totalCount, name: $name, countForSets: $countForSets, targets: $targets, resistance: $resistance, equipment: $equipment, steps: $steps, style: $style, notes: $notes, holdTime: $holdTime)';
   }
 
   bool operator ==(Object other) {
@@ -111,7 +119,8 @@ class Exercise {
         other.equipment == equipment &&
         other.steps == steps &&
         other.style == style &&
-        other.notes == notes;
+        other.notes == notes &&
+        other.holdTime == holdTime;
   }
 
   int get hashCode {
@@ -124,6 +133,7 @@ class Exercise {
         equipment.hashCode ^
         steps.hashCode ^
         style.hashCode ^
-        notes.hashCode;
+        notes.hashCode ^
+        holdTime.hashCode;
   }
 }

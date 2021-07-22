@@ -18,8 +18,8 @@ class ExerciseTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: GestureDetector(
-        onTap: selectAndPushToEdit,
-        onLongPress: quickCountPopup,
+        onTap: quickCountPopup,
+        onLongPress: selectAndPushToEdit,
         child: Material(
           borderOnForeground: true,
           elevation: 4,

@@ -219,7 +219,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: Text('Create Exercise'),
+          title: Text('Create Exercise ${nameTxtCtrl.text}'),
         ),
         body: ListView(
           children: [

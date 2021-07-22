@@ -109,6 +109,7 @@ class _TutorialBarState extends State<TutorialBar> {
                 },
                 child: Icon(
                   Icons.close,
+                  size: 35,
                   color: Theme.of(context).colorScheme.primaryVariant,
                 ),
               ),
@@ -130,6 +131,7 @@ class _TutorialBarState extends State<TutorialBar> {
                     child: GestureDetector(
                       child: Icon(
                         Icons.chevron_left,
+                        size: 35,
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                       onTap: () {
@@ -142,6 +144,7 @@ class _TutorialBarState extends State<TutorialBar> {
                     child: GestureDetector(
                       child: Icon(
                         Icons.chevron_right,
+                        size: 35,
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                       onTap: () {
@@ -175,16 +178,12 @@ class Tutorial {
     ''',
     //1
     '''
-    Tap Exercises to browse and edit the exercises you want to keep track of. 
+    Tap Exercises to add, browse, or edit the exercises you want to keep track of. 
     
     ''',
     //2
     '''
-    Circuits are where you combine different exercises for a full workout.
-    ''',
-    //3
-    '''
-    Stats show overall progress.
+    Stats show a breakdown of your overall progress.
     ''',
   ];
 
@@ -192,12 +191,17 @@ class Tutorial {
   static final List<String> exercisesScreen = const [
     ///0
     '''
-    Tap the + button to add a new exercise. Any exercise you create will show up here.
+    Tap the + button at the bottom of the screen to add a new exercise. Any exercise you create will show up here.
     ''',
 
     ///1
     '''
-    Tap an exercise to edit, and long press to get rid of an exercise. Deleting an exercise will not effect Stats.
+    Each tile shows your Exercise's name, with the amount of times you have performed that exercise.
+    ''',
+
+    ///2
+    '''
+    Tap a tile to update the total count, or long press to edit other aspects such as your notes.
     ''',
   ];
 
@@ -205,27 +209,47 @@ class Tutorial {
   static final List<String> createExerciseScreen = const [
     ///0
     '''
-    Anything entered can be changed, or just hit Let's Go! and take care of it later.
+    Anything entered can be changed later. By tapping "Make It!" at the bottom, you add this Exercise to your Exercise List. Going back will reset anything you've changed here and not add anything to the Exercise List. 
     ''',
 
     ///1
     '''
-    Name: Identify your exercise with a unique name.
+    Name: Identify your exercise with a unique name by tapping "Name It!".
     ''',
 
     ///2
     '''
-    Location: Select one or more areas of the body that this exercise focuses on.
+    Targets: Select one or more areas of the body that this exercise focuses on. Selecting an area without specifying Inner, Outer, Upper, or Lower will target the whole area.
     ''',
 
     ///3
     '''
-    Style: The type of exercise this is.
+    Styles: The type of exercise this is.
     ''',
 
     ///4
     '''
-    Set: To make adding to your count easier, choose how many repetitions you want to do in a set.
+    Equipment: If this exercise requires a particular type of equipment, make note of it here.
+    ''',
+
+    ///5
+    '''
+    Reps in a Set: Max Repetitions in a set.
+    ''',
+
+    ///6
+    '''
+    Resistance: How much weight, if any, is needed to perform this exercise.
+    ''',
+
+    ///7
+    '''
+    Notes: Your personal notepad for anything additional you would like to keep track of.
+    ''',
+
+    ///8
+    '''
+    Tap "Make It!" to add this Exercise to your Exercise List.
     ''',
   ];
 
@@ -233,12 +257,43 @@ class Tutorial {
   static final List<String> editExerciseScreen = const [
     ///0
     '''
-    Add to your total count by pressing the + buttons next to Count or Set. A Set adds your Set amount, and Count will bring up a number pad to enter in an exact amount.
+    Everything that was set when you created this Exercise can be changed here, as well as update the total count for this Exercise.
     ''',
 
     ///1
     '''
-    Tap any field to edit.
+    Tap the big number to update your total count.
+    ''',
+
+    ///2
+    '''
+    Notes are a great place to store a reminder for your next workout. 
+    ''',
+
+    ///3
+    '''
+    Update your amount of Resistance by tapping the number (or 'n/a' if left unset or 0).
+    ''',
+
+    ///4
+    '''
+    Update your amount of Max Repetitions by tapping the number (or 'n/a' if left unset or 0).
+    ''',
+
+    ///5
+    '''
+    Tap Targets, Style, or Equipment to select/deselect according to your needs.
+    ''',
+
+    ///6
+    '''
+    Change the name to more accurately describe your Exercise by tapping the icon to the left.
+    ''',
+  ];
+  static final List<String> statsScreen = const [
+    ///0
+    '''
+    This page is a representation of all the hard work you've put in to achieve your goals. Let's pump those numbers up!
     ''',
   ];
 
@@ -257,6 +312,9 @@ class Tutorial {
         break;
       case 'EditExerciseScreen':
         finalList = editExerciseScreen;
+        break;
+      case 'StatsScreen':
+        finalList = statsScreen;
         break;
       default:
         finalList = ['errrrrrror $pageContext'];

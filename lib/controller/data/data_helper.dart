@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-// import 'package:expense_manager/db/migrations/db_script.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,7 +12,6 @@ class DataHelper extends ChangeNotifier {
   DataHelper._();
 
   /// Static instances for commonly used strings in our DB
-  static final String exerciseTable = 'exercise';
   static final String idColumn = 'id';
 
   static final DataHelper _dbAccess = DataHelper._();
@@ -39,7 +37,6 @@ class DataHelper extends ChangeNotifier {
         ..forEach((key) async {
           String? script = DbMigrator.migrations[key];
           await db.transaction((txn) => txn.execute('${script!}'));
-          // execute('${script!}');
         });
     }, onUpgrade: (Database db, int _, int __) async {
       var currentDbVersion = await getCurrentDbVersion(db);
@@ -56,7 +53,6 @@ class DataHelper extends ChangeNotifier {
         ..forEach((k) async {
           var script = upgradeScripts[k];
           await db.transaction((txn) => txn.execute(script!));
-          // execute(script!);
         });
 
       _upgradeDbVersion(db, maxMigratedDbVersion);
@@ -83,9 +79,7 @@ class DataHelper extends ChangeNotifier {
 
   Future<List<Map<String, dynamic>>> getDataForRepo(String table) async {
     Database db = await _dbAccess.database;
-    // var txn =
     return await db.transaction((txn) => txn.query(table));
-    // return await db.query(table);
   }
 
   /// Helper methods and helpful comments provided by Twitter user '@Suragch1'.
@@ -99,8 +93,6 @@ class DataHelper extends ChangeNotifier {
     Database db = await _dbAccess.database;
     return await db.transaction((txn) => txn.insert(table, exercise,
         conflictAlgorithm: ConflictAlgorithm.replace));
-    // insert(table, exercise,
-    //     conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// The data present in the table is returned as a List of Map, where each row
@@ -109,7 +101,6 @@ class DataHelper extends ChangeNotifier {
     Database db = await _dbAccess.database;
 
     return await db.transaction((txn) => txn.query(table));
-    // db.query(table);
   }
 
   /// All of the methods (insert, query, update, delete) can also be done using
@@ -118,7 +109,6 @@ class DataHelper extends ChangeNotifier {
     Database db = await _dbAccess.database;
     return Sqflite.firstIntValue(await db
         .transaction((txn) => txn.rawQuery('SELECT COUNT(*) FROM $table')));
-    //rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
   /// We are assuming here that the id column in the map is set. The other
@@ -128,7 +118,6 @@ class DataHelper extends ChangeNotifier {
     int id = exercise['id'];
     return await db.transaction((txn) =>
         txn.update(table, exercise, where: '$idColumn = ?', whereArgs: [id]));
-    // .update(table, exercise, where: '$idColumn = ?', whereArgs: [id]);
   }
 
   /// Deletes the row specified by the id. The number of affected rows is
@@ -137,6 +126,5 @@ class DataHelper extends ChangeNotifier {
     Database db = await _dbAccess.database;
     return await db.transaction(
         (txn) => txn.delete(table, where: 'id = ?', whereArgs: [id]));
-    // db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }
