@@ -75,20 +75,18 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class CommonDrawer extends StatefulWidget {
+class CommonDrawer extends StatelessWidget {
   const CommonDrawer({Key? key}) : super(key: key);
 
   @override
-  _CommonDrawerState createState() => _CommonDrawerState();
-}
-
-class _CommonDrawerState extends State<CommonDrawer> {
-  bool darkModeOptionValue = false;
-  @override
   Widget build(BuildContext context) {
-    var repo = context.watch<UserOptions>();
-    return Consumer<UserOptions>(
-      builder: (_, repo, child) => Drawer(
+    return Consumer<UserOptions>(builder: (_, repo, child) {
+      // repo.fetchAndSetUserOptionsTableData();
+
+      bool darkModeOptionValue() =>
+          repo.intToBool(repo.userOptions[0].optionValue!);
+      bool ok = darkModeOptionValue();
+      return Drawer(
         child: Material(
           color: Theme.of(context).colorScheme.surface,
           child: Column(
@@ -99,19 +97,16 @@ class _CommonDrawerState extends State<CommonDrawer> {
                   'Use Dark Mode',
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                value: darkModeOptionValue,
+                value: ok,
                 onChanged: (v) {
                   repo.toggleUsesDarkMode(v);
-
-                  setState(() {
-                    darkModeOptionValue = !darkModeOptionValue;
-                  });
+                  print(repo.userOptions);
                 },
               ),
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -8,17 +8,23 @@ import '../model/model.dart' as theme show StronksTheme;
 
 final _dbHelper = DataHelper();
 const String _table = 'userOptions';
-final UserOptionValue _darkMode =
-    UserOptionValue(id: null, optionTitle: 'usesDarkMode', optionValue: 0);
-final UserOptionValue _metric =
-    UserOptionValue(id: null, optionTitle: 'usesMetric', optionValue: 0);
+
 // final UserOptionValue openedAppOnce =
 //     UserOptionValue(id: null, optionTitle: 'openedApp', optionValue: 1);
 
 class UserOptions extends ChangeNotifier {
-  UserOptions() {
-    initialize();
-  }
+  UserOptions._();
+
+// MobileAds._();
+  static final UserOptions _instance = UserOptions._();
+  // static final MobileAds _instance = MobileAds._().._init();
+
+  /// Shared instance to initialize the AdMob SDK.
+  static UserOptions get instance => _instance;
+  //////////////////////
+  // UserOptions() {
+  //   initialize();
+  // }
   List<ThemeData> themes = [];
 
   final bool userOpenedApp = true;
@@ -30,7 +36,7 @@ class UserOptions extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<UserOptionValue> userOptions = [];
+  late List<UserOptionValue> userOptions;
 
   late UserOptionValue? selectedOption;
 
@@ -64,10 +70,13 @@ class UserOptions extends ChangeNotifier {
     if (check) await firstTime();
 
     await fetchAndSetUserOptionsTableData();
-    notifyListeners();
   }
 
   Future<void> firstTime() async {
+    final UserOptionValue _darkMode =
+        UserOptionValue(id: null, optionTitle: 'usesDarkMode', optionValue: 0);
+    final UserOptionValue _metric =
+        UserOptionValue(id: null, optionTitle: 'usesMetric', optionValue: 0);
     final Database db = await _dbHelper.database;
     await db.transaction((txn) => txn.insert(
           _table,
@@ -81,14 +90,10 @@ class UserOptions extends ChangeNotifier {
   }
 
   Future<void> toggleUsesDarkMode(bool v) async {
-    print('in toggle input value: $v, flipped:${!v}');
     selectOption(userOptionsIndex: 0, updatedValue: boolToInt(v));
     var option = selectedOption!;
-    print('in toggle option = selectedOption: $option');
     await _dbHelper.update(option.toMap(), _table);
     await fetchAndSetUserOptionsTableData();
-    notifyListeners();
-    print('in toggle after update: ${userOptions[0]}');
   }
 
   Future<void> toggleUsesMetric(bool v) async {

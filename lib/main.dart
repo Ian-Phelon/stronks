@@ -13,6 +13,7 @@ void main() async {
       RequestConfiguration(testDeviceIds: [AdHelper.bannerAdUnitId]));
   var db = DataHelper(); //.initDB();
   ExerciseRepository();
+  await UserOptions.instance.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -23,7 +24,7 @@ void main() async {
           create: (_) => ExerciseRepository(),
         ),
         ChangeNotifierProvider<UserOptions>(
-          create: (_) => UserOptions(),
+          create: (_) => UserOptions.instance,
         )
 
         // ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
