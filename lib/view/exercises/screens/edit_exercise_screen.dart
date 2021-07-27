@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/controller/controller.dart'
-    show ExerciseRepository, RoutePageManager;
+import 'package:stronks/controller/controller.dart';
 import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
 import '../widgets/widgets.dart' show RoundIconButton;
@@ -332,7 +331,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Resistance: ${repo.selectedExercise!.resistance == 0 ? 'n/a' : repo.selectedExercise!.resistance}',
+                      'Resistance: ${repo.selectedExercise!.resistance == 0 ? 'n/a' : repo.selectedExercise!.resistance} ${repo.selectedExercise!.resistance == 0 ? '' : Provider.of<UserOptions>(context).getUserResistanceValue()}',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),

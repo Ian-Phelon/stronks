@@ -81,11 +81,8 @@ class CommonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserOptions>(builder: (_, repo, child) {
-      // repo.fetchAndSetUserOptionsTableData();
-
-      bool darkModeOptionValue() =>
-          repo.intToBool(repo.userOptions[0].optionValue!);
-      bool ok = darkModeOptionValue();
+      bool isUsesDarkMode = repo.getOptionValue(userOptionsIndex: 0);
+      bool isUsesMetric = repo.getOptionValue(userOptionsIndex: 1);
       return Drawer(
         child: Material(
           color: Theme.of(context).colorScheme.surface,
@@ -97,10 +94,19 @@ class CommonDrawer extends StatelessWidget {
                   'Use Dark Mode',
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                value: ok,
+                value: isUsesDarkMode,
                 onChanged: (v) {
                   repo.toggleUsesDarkMode(v);
-                  print(repo.userOptions);
+                },
+              ),
+              SwitchListTile(
+                title: Text(
+                  'Use Metric Values',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                value: isUsesMetric,
+                onChanged: (v) {
+                  repo.toggleUsesMetric(v);
                 },
               ),
             ],

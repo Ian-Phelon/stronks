@@ -24,6 +24,11 @@ const kcolorError = Color(0xffF55454);
 /// lul
 
 class StronksTheme {
+  ThemeData getTheme(int index) {
+    if (index == 1) return darkMode;
+    return lightMode;
+  }
+
   static ThemeData get lightMode {
     TextTheme textTheme = const TextTheme(
       headline1: kCommonLightThemeTextStyle,

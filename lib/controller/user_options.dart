@@ -15,29 +15,34 @@ const String _table = 'userOptions';
 class UserOptions extends ChangeNotifier {
   UserOptions._();
 
-// MobileAds._();
   static final UserOptions _instance = UserOptions._();
-  // static final MobileAds _instance = MobileAds._().._init();
-
-  /// Shared instance to initialize the AdMob SDK.
   static UserOptions get instance => _instance;
-  //////////////////////
-  // UserOptions() {
-  //   initialize();
-  // }
+
+  Future<void> initialize() async {
+    final dataList = await _dbHelper.getDataForRepo(_table);
+    final bool check = userOpenedApp && dataList.isEmpty;
+    if (check) await firstTime();
+    loadThemes();
+    await fetchAndSetUserOptionsTableData();
+  }
+
+  static const List<String> resistanceValues = ['lb.', 'kg.'];
   List<ThemeData> themes = [];
-
-  final bool userOpenedApp = true;
-
   void loadThemes() {
+    themes.clear();
     themes.add(theme.StronksTheme.lightMode);
     themes.add(theme.StronksTheme.darkMode);
-
     notifyListeners();
   }
 
-  late List<UserOptionValue> userOptions;
+  String getUserResistanceValue() =>
+      resistanceValues[userOptions[1].optionValue!];
+  ThemeData getCurrentTheme() {
+    return themes[userOptions[0].optionValue!];
+  }
 
+  final bool userOpenedApp = true;
+  late List<UserOptionValue> userOptions;
   late UserOptionValue? selectedOption;
 
   void selectOption(
@@ -46,6 +51,10 @@ class UserOptions extends ChangeNotifier {
         userOptions[userOptionsIndex].copyWith(optionValue: updatedValue);
     notifyListeners();
   }
+
+  /// [0: usesDarkMode, 1: usesMetric]
+  bool getOptionValue({required int userOptionsIndex}) =>
+      intToBool(userOptions[userOptionsIndex].optionValue!);
 
   Future<void> fetchAndSetUserOptionsTableData() async {
     final dataList = await _dbHelper.getDataForRepo(_table);
@@ -62,14 +71,6 @@ class UserOptions extends ChangeNotifier {
     userOptions = convertedList;
 
     notifyListeners();
-  }
-
-  Future<void> initialize() async {
-    final dataList = await _dbHelper.getDataForRepo(_table);
-    final bool check = userOpenedApp && dataList.isEmpty;
-    if (check) await firstTime();
-
-    await fetchAndSetUserOptionsTableData();
   }
 
   Future<void> firstTime() async {
@@ -94,17 +95,14 @@ class UserOptions extends ChangeNotifier {
     var option = selectedOption!;
     await _dbHelper.update(option.toMap(), _table);
     await fetchAndSetUserOptionsTableData();
+    getCurrentTheme();
   }
 
   Future<void> toggleUsesMetric(bool v) async {
-    var usesMetric =
-        userOptions.firstWhere((e) => e.optionTitle == 'usesMetric');
-    var option = usesMetric.copyWith(optionValue: boolToInt(!v));
-    await _dbHelper.update(
-      option.toMap(),
-      _table,
-    );
-    notifyListeners();
+    selectOption(userOptionsIndex: 1, updatedValue: boolToInt(v));
+    var option = selectedOption!;
+    await _dbHelper.update(option.toMap(), _table);
+    await fetchAndSetUserOptionsTableData();
   }
 
   int boolToInt(bool v) => v ? 1 : 0;

@@ -507,7 +507,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                                   ));
                         },
                         child: Text(
-                          '$countForResistance',
+                          '$countForResistance ${Provider.of<UserOptions>(context).getUserResistanceValue()}',
                           style: Theme.of(context).textTheme.headline3,
                         ),
                       ),

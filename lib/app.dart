@@ -12,12 +12,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: StronksTheme.lightMode,
-      color: Theme.of(context).primaryColor,
-      title: 'Stronks Fitness',
-      routerDelegate: StronksRouterDelegate(),
-      routeInformationParser: StronksRouteInformationParser(),
-    );
+    return Consumer<UserOptions>(builder: (context, repo, __) {
+      return MaterialApp.router(
+        theme: repo.getCurrentTheme(),
+        color: Theme.of(context).primaryColor,
+        title: 'Stronks Fitness',
+        routerDelegate: StronksRouterDelegate(),
+        routeInformationParser: StronksRouteInformationParser(),
+      );
+    });
   }
 }
