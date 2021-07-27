@@ -89,10 +89,10 @@ class DataHelper extends ChangeNotifier {
   /// Inserts a row in the database where each key in the Map is a column name
   /// and the value is the column value. The return value is the id of the
   /// inserted row.
-  Future<int> insert(Map<String, dynamic> exercise, String table) async {
+  Future<int> insert(Map<String, dynamic> input, String table) async {
     Database db = await _dbAccess.database;
-    return await db.transaction((txn) => txn.insert(table, exercise,
-        conflictAlgorithm: ConflictAlgorithm.replace));
+    return await db.transaction((txn) =>
+        txn.insert(table, input, conflictAlgorithm: ConflictAlgorithm.replace));
   }
 
   /// The data present in the table is returned as a List of Map, where each row
@@ -113,11 +113,15 @@ class DataHelper extends ChangeNotifier {
 
   /// We are assuming here that the id column in the map is set. The other
   /// column values will be used to update the row.
-  Future<int> update(Map<String, dynamic> exercise, String table) async {
+  Future<int> update(Map<String, dynamic> input, String table) async {
     Database db = await _dbAccess.database;
-    int id = exercise['id'];
-    return await db.transaction((txn) =>
-        txn.update(table, exercise, where: '$idColumn = ?', whereArgs: [id]));
+    int id = input['id'];
+    return await db.transaction((txn) => txn.update(
+          table,
+          input,
+          where: '$idColumn = ?',
+          whereArgs: [id],
+        ));
   }
 
   /// Deletes the row specified by the id. The number of affected rows is

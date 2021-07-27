@@ -3,28 +3,41 @@ import 'package:sqflite/sqflite.dart';
 
 // import '../constants.dart';
 import '../constants.dart';
-import '../model/model.dart' show Exercise;
+import '../model/model.dart' show Exercise, Performance;
 import '../controller/controller.dart'
     show DataHelper, ExerciseHelper, ExerciseKeys;
 
-const String table = 'exercise';
+const String exerciseTable = 'exercise';
+const String performanceTable = 'performance';
 final _dbHelper = DataHelper();
 
 class ExerciseRepository extends ChangeNotifier {
   ExerciseRepository._() {
-    fetchAndSetData();
+    fetchAndSetExerciseTableData();
+    // fetchAndSetPerformanceTableData();
   }
   static final ExerciseRepository _exerciseRepo = ExerciseRepository._();
   factory ExerciseRepository() => _exerciseRepo;
   static final ExerciseHelper eHelper = ExerciseHelper();
 
   static late List<Exercise> exerciseList;
+  static late List<Performance> performanceList;
 
   late Exercise? selectedExercise;
 
   List<Exercise> getExercises() {
-    fetchAndSetData();
+    fetchAndSetExerciseTableData();
     return exerciseList;
+  }
+
+  List<Performance> getPerformances() {
+    fetchAndSetExerciseTableData();
+    return performanceList;
+  }
+
+  Future<void> addPerformance(Map<String, dynamic> input) async {
+    final Database dB = await _dbHelper.database;
+    await dB.transaction((txn) => txn.insert(performanceTable, input));
   }
 
   /// Provides a Size based on String length and Font Styling IAN: this doesn't
@@ -109,8 +122,8 @@ class ExerciseRepository extends ChangeNotifier {
     return totalCount;
   }
 
-  Future<void> fetchAndSetData() async {
-    final dataList = await _dbHelper.getDataForRepo(table);
+  Future<void> fetchAndSetExerciseTableData() async {
+    final dataList = await _dbHelper.getDataForRepo(exerciseTable);
     List<Exercise> convertedList = dataList
         .map<Exercise>(
           (item) => Exercise(
@@ -137,9 +150,8 @@ class ExerciseRepository extends ChangeNotifier {
       'name',
       (value) => value == '' ? _userSkippedName() : value,
     );
-    await dB.transaction((txn) => txn.insert(table, e));
-    // await dB.insert(table, e);
-    await fetchAndSetData();
+    await dB.transaction((txn) => txn.insert(exerciseTable, e));
+    await fetchAndSetExerciseTableData();
   }
 
   void selectExercise(Exercise e) {
@@ -148,7 +160,7 @@ class ExerciseRepository extends ChangeNotifier {
   }
 
   Future<void> removeExerciseFromDB(Exercise e) async {
-    await _dbHelper.delete(e.id!, table);
+    await _dbHelper.delete(e.id!, exerciseTable);
     getExercises();
     notifyListeners();
   }
@@ -156,7 +168,7 @@ class ExerciseRepository extends ChangeNotifier {
   Future<void> updateSelectedExerciseName(String e) async {
     if (e == selectedExercise?.name || e == '') return;
     Exercise thisExercise = selectedExercise!.copyWith(name: e);
-    await _dbHelper.update(thisExercise.toMap(), table);
+    await _dbHelper.update(thisExercise.toMap(), exerciseTable);
     selectExercise(thisExercise);
     notifyListeners();
   }
@@ -165,13 +177,13 @@ class ExerciseRepository extends ChangeNotifier {
     if (e.id != selectedExercise!.id) return;
     int i = selectedExercise!.totalCount! + bump;
     Exercise thisExercise = e.copyWith(totalCount: i);
-    await _dbHelper.update(thisExercise.toMap(), table);
+    await _dbHelper.update(thisExercise.toMap(), exerciseTable);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
   Future<void> updateGeneral(Exercise e) async {
-    await _dbHelper.update(e.toMap(), table);
+    await _dbHelper.update(e.toMap(), exerciseTable);
     selectExercise(e);
     notifyListeners();
   }

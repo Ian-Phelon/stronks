@@ -95,7 +95,7 @@ class RoutePageManager extends ChangeNotifier {
       _pages.add(
         MaterialPage(
           child: Consumer<ExerciseRepository>(builder: (_, repo, ___) {
-            repo.fetchAndSetData();
+            repo.fetchAndSetExerciseTableData();
             return ExercisesScreen();
           }),
           // child: ExercisesScreen(),),

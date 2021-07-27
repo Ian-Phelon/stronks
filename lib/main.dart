@@ -5,7 +5,6 @@ import 'package:stronks/view/widgets/main_banner_ad.dart';
 
 import 'app.dart';
 import 'controller/controller.dart';
-// import 'model/model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,15 +17,15 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<DataHelper>(
-          create: (_) => db, //DataHelper(),
+          create: (_) => db,
         ),
         ChangeNotifierProvider<ExerciseRepository>(
           create: (_) => ExerciseRepository(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => RoutePageManager(),
-        // )
-        // ChangeNotifierProvider(create: (_) => DataHelper.dbAccess),
+        ChangeNotifierProvider<UserOptions>(
+          create: (_) => UserOptions(),
+        )
+
         // ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
         //   create: (_) => ExerciseRepository(),
         //   update: (_, db, previous) => ExerciseRepository(

@@ -65,6 +65,18 @@ Widget _body(BuildContext context) {
                   totalCount: initialCount + v,
                 );
                 repo.updateGeneral(e);
+                var p = Performance(
+                  id: null,
+                  datePerformed: DateTime.now().toString(),
+                  exerciseId: e.id,
+                  updatedCount: v,
+                  currentResistance: e.resistance,
+
+                  ///This is where we need a function to parse the first integer
+                  repsOrHold: e.countForSets,
+                  splitMultiplier: 0,
+                );
+                repo.addPerformance(p.toMap());
               },
             ),
           );

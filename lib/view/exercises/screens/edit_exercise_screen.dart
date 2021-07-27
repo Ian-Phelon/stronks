@@ -7,7 +7,7 @@ import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 import '../widgets/widgets.dart' show RoundIconButton;
 import '../../widgets/widgets.dart'
     show AspectTile, MainBannerAd, StronksTextButton, TutorialBar;
-import '../../../model/model.dart' show Exercise;
+import '../../../model/model.dart';
 
 List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
   List<Map<String, bool>> targetFine = [{}, {}, {}, {}, {}];
@@ -186,7 +186,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final repo = context.watch<ExerciseRepository>();
-    // var exerciseView = repo.selectedExercise!;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -225,11 +224,24 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         builder: (_) => CountFinePopupTotalCount(
                               ok: (v) => v,
                               onCounterChanged: (count) {
+                                int baseCount = count;
                                 count += exercise.totalCount!;
                                 var e = exercise.copyWith(
                                   totalCount: count,
                                 );
                                 repo.updateGeneral(e);
+                                var p = Performance(
+                                  id: null,
+                                  datePerformed: DateTime.now().toString(),
+                                  exerciseId: e.id,
+                                  updatedCount: baseCount,
+                                  currentResistance: e.resistance,
+
+                                  ///This is where we need a function to parse the first integer
+                                  repsOrHold: e.countForSets,
+                                  splitMultiplier: 0,
+                                );
+                                repo.addPerformance(p.toMap());
                               },
                             ));
                   },
