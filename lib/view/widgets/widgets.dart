@@ -5,3 +5,4 @@ export './tutorial_bar.dart';
 export './signup.dart';
 export './counter.dart';
 export './main_banner_ad.dart';
+export './common_drawer.dart';

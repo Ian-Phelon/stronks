@@ -1,18 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../controller/controller.dart';
+import '../../controller/controller.dart' show RoutePageManager;
 import 'widgets/widgets.dart';
-import '../widgets/widgets.dart' show TutorialBar, MainBannerAd;
-import '../../constants.dart';
+import '../widgets/widgets.dart' show TutorialBar, MainBannerAd, CommonDrawer;
 
 const List<String> encouragement = [
   'Keep it Up!',
   'Let\'s Go!',
   'Pump Those Numbers Up!'
 ];
-bool _intToBool(BuildContext context, int v) =>
-    Provider.of<UserOptions>(context, listen: false).intToBool(v);
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -21,16 +17,6 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final rng = Random();
     String encourage() => encouragement[rng.nextInt(encouragement.length)];
-
-    ////////////////////////
-    ////////////////////////
-    ////////////////////////
-    ////////////////////////
-    /// Provider.of<UserOptions>(context,listen: false).
-    ////////////////////////
-    ////////////////////////
-    ////////////////////////
-    ////////////////////////
 
     return SafeArea(
       child: Scaffold(
@@ -59,12 +45,9 @@ class DashboardScreen extends StatelessWidget {
                   },
                   buttonText: 'Stats',
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    MainBannerAd(),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MainBannerAd(),
                 ),
               ],
             ),
@@ -72,47 +55,5 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class CommonDrawer extends StatelessWidget {
-  const CommonDrawer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<UserOptions>(builder: (_, repo, child) {
-      bool isUsesDarkMode = repo.getOptionValue(userOptionsIndex: 0);
-      bool isUsesMetric = repo.getOptionValue(userOptionsIndex: 1);
-      return Drawer(
-        child: Material(
-          color: Theme.of(context).colorScheme.surface,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SwitchListTile(
-                title: Text(
-                  'Use Dark Mode',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                value: isUsesDarkMode,
-                onChanged: (v) {
-                  repo.toggleUsesDarkMode(v);
-                },
-              ),
-              SwitchListTile(
-                title: Text(
-                  'Use Metric Values',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                value: isUsesMetric,
-                onChanged: (v) {
-                  repo.toggleUsesMetric(v);
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    });
   }
 }
