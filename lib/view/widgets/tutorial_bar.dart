@@ -77,10 +77,14 @@ class _TutorialBarState extends State<TutorialBar> {
           },
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Icon(
-              Icons.help_outline,
-              size: 42,
-              color: Theme.of(context).colorScheme.primaryVariant,
+            child: Material(
+              borderRadius: BorderRadius.circular(42 / 2.2),
+              color: Theme.of(context).colorScheme.background,
+              child: Icon(
+                Icons.help_outline,
+                size: 42,
+                color: Theme.of(context).colorScheme.primaryVariant,
+              ),
             ),
           ),
         ),

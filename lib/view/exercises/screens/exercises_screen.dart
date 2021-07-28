@@ -22,10 +22,7 @@ class ExercisesScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 44, 0, 0),
-              child: _body(context),
-            ),
+            _body(context),
             TutorialBar(pageContext: context),
           ],
         ),

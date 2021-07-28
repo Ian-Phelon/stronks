@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-// import '../constants.dart';
-import '../constants.dart';
 import '../model/model.dart' show Exercise, Performance;
 import '../controller/controller.dart'
     show DataHelper, ExerciseHelper, ExerciseKeys;
@@ -46,7 +44,7 @@ class ExerciseRepository extends ChangeNotifier {
   Size sizeFromText(BuildContext context, String text) {
     text += '______';
     return (TextPainter(
-      text: TextSpan(text: text, style: kAspectTextStyle),
+      text: TextSpan(text: text, style: Theme.of(context).textTheme.headline6),
       maxLines: 1,
       textScaleFactor: MediaQuery.of(context).textScaleFactor,
       textDirection: TextDirection.ltr,

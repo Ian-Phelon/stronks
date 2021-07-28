@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:stronks/controller/controller.dart';
 import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
-import '../widgets/widgets.dart' show RoundIconButton;
+import '../widgets/widgets.dart' show DeleteExercisePopup, RoundIconButton;
 import '../../widgets/widgets.dart'
     show AspectTile, MainBannerAd, StronksTextButton, TutorialBar;
 import '../../../model/model.dart';
@@ -288,6 +288,26 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             textAlign: TextAlign.center,
                           ),
                           child: TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
                             style: Theme.of(context).textTheme.headline6,
                             maxLines: null,
                             autofocus: true,
@@ -579,16 +599,22 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       RoundIconButton(
-                          icon: Icons.edit,
+                          icon: Icons.delete_forever,
                           onTap: () {
-                            _triggerNameVisibility();
+                            showDialog(
+                                context: context,
+                                builder: (_) => DeleteExercisePopup(
+                                      deleteExerciseAndTile: () {
+                                        repo.removeExerciseFromDB(
+                                            repo.selectedExercise!);
+                                        RoutePageManager.of(context)
+                                            .toExercises();
+                                      },
+                                    ));
                           }),
-                      Spacer(
-                        flex: 3,
-                      ),
                       Flexible(
                         flex: 16,
                         child: Text(
@@ -598,9 +624,11 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      Spacer(
-                        flex: 5,
-                      ),
+                      RoundIconButton(
+                          icon: Icons.edit,
+                          onTap: () {
+                            _triggerNameVisibility();
+                          }),
                     ],
                   ),
                 ),
@@ -610,6 +638,20 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(28.0),
                     child: TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                      ),
                       autofocus: true,
                       keyboardType: TextInputType.text,
                       style: Theme.of(context).textTheme.headline6,

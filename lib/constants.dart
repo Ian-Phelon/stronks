@@ -49,26 +49,12 @@ const int kAspectStringSkip = 6;
 
 const Color kCommonColorPrimaryDark = Color(0xff2A2B9F);
 const String kFontFamily = 'Montserrat';
-const TextStyle kAspectTextStyle = TextStyle(
-  fontWeight: FontWeight.w600,
-  fontFamily: kFontFamily,
-  color: kCommonColorPrimaryDark,
-  fontSize: 20,
-);
-const CircleBorder kButtonBorderCircle = CircleBorder(
-  side: const BorderSide(
-    color: kCommonColorPrimaryDark,
-    width: 6.0,
-  ),
-);
-
-const RoundedRectangleBorder kButtonBorderRoundedRectangle =
-    RoundedRectangleBorder(
-  side: BorderSide(
-    color: kCommonColorPrimaryDark,
-    width: 6.0,
-  ),
-);
+// const TextStyle kAspectTextStyle = TextStyle(
+//   fontWeight: FontWeight.w600,
+//   fontFamily: kFontFamily,
+//   color: kCommonColorPrimaryDark,
+//   fontSize: 20,
+// );
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen();

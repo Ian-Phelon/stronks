@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../controller/controller.dart' show UserOptions;
+import '../../controller/controller.dart' show RoutePageManager, UserOptions;
 import '../../view/exercises/widgets/widgets.dart';
 
 class CommonDrawer extends StatelessWidget {
@@ -42,8 +42,10 @@ class CommonDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: StronksTextButton(
-                  onTap: () {},
                   text: 'Remove Ads',
+                  onTap: () {
+                    // RoutePageManager.of(context).goToPurchases();
+                  },
                 ),
               )
             ],

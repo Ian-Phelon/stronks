@@ -13,7 +13,7 @@ class CountFinePopup extends AlertDialog {
   final CounterCallback onCounterChanged;
   final String? titleText;
 
-  Widget addOrSubtract() => SizedBox.shrink();
+  Widget addOrSubtract(BuildContext context) => SizedBox.shrink();
 
   bool isTotalCount() => false;
 
@@ -32,7 +32,7 @@ class CountFinePopup extends AlertDialog {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
-                child: addOrSubtract(),
+                child: addOrSubtract(context),
               ),
               isTotalCount()
                   ? SizedBox(
@@ -42,6 +42,20 @@ class CountFinePopup extends AlertDialog {
               Container(
                 width: 69,
                 child: TextField(
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                  ),
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                   textDirection: TextDirection.ltr,
@@ -66,7 +80,10 @@ class CountFinePopup extends AlertDialog {
             numberTxt.dispose();
             Navigator.pop(context);
           },
-          child: Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: Theme.of(context).textTheme.headline6,
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -76,7 +93,12 @@ class CountFinePopup extends AlertDialog {
             numberTxt.dispose();
             Navigator.of(context).pop();
           },
-          child: Text('Update'),
+          child: Text(
+            'Update',
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+          ),
         ),
       ],
     );
@@ -113,13 +135,11 @@ class CountFinePopupTotalCount extends CountFinePopup {
   final bool Function(bool) ok;
 
   @override
-  Widget addOrSubtract() {
-    return Icon(Icons.add);
-
-    ///fuckit
-    // return AddOrSubtract(
-    //   ok: ok,
-    // );
+  Widget addOrSubtract(BuildContext context) {
+    return Icon(
+      Icons.add,
+      color: Theme.of(context).colorScheme.primaryVariant,
+    );
   }
 
   @override
@@ -138,8 +158,6 @@ class AddOrSubtract extends StatefulWidget {
 
 class _AddOrSubtractState extends State<AddOrSubtract> {
   Icon? icon;
-  final Icon addIcon = Icon(Icons.add);
-  final Icon subtractIcon = Icon(Icons.remove);
 
   /// plus == true, minus == false.
   late bool iconToggle;
@@ -159,6 +177,14 @@ class _AddOrSubtractState extends State<AddOrSubtract> {
   bool getok() => !iconToggle;
   @override
   Widget build(BuildContext context) {
+    final Icon addIcon = Icon(
+      Icons.add,
+      color: Theme.of(context).colorScheme.primaryVariant,
+    );
+    final Icon subtractIcon = Icon(
+      Icons.remove,
+      color: Theme.of(context).colorScheme.primaryVariant,
+    );
     return GestureDetector(
       onTap: () {
         changeIcon();

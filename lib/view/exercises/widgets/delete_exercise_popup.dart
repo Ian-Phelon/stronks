@@ -8,20 +8,31 @@ class DeleteExercisePopup extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      titleTextStyle: TextStyle(fontSize: 45),
-      backgroundColor: Colors.deepPurpleAccent,
+      contentTextStyle: Theme.of(context).textTheme.headline6,
+      titleTextStyle: Theme.of(context).textTheme.headline3,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: Text('Delete Exercise?'),
-      content: Icon(Icons.outdoor_grill),
+      content: Text(
+          'Deleting will remove this exercise from your exercise list forever.'),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('back'),
+          child: Text(
+            'Cancel',
+            style: Theme.of(context).textTheme.headline6,
+          ),
         ),
         TextButton(
           onPressed: deleteExerciseAndTile,
-          child: Text('delete'),
+          child: Text(
+            'Delete',
+            style: Theme.of(context)
+                .textTheme
+                .headline5!
+                .copyWith(color: Theme.of(context).colorScheme.error),
+          ),
         ),
       ],
       // height: 80.0,

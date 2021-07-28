@@ -18,17 +18,38 @@ const kcolorPrimaryDark = Color(0xff2A2B9F);
 const kcolorSecondary = Color(0xffFFBFCB);
 const kcolorSecondaryLight = Color(0xffFFF2FE);
 const kcolorSecondaryDark = Color(0xffCB8E9A);
-const kcolorError = Color(0xffF55454);
+const kcolorError = Color(0xFFFF5151);
 
 /// Dark Mode
-/// lul
+const TextStyle kCommonDarkThemeTextStyle = TextStyle(
+  color: kcolorDarkModePrimaryLight,
+  fontFamily: kFontFamily,
+  fontWeight: FontWeight.bold,
+);
+
+/// Light mode equivalent theme use above each THEME>TEXTTHEME>COLORSCHEME
+///
+/// primarycolor>color>primary
+const kcolorDarkModePrimary = Color(0xFF474070);
+
+/// primarycolorlight>null>onBG,onSecondary
+const kcolorDarkModePrimaryLight = Color(0xFFCABEFF);
+
+/// really is primaryBold(bold as in visible, not text)
+const kcolorDarkModePrimaryDark = Color(0xFFC1B6FF);
+const kcolorDarkModeSecondary = Color(0xFF8F6B72);
+const kcolorDarkModeSecondaryLight = Color(0xFF6E616D);
+const kcolorDarkModeSecondaryDark = Color(0xffCB8E9A);
+const kcolorDarkModeError = Colors.white;
 
 class StronksTheme {
-  ThemeData getTheme(int index) {
-    if (index == 1) return darkMode;
-    return lightMode;
-  }
-
+  /// currently only using less opaque versions of kcolorDarkModeSecondaryDark for selectionColor, and
+  static final textCursorAndSelection = TextSelectionThemeData(
+    cursorColor: kcolorPrimaryDark,
+    selectionColor: Color.fromARGB(52, 0xCb, 0x8e, 0x9a),
+    selectionHandleColor: Color.fromARGB(52, 0xCb, 0x8e, 0x9a),
+  );
+  // static final duh = Text
   static ThemeData get lightMode {
     TextTheme textTheme = const TextTheme(
       headline1: kCommonLightThemeTextStyle,
@@ -44,6 +65,7 @@ class StronksTheme {
     );
     return ThemeData(
       // toggleButtonsTheme: ToggleButtonsThemeData(),
+      textSelectionTheme: textCursorAndSelection,
       platform: isIos ? TargetPlatform.iOS : TargetPlatform.android,
       brightness: Brightness.light,
       primaryColor: kcolorPrimary,
@@ -123,9 +145,96 @@ class StronksTheme {
   }
 
   static ThemeData get darkMode {
+    TextTheme textTheme = const TextTheme(
+      headline1: kCommonDarkThemeTextStyle,
+      headline2: const TextStyle(
+        fontWeight: FontWeight.w600,
+        fontFamily: kFontFamily,
+        color: kcolorDarkModePrimaryLight,
+      ),
+      headline3: kCommonDarkThemeTextStyle,
+      headline4: kCommonDarkThemeTextStyle,
+      headline5: kCommonDarkThemeTextStyle,
+      headline6: kCommonDarkThemeTextStyle,
+    );
     return ThemeData(
+      // toggleButtonsTheme: ToggleButtonsThemeData(),
+      textSelectionTheme: textCursorAndSelection,
       platform: isIos ? TargetPlatform.iOS : TargetPlatform.android,
       brightness: Brightness.dark,
+      primaryColor: kcolorDarkModePrimary,
+      primaryColorDark: kcolorDarkModePrimaryDark,
+      primaryColorLight: kcolorDarkModePrimaryLight,
+      fontFamily: kFontFamily,
+
+      /// largest headline2, smallest headline6
+      textTheme: textTheme,
+      appBarTheme: AppBarTheme(
+        color: kcolorDarkModePrimary,
+        centerTitle: true,
+      ),
+      colorScheme: ColorScheme(
+        /// A color that typically appears behind scrollable content.
+        background: kcolorDarkModeSecondary,
+
+        /// .This is the light theme
+        brightness: Brightness.dark,
+
+        /// The color to use for input validation errors, e.g. for
+        /// [InputDecoration.errorText].
+        error: kcolorDarkModeError,
+
+        /// A color that's clearly legible when drawn on [background].
+        ///
+        /// To ensure that an app is accessible, a contrast ratio of 4.5:1 for [background]
+        /// and [onBackground] is recommended. See
+        /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+        onBackground: kcolorDarkModePrimaryLight,
+
+        /// A color that's clearly legible when drawn on [error].
+        ///
+        /// To ensure that an app is accessible, a contrast ratio of 4.5:1 for [error]
+        /// and [onError] is recommended. See
+        /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+        onError: Colors.black,
+
+        /// A color that's clearly legible when drawn on [primary].
+        ///
+        /// To ensure that an app is accessible, a contrast ratio of 4.5:1 for [primary]
+        /// and [onPrimary] is recommended. See
+        /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+        onPrimary: kcolorDarkModeSecondaryLight,
+
+        /// A color that's clearly legible when drawn on [secondary].
+        ///
+        /// To ensure that an app is accessible, a contrast ratio of 4.5:1 for [secondary]
+        /// and [onSecondary] is recommended. See
+        /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+        onSecondary: kcolorDarkModePrimaryLight,
+
+        /// A color that's clearly legible when drawn on [surface].
+        ///
+        /// To ensure that an app is accessible, a contrast ratio of 4.5:1 for [surface]
+        /// and [onSurface] is recommended. See
+        /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+        onSurface: kcolorDarkModePrimaryDark,
+
+        /// The color displayed most frequently across your app’s screens and components.
+        primary: kcolorDarkModePrimary,
+
+        /// darker primary
+        primaryVariant: kcolorDarkModePrimaryDark,
+
+        /// An accent color that, when used sparingly, calls attention to parts
+        /// of your app.
+        secondary: kcolorDarkModeSecondary,
+
+        /// darker secondary
+        secondaryVariant: kcolorDarkModeSecondaryDark,
+
+        /// The background color for widgets like [Card].
+        surface: kcolorDarkModeSecondaryLight,
+      ),
     );
   }
 }
