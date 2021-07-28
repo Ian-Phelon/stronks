@@ -14,38 +14,23 @@ class StatsScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: const Text('Stats'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  repo.dropDB();
-                },
-                icon: const Icon(Icons.menu))
-          ],
         ),
-        body: Center(
-          child: Container(
-            child: Column(
+        body: Stack(
+          children: [
+            TutorialBar(pageContext: context),
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ///testing
-                // TextButton(
-                //     onPressed: () {
-                //       showDialog(
-                //           context: context,
-                //           builder: (_) {
-                //             return CountFinePopupTotalCount(
-                //               onCounterChanged: (v) {},
-                //             );
-                //           });
-                //     },
-                //     child: Text('ok')),
-                // CountFinePopupSets(onCounterChanged: (v) {}),
                 MainBannerAd(),
                 Text(
                   'Total Exercise Count: ${repo.allExercisesTotalCount().toString()}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                const Divider(),
+                Divider(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  indent: 8.0,
+                  endIndent: 8.0,
+                ),
                 Text(
                   'Arm Exercises: ${repo.allExercisesTotalCountArms().toString()}',
                   style: Theme.of(context).textTheme.headline5,
@@ -81,7 +66,7 @@ class StatsScreen extends StatelessWidget {
                 MainBannerAd(),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

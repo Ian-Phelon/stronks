@@ -18,7 +18,7 @@ const kcolorPrimaryDark = Color(0xff2A2B9F);
 const kcolorSecondary = Color(0xffFFBFCB);
 const kcolorSecondaryLight = Color(0xffFFF2FE);
 const kcolorSecondaryDark = Color(0xffCB8E9A);
-const kcolorError = Color(0xFFFF5151);
+const kcolorError = Color(0xffF55454);
 
 /// Dark Mode
 const TextStyle kCommonDarkThemeTextStyle = TextStyle(
@@ -33,7 +33,7 @@ const TextStyle kCommonDarkThemeTextStyle = TextStyle(
 const kcolorDarkModePrimary = Color(0xFF474070);
 
 /// primarycolorlight>null>onBG,onSecondary
-const kcolorDarkModePrimaryLight = Color(0xFFCABEFF);
+const kcolorDarkModePrimaryLight = Color(0xFFDBD5FF);
 
 /// really is primaryBold(bold as in visible, not text)
 const kcolorDarkModePrimaryDark = Color(0xFFC1B6FF);
@@ -43,6 +43,8 @@ const kcolorDarkModeSecondaryDark = Color(0xffCB8E9A);
 const kcolorDarkModeError = Colors.white;
 
 class StronksTheme {
+  static final togglesForDarkMode = ToggleButtonsThemeData();
+
   /// currently only using less opaque versions of kcolorDarkModeSecondaryDark for selectionColor, and
   static final textCursorAndSelection = TextSelectionThemeData(
     cursorColor: kcolorPrimaryDark,

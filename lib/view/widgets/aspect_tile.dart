@@ -162,6 +162,7 @@ Widget _targetIcon({
   required Function() targetFineSelect,
   BuildContext? context,
 }) {
+  final Color iconFineColor = Theme.of(context!).colorScheme.primaryVariant;
   return Padding(
     padding: const EdgeInsets.all(2.0),
     child: Opacity(
@@ -171,8 +172,9 @@ Widget _targetIcon({
           child: Icon(
             iconData,
             color: target.value
-                ? Theme.of(context!).colorScheme.error
-                : Theme.of(context!).colorScheme.primaryVariant,
+                ? Theme.of(context).colorScheme.error
+                : iconFineColor.withOpacity(0.65),
+            // Theme.of(context).colorScheme.primaryVariant,
           ),
         )),
   );

@@ -188,23 +188,8 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text('${repo.selectedExercise!.name}'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Exercise ex = repo.selectedExercise!.copyWith(
-                      targets: repo.eAspectToStringBuilder(_newTargets()));
-                  repo.updateGeneral(ex);
-                  RoutePageManager.of(context).toExercises();
-                },
-                child: const Icon(
-                  Icons.add,
-                ),
-              ),
-            ),
-          ],
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: ListView(

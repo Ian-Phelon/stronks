@@ -20,6 +20,16 @@ class CommonDrawer extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               SwitchListTile(
+                inactiveThumbColor: MediaQuery.of(context).platformBrightness ==
+                        Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.primaryVariant,
+                inactiveTrackColor: Theme.of(context).colorScheme.background,
+                //
+                activeColor: Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.primaryVariant,
+                activeTrackColor: Theme.of(context).colorScheme.secondary,
                 title: Text(
                   'Use Dark Mode',
                   style: Theme.of(context).textTheme.headline5,
@@ -30,6 +40,17 @@ class CommonDrawer extends StatelessWidget {
                 },
               ),
               SwitchListTile(
+                inactiveThumbColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.primary,
+                inactiveTrackColor: Theme.of(context).colorScheme.background,
+                //
+                activeColor: MediaQuery.of(context).platformBrightness ==
+                        Brightness.light
+                    ? Theme.of(context).colorScheme.primaryVariant
+                    : Theme.of(context).colorScheme.primary,
+                activeTrackColor: Theme.of(context).colorScheme.secondary,
                 title: Text(
                   'Use Metric Values',
                   style: Theme.of(context).textTheme.headline5,
