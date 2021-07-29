@@ -21,7 +21,7 @@ class ExerciseRepository extends ChangeNotifier {
   static late List<Exercise> exerciseList;
   static late List<Performance> performanceList;
 
-  late Exercise? selectedExercise;
+  Exercise selectedExercise = Exercise();
 
   List<Exercise> getExercises() {
     fetchAndSetExerciseTableData();
@@ -154,6 +154,7 @@ class ExerciseRepository extends ChangeNotifier {
 
   void selectExercise(Exercise e) {
     selectedExercise = e;
+    print('Selected: $selectedExercise');
     notifyListeners();
   }
 
@@ -164,16 +165,16 @@ class ExerciseRepository extends ChangeNotifier {
   }
 
   Future<void> updateSelectedExerciseName(String e) async {
-    if (e == selectedExercise?.name || e == '') return;
-    Exercise thisExercise = selectedExercise!.copyWith(name: e);
+    if (e == selectedExercise.name || e == '') return;
+    Exercise thisExercise = selectedExercise.copyWith(name: e);
     await _dbHelper.update(thisExercise.toMap(), exerciseTable);
     selectExercise(thisExercise);
     notifyListeners();
   }
 
   Future<void> incrementExerciseCount(Exercise e, int bump) async {
-    if (e.id != selectedExercise!.id) return;
-    int i = selectedExercise!.totalCount! + bump;
+    if (e.id != selectedExercise.id) return;
+    int i = selectedExercise.totalCount! + bump;
     Exercise thisExercise = e.copyWith(totalCount: i);
     await _dbHelper.update(thisExercise.toMap(), exerciseTable);
     selectExercise(thisExercise);
@@ -181,8 +182,12 @@ class ExerciseRepository extends ChangeNotifier {
   }
 
   Future<void> updateGeneral(Exercise e) async {
+    // final Database dB = await _dbHelper.database;
+
+    // await dB.transaction((txn) => txn.update(exerciseTable, e.toMap()));
     await _dbHelper.update(e.toMap(), exerciseTable);
     selectExercise(e);
+    fetchAndSetExerciseTableData();
     notifyListeners();
   }
 

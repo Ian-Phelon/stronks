@@ -10,7 +10,7 @@ const String createExerciseTable =
 
 /// 2
 const String createPerformanceTable =
-    'CREATE TABLE IF NOT EXISTS performance (id INTEGER PRIMARY KEY, datePerformed TEXT, exerciseId INTEGER, updatedCount INTEGER, currentResistance INTEGER, repsOrHold INTEGER, splitMultiplier INTEGER);';
+    'CREATE TABLE IF NOT EXISTS performance (id INTEGER PRIMARY KEY, datePerformed TEXT, exerciseId INTEGER, updatedCount INTEGER, currentResistance INTEGER, repsOrHold INTEGER, splitMultiplier INTEGER, currentTargets TEXT);';
 
 /// 3
 const String createUserOptionsTable =

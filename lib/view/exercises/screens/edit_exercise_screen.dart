@@ -19,6 +19,7 @@ List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
 
     while (arms) {
       targetFine.elementAt(0).addAll({target.key: target.value});
+
       break;
     }
     while (chest) {
@@ -138,7 +139,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
       listen: false,
     );
     editNameVisibility = false;
-    exercise = repo.selectedExercise!;
+    exercise = repo.selectedExercise;
     countForResistance = exercise.resistance!;
     initialNotes = exercise.notes.toString();
     bool emptyNotes = initialNotes == '';
@@ -189,13 +190,13 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text('${repo.selectedExercise!.name}'),
+          title: Text('${repo.selectedExercise.name}'),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: ListView(
           children: [
             TutorialBar(
-              pageContext: context,
+              pageContext: 'editExercise',
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -206,13 +207,14 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupTotalCount(
-                              ok: (v) => v,
+                              exerciseName: repo.selectedExercise.name!,
                               onCounterChanged: (count) {
                                 int baseCount = count;
-                                count += exercise.totalCount!;
-                                var e = exercise.copyWith(
+                                count += repo.selectedExercise.totalCount!;
+                                var e = repo.selectedExercise.copyWith(
                                   totalCount: count,
                                 );
+                                print('EEQC TARGETS: ${e.targets}');
                                 repo.updateGeneral(e);
                                 var p = Performance(
                                   id: null,
@@ -220,24 +222,29 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                   exerciseId: e.id,
                                   updatedCount: baseCount,
                                   currentResistance: e.resistance,
+                                  currentTargets:
+                                      '${_targetFineSeletctions[0] ? 'arms ' : ''}${_targetFineSeletctions[1] ? 'chest ' : ''}${_targetFineSeletctions[2] ? 'back ' : ''}${_targetFineSeletctions[3] ? 'core ' : ''}${_targetFineSeletctions[4] ? 'legs ' : ''}',
 
                                   ///This is where we need a function to parse the first integer
                                   repsOrHold: e.countForSets,
                                   splitMultiplier: 0,
                                 );
                                 repo.addPerformance(p.toMap());
+
+                                print('EEQC PERFORMANCE: ${p.toString()}');
+                                // repo.selectExercise(e);
                               },
                             ));
                   },
                   child: Text(
-                    '${repo.selectedExercise!.totalCount}',
+                    '${repo.selectedExercise.totalCount}',
                     style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: Text(
-                    '${repo.selectedExercise!.name} Total Count',
+                    '${repo.selectedExercise.name} Total Count',
                     style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
@@ -302,13 +309,13 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             controller: initialNotesCtrl,
                             onChanged: (v) {
                               notesTxtCtrl.text = v;
-                              var e = repo.selectedExercise!
+                              var e = repo.selectedExercise
                                   .copyWith(notes: notesTxtCtrl.text);
                               repo.updateGeneral(e);
                             },
                             onSubmitted: (v) {
                               notesTxtCtrl.text = v;
-                              var e = repo.selectedExercise!
+                              var e = repo.selectedExercise
                                   .copyWith(notes: notesTxtCtrl.text);
                               repo.updateGeneral(e);
                               _triggerNoteFieldVisibility();
@@ -325,18 +332,21 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupResistance(
+                              exerciseName: repo.selectedExercise.name!,
                               onCounterChanged: (count) {
-                                var e = repo.selectedExercise!.copyWith(
+                                var e = repo.selectedExercise.copyWith(
                                   resistance: count,
                                 );
+
                                 repo.updateGeneral(e);
+                                // repo.selectExercise(e);
                               },
                             ));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Resistance: ${repo.selectedExercise!.resistance == 0 ? 'n/a' : repo.selectedExercise!.resistance} ${repo.selectedExercise!.resistance == 0 ? '' : Provider.of<UserOptions>(context).getUserResistanceValue()}',
+                      'Resistance: ${repo.selectedExercise.resistance == 0 ? 'n/a' : repo.selectedExercise.resistance} ${repo.selectedExercise.resistance == 0 ? '' : Provider.of<UserOptions>(context).getUserResistanceValue()}',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
@@ -347,18 +357,20 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupSets(
+                              exerciseName: repo.selectedExercise.name!,
                               onCounterChanged: (count) {
-                                var e = repo.selectedExercise!.copyWith(
+                                var e = repo.selectedExercise.copyWith(
                                   countForSets: count,
                                 );
                                 repo.updateGeneral(e);
+                                // repo.selectExercise(e);
                               },
                             ));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Reps in a Set: ${repo.selectedExercise!.countForSets == 0 ? 'n/a' : repo.selectedExercise!.countForSets}',
+                      'Reps in a Set: ${repo.selectedExercise.countForSets == 0 ? 'n/a' : repo.selectedExercise.countForSets}',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
@@ -370,10 +382,13 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 StronksTextButton(
                   text: editTargetVisibility ? 'Update' : 'Targets',
                   onTap: () {
-                    if (editTargetVisibility)
-                      repo.updateGeneral(repo.selectedExercise!.copyWith(
-                        targets: repo.eAspectToStringBuilder(_newTargets()),
-                      ));
+                    if (editTargetVisibility) {
+                      var e = repo.selectedExercise.copyWith(
+                          targets: repo.eAspectToStringBuilder(_newTargets()));
+                      // repo.selectExercise(e);
+                      repo.updateGeneral(e);
+                    }
+
                     _triggerTargetVisibility();
                   },
                   isSelected: editTargetVisibility,
@@ -471,10 +486,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 StronksTextButton(
                   text: editStyleVisibility ? 'Update' : 'Style',
                   onTap: () {
-                    if (editStyleVisibility)
-                      repo.updateGeneral(repo.selectedExercise!.copyWith(
-                        style: repo.eAspectToStringBuilder(styles),
-                      ));
+                    var e = repo.selectedExercise
+                        .copyWith(style: repo.eAspectToStringBuilder(styles));
+                    // repo.selectExercise(e);
+                    if (editStyleVisibility) {
+                      repo.updateGeneral(e);
+                    }
                     _triggerStyleVisibility();
                   },
                   isSelected: editStyleVisibility,
@@ -528,9 +545,12 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 StronksTextButton(
                   text: editEquipVisibility ? 'Update' : 'Equipment',
                   onTap: () {
-                    if (editEquipVisibility)
-                      repo.updateGeneral(repo.selectedExercise!.copyWith(
-                          equipment: repo.eAspectToStringBuilder(equips)));
+                    var e = repo.selectedExercise.copyWith(
+                        equipment: repo.eAspectToStringBuilder(equips));
+                    if (editEquipVisibility) {
+                      repo.updateGeneral(e);
+                      // repo.selectExercise(e);
+                    }
                     _triggerEquipVisibility();
                   },
                   isSelected: editEquipVisibility,
@@ -594,7 +614,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 builder: (_) => DeleteExercisePopup(
                                       deleteExerciseAndTile: () {
                                         repo.removeExerciseFromDB(
-                                            repo.selectedExercise!);
+                                            repo.selectedExercise);
                                         RoutePageManager.of(context)
                                             .toExercises();
                                       },
@@ -603,7 +623,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       Flexible(
                         flex: 16,
                         child: Text(
-                          '${repo.selectedExercise!.name}',
+                          '${repo.selectedExercise.name}',
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.headline6,
                           textAlign: TextAlign.center,

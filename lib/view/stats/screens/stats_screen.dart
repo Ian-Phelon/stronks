@@ -17,7 +17,7 @@ class StatsScreen extends StatelessWidget {
         ),
         body: Stack(
           children: [
-            TutorialBar(pageContext: context),
+            TutorialBar(pageContext: 'stats'),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

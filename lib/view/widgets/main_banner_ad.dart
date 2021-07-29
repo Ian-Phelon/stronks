@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import '../../../controller/controller.dart';
 // class AdHelper {
 
 //   static String get bannerAdUnitId {
@@ -80,9 +82,20 @@ class _MainBannerAdState extends State<MainBannerAd> {
     request: AdRequest(),
     listener: BannerAdListener(),
   );
+
+  late final bool userRemovedAds;
+
   @override
   void initState() {
-    myBanner.load();
+    // await
+    userRemovedAds = Provider.of<UserOptions>(context, listen: false)
+        .getOptionValue(userOptionsIndex: 2);
+    if (userRemovedAds == false) {
+      myBanner.load();
+    }
+    if (userRemovedAds) {
+      myBanner.dispose();
+    }
     super.initState();
   }
 
@@ -93,7 +106,8 @@ class _MainBannerAdState extends State<MainBannerAd> {
       child: Container(
         height: myBanner.size.height.toDouble(),
         width: myBanner.size.width.toDouble(),
-        child: AdWidget(ad: myBanner),
+        child:
+            userRemovedAds ? const SizedBox.shrink() : AdWidget(ad: myBanner),
       ),
     );
   }

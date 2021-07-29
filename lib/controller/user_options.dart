@@ -78,6 +78,8 @@ class UserOptions extends ChangeNotifier {
         UserOptionValue(id: null, optionTitle: 'usesDarkMode', optionValue: 0);
     final UserOptionValue _metric =
         UserOptionValue(id: null, optionTitle: 'usesMetric', optionValue: 0);
+    final UserOptionValue _removedAds = UserOptionValue(
+        id: null, optionTitle: 'userRemovedAds', optionValue: 0);
     final Database db = await _dbHelper.database;
     await db.transaction((txn) => txn.insert(
           _table,
@@ -87,7 +89,18 @@ class UserOptions extends ChangeNotifier {
           _table,
           _metric.toMap(),
         ));
+    await db.transaction((txn) => txn.insert(
+          _table,
+          _removedAds.toMap(),
+        ));
     notifyListeners();
+  }
+
+  Future<void> toggleUserRemovedAds() async {
+    selectOption(userOptionsIndex: 2, updatedValue: 1);
+    var option = selectedOption!;
+    await _dbHelper.update(option.toMap(), _table);
+    await fetchAndSetUserOptionsTableData();
   }
 
   Future<void> toggleUsesDarkMode(bool v) async {

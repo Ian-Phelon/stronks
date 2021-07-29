@@ -28,7 +28,7 @@ class DashboardScreen extends StatelessWidget {
         body: Stack(
           children: [
             TutorialBar(
-              pageContext: context,
+              pageContext: 'dash',
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -119,6 +119,15 @@ class RoutePageManager extends ChangeNotifier {
       _pages.add(
         EditExercisePage(),
       );
+    } else if (configuration.isPurchasesPage) {
+      _pages.add(
+        MaterialPage(
+          child: PurchasesScreen(),
+          // unique?
+          key: UniqueKey(),
+          name: '/purchases',
+        ),
+      );
     } else if (configuration.isCircuitsPage) {
       _pages.add(
         MaterialPage(
@@ -156,16 +165,20 @@ class RoutePageManager extends ChangeNotifier {
     return;
   }
 
+  void toPurchases() {
+    setNewRoutePath(StronksPath.purchases());
+  }
+
   void toExercises() {
     setNewRoutePath(StronksPath.exercises());
   }
 
   void toCreateExerciseScreen() {
-    setNewRoutePath(StronksPath.createExerciseScreen());
+    setNewRoutePath(StronksPath.createExercise());
   }
 
   void toEditExerciseScreen() {
-    setNewRoutePath(StronksPath.editExerciseScreen());
+    setNewRoutePath(StronksPath.editExercise());
   }
 
   void toCircuits() {
@@ -195,7 +208,8 @@ StronksPath parseRoute(Uri uri) {
   if (uri.pathSegments.length == 1) {
     if (uri.pathSegments[0] == 'exercises') return StronksPath.exercises();
     if (uri.pathSegments[0] == 'edit_exercises')
-      return StronksPath.editExerciseScreen();
+      return StronksPath.editExercise();
+    if (uri.pathSegments[0] == 'purchases') return StronksPath.purchases();
     if (uri.pathSegments[0] == 'circuits') return StronksPath.circuits();
     if (uri.pathSegments[0] == 'tp') return StronksPath.tp();
     if (uri.pathSegments[0] == 'stats') return StronksPath.stats();
@@ -230,8 +244,9 @@ class StronksPath {
 
   StronksPath.dash() : id = 'dash';
   StronksPath.exercises() : id = 'exercises';
-  StronksPath.createExerciseScreen() : id = 'create_exercise';
-  StronksPath.editExerciseScreen() : id = 'edit_exercises';
+  StronksPath.createExercise() : id = 'create_exercise';
+  StronksPath.editExercise() : id = 'edit_exercises';
+  StronksPath.purchases() : id = 'purchases';
   StronksPath.circuits() : id = 'circuits';
   StronksPath.createCricuit() : id = 'create_circuit';
   StronksPath.editCircuit() : id = 'edit_circuits';
@@ -243,6 +258,7 @@ class StronksPath {
   bool get isExerciesPage => id == 'exercises';
   bool get isCreateExerciseScreenPage => id == 'create_exercise';
   bool get isEditExerciseScreenPage => id == 'edit_exercises';
+  bool get isPurchasesPage => id == 'purchases';
   bool get isCircuitsPage => id == 'circuits';
   bool get isCreateCircuitPage => id == 'create_circuit';
   bool get isEditCircuitPage => id == 'edit_circuits';

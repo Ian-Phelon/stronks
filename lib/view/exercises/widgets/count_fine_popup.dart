@@ -8,10 +8,12 @@ class CountFinePopup extends AlertDialog {
   const CountFinePopup({
     required this.onCounterChanged,
     this.titleText,
+    required this.exerciseName,
   });
 
   final CounterCallback onCounterChanged;
   final String? titleText;
+  final String exerciseName;
 
   Widget addOrSubtract(BuildContext context) => SizedBox.shrink();
 
@@ -22,9 +24,10 @@ class CountFinePopup extends AlertDialog {
     final TextEditingController numberTxt = TextEditingController();
     return AlertDialog(
       contentTextStyle: Theme.of(context).textTheme.headline4,
-      titleTextStyle: Theme.of(context).textTheme.headline4,
+      titleTextStyle: Theme.of(context).textTheme.headline5,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text(titleText ?? 'Oops'),
+      // titlePadding: ,
+      title: Text(titleText!),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -106,33 +109,40 @@ class CountFinePopup extends AlertDialog {
 }
 
 class CountFinePopupSets extends CountFinePopup {
-  CountFinePopupSets({required this.onCounterChanged})
+  CountFinePopupSets(
+      {required this.onCounterChanged, required this.exerciseName})
       : super(
+          exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'How many Reps in a Set?',
+          titleText: 'How many Reps in a Set for $exerciseName?',
         );
   final Function(int) onCounterChanged;
+  final String exerciseName;
 }
 
 class CountFinePopupResistance extends CountFinePopup {
-  CountFinePopupResistance({required this.onCounterChanged})
+  CountFinePopupResistance(
+      {required this.onCounterChanged, required this.exerciseName})
       : super(
+          exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'How much Resistance?',
+          titleText: 'How much Resistance for $exerciseName?',
         );
   final Function(int) onCounterChanged;
+  final String exerciseName;
 }
 
 class CountFinePopupTotalCount extends CountFinePopup {
   CountFinePopupTotalCount({
     required this.onCounterChanged,
-    required this.ok,
+    required this.exerciseName,
   }) : super(
+          exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'Update Total Count',
+          titleText: 'Update Total Count for $exerciseName',
         );
   final Function(int) onCounterChanged;
-  final bool Function(bool) ok;
+  final String exerciseName;
 
   @override
   Widget addOrSubtract(BuildContext context) {
@@ -146,51 +156,51 @@ class CountFinePopupTotalCount extends CountFinePopup {
   bool isTotalCount() => true;
 }
 
-class AddOrSubtract extends StatefulWidget {
-  const AddOrSubtract({
-    Key? key,
-    required this.ok,
-  }) : super(key: key);
-  final SubtractCallback ok;
-  @override
-  _AddOrSubtractState createState() => _AddOrSubtractState();
-}
+// class AddOrSubtract extends StatefulWidget {
+//   const AddOrSubtract({
+//     Key? key,
+//     // required this.ok,
+//   }) : super(key: key);
+//   // final SubtractCallback ok;
+//   @override
+//   _AddOrSubtractState createState() => _AddOrSubtractState();
+// }
 
-class _AddOrSubtractState extends State<AddOrSubtract> {
-  Icon? icon;
+// class _AddOrSubtractState extends State<AddOrSubtract> {
+//   Icon? icon;
 
-  /// plus == true, minus == false.
-  late bool iconToggle;
+//   /// plus == true, minus == false.
+//   late bool iconToggle;
 
-  void changeIcon() {
-    setState(() {
-      iconToggle = !iconToggle;
-    });
-  }
+//   void changeIcon() {
+//     setState(() {
+//       iconToggle = !iconToggle;
+//     });
+//   }
 
-  @override
-  void initState() {
-    super.initState();
-    iconToggle = true;
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     iconToggle = true;
+//   }
 
-  bool getok() => !iconToggle;
-  @override
-  Widget build(BuildContext context) {
-    final Icon addIcon = Icon(
-      Icons.add,
-      color: Theme.of(context).colorScheme.primaryVariant,
-    );
-    final Icon subtractIcon = Icon(
-      Icons.remove,
-      color: Theme.of(context).colorScheme.primaryVariant,
-    );
-    return GestureDetector(
-      onTap: () {
-        changeIcon();
-        widget.ok(getok());
-      },
-      child: iconToggle ? addIcon : subtractIcon,
-    );
-  }
-}
+//   bool getok() => !iconToggle;
+//   @override
+//   Widget build(BuildContext context) {
+//     final Icon addIcon = Icon(
+//       Icons.add,
+//       color: Theme.of(context).colorScheme.primaryVariant,
+//     );
+//     final Icon subtractIcon = Icon(
+//       Icons.remove,
+//       color: Theme.of(context).colorScheme.primaryVariant,
+//     );
+//     return GestureDetector(
+//       onTap: () {
+//         changeIcon();
+//         widget.ok(getok());
+//       },
+//       child: iconToggle ? addIcon : subtractIcon,
+//     );
+//   }
+// }

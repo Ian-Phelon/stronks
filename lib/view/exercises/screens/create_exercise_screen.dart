@@ -211,7 +211,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final TutorialBar tutorialBar = TutorialBar(
-      pageContext: context,
+      pageContext: 'createExercise',
     );
     final repo = context.watch<ExerciseRepository>();
 
@@ -477,7 +477,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                           showDialog(
                               context: context,
                               builder: (_) => CountFinePopup(
-                                    titleText: 'How many reps in a set?',
+                                    exerciseName: nameTxtCtrl.text,
+                                    titleText: 'How many reps in a set for',
                                     onCounterChanged: updateCountForSets,
                                   ));
                         },
@@ -503,7 +504,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                           showDialog(
                               context: context,
                               builder: (_) => CountFinePopup(
-                                    titleText: 'How much Resistance?',
+                                    exerciseName: nameTxtCtrl.text,
+                                    titleText: 'How much Resistance for',
                                     onCounterChanged: updateCountForResistance,
                                   ));
                         },

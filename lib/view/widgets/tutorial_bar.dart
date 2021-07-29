@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Should be built on every screen. Takes the screen's build context
 /// to pass on to `Tutorial` which provides the appropriate information.
 class TutorialBar extends StatefulWidget {
-  final BuildContext? pageContext;
+  final String? pageContext;
 
   const TutorialBar({
     Key? key,
@@ -48,7 +48,7 @@ class _TutorialBarState extends State<TutorialBar> {
   }
 
   List<String> _getTutorialStrings() {
-    Tutorial tutorial = Tutorial(pageContext: super.widget.pageContext);
+    Tutorial tutorial = Tutorial(pageContext: super.widget.pageContext!);
     return tutorial.stringsFromContext();
   }
 
@@ -171,7 +171,7 @@ class _TutorialBarState extends State<TutorialBar> {
 class Tutorial {
   /// uses the context of whichever page is on screen
   const Tutorial({@required this.pageContext});
-  final BuildContext? pageContext;
+  final String? pageContext;
 
   /// dashScreen
   static final List<String> dashboardScreen = const [
@@ -223,7 +223,7 @@ class Tutorial {
 
     ///2
     '''
-    Targets: Select one or more areas of the body that this exercise focuses on. Selecting an area without specifying Inner, Outer, Upper, or Lower will target the whole area.
+    Targets: Select one or more areas of the body that this exercise focuses on. Selecting an area without specifying Inner, Outer, Upper, or Lower will target the whole area. Scroll Horizontally to see more options for Targets, Styles, and Equipment. 
     ''',
 
     ///3
@@ -291,7 +291,12 @@ class Tutorial {
 
     ///6
     '''
-    Change the name to more accurately describe your Exercise by tapping the icon to the left.
+    Change the name to more accurately describe your Exercise by tapping the icon to the right.
+    ''',
+
+    ///7
+    '''
+    If you want to get this exercise off of your list forever, tap the Trash icon to the left.
     ''',
   ];
   static final List<String> statsScreen = const [
@@ -304,24 +309,24 @@ class Tutorial {
   /// uses the context recieved from tutorial's constructor to provide a list of strings to be rendered by the `TutorialBar`
   List<String> stringsFromContext() {
     late final List<String> finalList;
-    switch (this.pageContext?.widget.toString()) {
-      case 'DashboardScreen':
+    switch (this.pageContext) {
+      case 'dashboard':
         finalList = dashboardScreen;
         break;
-      case 'ExercisesScreen':
+      case 'exercises':
         finalList = exercisesScreen;
         break;
-      case 'CreateExerciseScreen':
+      case 'createExercise':
         finalList = createExerciseScreen;
         break;
-      case 'EditExerciseScreen':
+      case 'editExercise':
         finalList = editExerciseScreen;
         break;
-      case 'StatsScreen':
+      case 'stats':
         finalList = statsScreen;
         break;
       default:
-        finalList = ['errrrrrror $pageContext'];
+        finalList = dashboardScreen;
     }
     return finalList;
   }

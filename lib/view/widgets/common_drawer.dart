@@ -20,10 +20,10 @@ class CommonDrawer extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               SwitchListTile(
-                inactiveThumbColor: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.primaryVariant,
+                inactiveThumbColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.primaryVariant,
                 inactiveTrackColor: Theme.of(context).colorScheme.background,
                 //
                 activeColor: Theme.of(context).brightness == Brightness.light
@@ -41,15 +41,15 @@ class CommonDrawer extends StatelessWidget {
               ),
               SwitchListTile(
                 inactiveThumbColor:
-                    Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.primary,
+                    // Theme.of(context).brightness == Brightness.light
+                    //     ? Theme.of(context).colorScheme.primary
+                    //     :
+                    Theme.of(context).colorScheme.primary,
                 inactiveTrackColor: Theme.of(context).colorScheme.background,
                 //
-                activeColor: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
+                activeColor: Theme.of(context).brightness == Brightness.light
                     ? Theme.of(context).colorScheme.primaryVariant
-                    : Theme.of(context).colorScheme.primary,
+                    : Theme.of(context).colorScheme.primaryVariant,
                 activeTrackColor: Theme.of(context).colorScheme.secondary,
                 title: Text(
                   'Use Metric Values',
@@ -60,13 +60,17 @@ class CommonDrawer extends StatelessWidget {
                   repo.toggleUsesMetric(v);
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: StronksTextButton(
-                  text: 'Remove Ads',
-                  onTap: () {
-                    // RoutePageManager.of(context).goToPurchases();
-                  },
+              Visibility(
+                visible: !Provider.of<UserOptions>(context, listen: false)
+                    .getOptionValue(userOptionsIndex: 2),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: StronksTextButton(
+                    text: 'Remove Ads',
+                    onTap: () {
+                      RoutePageManager.of(context).toPurchases();
+                    },
+                  ),
                 ),
               )
             ],

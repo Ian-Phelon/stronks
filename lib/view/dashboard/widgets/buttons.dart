@@ -11,16 +11,15 @@ class DashButton extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      height: 84,
       child: GestureDetector(
         onTap: onPressed,
         child: Material(
           color: Theme.of(context).colorScheme.surface,
-          shape: OutlineInputBorder(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(9),
-            borderSide: BorderSide(
+            side: BorderSide(
               width: 8,
               color: Theme.of(context).colorScheme.primary,
               style: BorderStyle.solid,

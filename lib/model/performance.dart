@@ -9,6 +9,7 @@ class Performance {
   final int? currentResistance;
   final int? repsOrHold;
   final int? splitMultiplier;
+  final String? currentTargets;
   Performance({
     this.id,
     this.datePerformed,
@@ -17,6 +18,7 @@ class Performance {
     this.currentResistance,
     this.repsOrHold,
     this.splitMultiplier,
+    this.currentTargets,
   });
 
   Performance copyWith({
@@ -27,6 +29,7 @@ class Performance {
     int? currentResistance,
     int? repsOrHold,
     int? splitMultiplier,
+    String? currentTargets,
   }) {
     return Performance(
       id: id ?? this.id,
@@ -36,6 +39,7 @@ class Performance {
       currentResistance: currentResistance ?? this.currentResistance,
       repsOrHold: repsOrHold ?? this.repsOrHold,
       splitMultiplier: splitMultiplier ?? this.splitMultiplier,
+      currentTargets: currentTargets ?? this.currentTargets,
     );
   }
 
@@ -48,6 +52,7 @@ class Performance {
       'currentResistance': currentResistance,
       'repsOrHold': repsOrHold,
       'splitMultiplier': splitMultiplier,
+      'currentTargets': currentTargets,
     };
   }
 
@@ -60,6 +65,7 @@ class Performance {
       currentResistance: map['currentResistance'],
       repsOrHold: map['repsOrHold'],
       splitMultiplier: map['splitMultiplier'],
+      currentTargets: map['currentTargets'],
     );
   }
 
@@ -70,7 +76,7 @@ class Performance {
 
   @override
   String toString() {
-    return 'Performance(id: $id, datePerformed: $datePerformed, exerciseId: $exerciseId, updatedCount: $updatedCount, currentResistance: $currentResistance, repsOrHold: $repsOrHold, splitMultiplier: $splitMultiplier)';
+    return 'Performance(id: $id, datePerformed: $datePerformed, exerciseId: $exerciseId, updatedCount: $updatedCount, currentResistance: $currentResistance, repsOrHold: $repsOrHold, splitMultiplier: $splitMultiplier, currentTargets: $currentTargets)';
   }
 
   @override
@@ -84,7 +90,8 @@ class Performance {
         other.updatedCount == updatedCount &&
         other.currentResistance == currentResistance &&
         other.repsOrHold == repsOrHold &&
-        other.splitMultiplier == splitMultiplier;
+        other.splitMultiplier == splitMultiplier &&
+        other.currentTargets == currentTargets;
   }
 
   @override
@@ -95,6 +102,7 @@ class Performance {
         updatedCount.hashCode ^
         currentResistance.hashCode ^
         repsOrHold.hashCode ^
-        splitMultiplier.hashCode;
+        splitMultiplier.hashCode ^
+        currentTargets.hashCode;
   }
 }
