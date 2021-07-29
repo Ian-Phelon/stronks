@@ -38,6 +38,8 @@ class UserOptions extends ChangeNotifier {
   String getUserResistanceValue() =>
       resistanceValues[userOptions[1].optionValue!];
   ThemeData getCurrentTheme() {
+    // toggleUsesDarkMode(true);
+
     return themes[userOptions[0].optionValue!];
   }
 
@@ -108,7 +110,7 @@ class UserOptions extends ChangeNotifier {
     var option = selectedOption!;
     await _dbHelper.update(option.toMap(), _table);
     await fetchAndSetUserOptionsTableData();
-    getCurrentTheme();
+    // getCurrentTheme();
   }
 
   Future<void> toggleUsesMetric(bool v) async {

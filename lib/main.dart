@@ -8,17 +8,16 @@ import 'controller/controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  MobileAds.instance.updateRequestConfiguration(
+  await MobileAds.instance.initialize();
+  await MobileAds.instance.updateRequestConfiguration(
       RequestConfiguration(testDeviceIds: [AdHelper.bannerAdUnitId]));
-  var db = DataHelper(); //.initDB();
-  ExerciseRepository();
   await UserOptions.instance.initialize();
+  await ExerciseRepository.instance.initialize();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<DataHelper>(
-          create: (_) => db,
+          create: (_) => DataHelper(),
         ),
         ChangeNotifierProvider<ExerciseRepository>(
           create: (_) => ExerciseRepository(),

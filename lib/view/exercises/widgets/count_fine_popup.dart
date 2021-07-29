@@ -114,7 +114,7 @@ class CountFinePopupSets extends CountFinePopup {
       : super(
           exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'How many Reps in a Set for $exerciseName?',
+          titleText: 'How many Reps in a Set for "$exerciseName"?',
         );
   final Function(int) onCounterChanged;
   final String exerciseName;
@@ -126,7 +126,7 @@ class CountFinePopupResistance extends CountFinePopup {
       : super(
           exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'How much Resistance for $exerciseName?',
+          titleText: 'How much Resistance for "$exerciseName"?',
         );
   final Function(int) onCounterChanged;
   final String exerciseName;
@@ -139,7 +139,7 @@ class CountFinePopupTotalCount extends CountFinePopup {
   }) : super(
           exerciseName: exerciseName,
           onCounterChanged: onCounterChanged,
-          titleText: 'Update Total Count for $exerciseName',
+          titleText: 'Update Total Count for "$exerciseName"',
         );
   final Function(int) onCounterChanged;
   final String exerciseName;

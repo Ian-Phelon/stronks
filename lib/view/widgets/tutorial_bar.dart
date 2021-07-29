@@ -286,7 +286,7 @@ class Tutorial {
 
     ///5
     '''
-    Tap Targets, Style, or Equipment to select/deselect according to your needs.
+    Tap Targets, Style, or Equipment to select/deselect according to your needs. Press the "Update" button to record your changes.
     ''',
 
     ///6

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../../controller/controller.dart' show RoutePageManager;
+import '../../controller/controller.dart';
 import 'widgets/widgets.dart';
 import '../widgets/widgets.dart' show TutorialBar, MainBannerAd, CommonDrawer;
 

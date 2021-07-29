@@ -309,9 +309,9 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             controller: initialNotesCtrl,
                             onChanged: (v) {
                               notesTxtCtrl.text = v;
-                              var e = repo.selectedExercise
-                                  .copyWith(notes: notesTxtCtrl.text);
-                              repo.updateGeneral(e);
+                              // var e = repo.selectedExercise
+                              //     .copyWith(notes: notesTxtCtrl.text);
+                              // repo.updateGeneral(e);
                             },
                             onSubmitted: (v) {
                               notesTxtCtrl.text = v;

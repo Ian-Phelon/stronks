@@ -16,7 +16,14 @@ class ExerciseRepository extends ChangeNotifier {
   }
   static final ExerciseRepository _exerciseRepo = ExerciseRepository._();
   factory ExerciseRepository() => _exerciseRepo;
-  static final ExerciseHelper eHelper = ExerciseHelper();
+  static final ExerciseHelper _eHelper = ExerciseHelper();
+  static ExerciseRepository get instance => _exerciseRepo;
+
+  Future<void> initialize() async {
+    //  await _dbHelper.getDataForRepo(exerciseTable);
+
+    await fetchAndSetExerciseTableData();
+  }
 
   static late List<Exercise> exerciseList;
   static late List<Performance> performanceList;
@@ -206,13 +213,13 @@ class ExerciseRepository extends ChangeNotifier {
 
   /// Wrapper for widget access to user input
   Map<String, bool> eAspectForView({required String? input}) =>
-      eHelper.eAspectForView(
+      _eHelper.eAspectForView(
         aspect: input ?? 'none',
       );
 
   /// Wrapper for providing data we can actually store
   String eAspectToStringBuilder(Map<String, bool> aspectFromUser) =>
-      eHelper.eAspectToString(aspectFromUser);
+      _eHelper.eAspectToString(aspectFromUser);
 
   /// Access a list of strings for common use
   final List<String> syleKeys = ExerciseKeys.ekeys.style;
