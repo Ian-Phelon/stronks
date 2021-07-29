@@ -13,6 +13,7 @@ void main() async {
       RequestConfiguration(testDeviceIds: [AdHelper.bannerAdUnitId]));
   await UserOptions.instance.initialize();
   await ExerciseRepository.instance.initialize();
+  await StatsHelper.instance.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -24,7 +25,10 @@ void main() async {
         ),
         ChangeNotifierProvider<UserOptions>(
           create: (_) => UserOptions.instance,
-        )
+        ),
+        ChangeNotifierProvider<StatsHelper>(
+          create: (_) => StatsHelper(),
+        ),
 
         // ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
         //   create: (_) => ExerciseRepository(),

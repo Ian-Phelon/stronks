@@ -94,10 +94,8 @@ class RoutePageManager extends ChangeNotifier {
       );
       _pages.add(
         MaterialPage(
-          child: Consumer<ExerciseRepository>(builder: (_, repo, ___) {
-            repo.fetchAndSetExerciseTableData();
-            return ExercisesScreen();
-          }),
+          child: ExercisesScreen(),
+
           // child: ExercisesScreen(),),
           // unique?
           key: UniqueKey(),
@@ -141,7 +139,6 @@ class RoutePageManager extends ChangeNotifier {
       _pages.add(
         MaterialPage(
           child: StatsScreen(),
-          // unique?
           key: UniqueKey(),
           name: '/stats',
         ),

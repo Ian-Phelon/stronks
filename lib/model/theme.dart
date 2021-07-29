@@ -37,7 +37,7 @@ const kcolorDarkModePrimaryLight = Color(0xFFDBD5FF);
 
 /// really is primaryBold(bold as in visible, not text)
 const kcolorDarkModePrimaryDark = Color(0xFFC1B6FF);
-const kcolorDarkModeSecondary = Color(0xFF8F6B72);
+const kcolorDarkModeSecondary = Color(0xFF8B7075);
 const kcolorDarkModeSecondaryLight = Color(0xFF6E616D);
 const kcolorDarkModeSecondaryDark = Color(0xffCB8E9A);
 const kcolorDarkModeError = Colors.white;

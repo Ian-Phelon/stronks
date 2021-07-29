@@ -83,7 +83,9 @@ class _TutorialBarState extends State<TutorialBar> {
               child: Icon(
                 Icons.help_outline,
                 size: 42,
-                color: Theme.of(context).colorScheme.primaryVariant,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.primaryVariant,
               ),
             ),
           ),
@@ -94,7 +96,9 @@ class _TutorialBarState extends State<TutorialBar> {
         padding: EdgeInsets.all(10.0),
         child: Material(
           elevation: 18.0,
-          shadowColor: Theme.of(context).colorScheme.error,
+          shadowColor: widget.pageContext == 'exercises'
+              ? Theme.of(context).colorScheme.error
+              : null,
           color: Theme.of(context).colorScheme.surface,
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.zero,

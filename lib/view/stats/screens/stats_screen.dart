@@ -6,9 +6,11 @@ import '../../widgets/widgets.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final repo = context.watch<ExerciseRepository>();
+    final List<int> performanceCounts =
+        StatsHelper.of(context).getPerformances();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -18,12 +20,16 @@ class StatsScreen extends StatelessWidget {
         body: Stack(
           children: [
             TutorialBar(pageContext: 'stats'),
+            // Consumer<StatsHelper>(builder: (context, repo, _) {
+            //   return
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MainBannerAd(),
                 Text(
-                  'Total Exercise Count: ${repo.allExercisesTotalCount().toString()}',
+                  'Total Exercise Count: ${performanceCounts[0]
+                  // .performanceCounts[0]
+                  }',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 Divider(
@@ -32,40 +38,42 @@ class StatsScreen extends StatelessWidget {
                   endIndent: 8.0,
                 ),
                 Text(
-                  'Arm Exercises: ${repo.allExercisesTotalCountArms().toString()}',
+                  'Arm Exercises: ${performanceCounts[1]}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(
                   height: 8.0,
                 ),
                 Text(
-                  'Chest Exercises: ${repo.allExercisesTotalCountChest().toString()}',
+                  'Chest Exercises: ${performanceCounts[2]}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(
                   height: 8.0,
                 ),
                 Text(
-                  'Back Exercises: ${repo.allExercisesTotalCountBack().toString()}',
+                  'Back Exercises: ${performanceCounts[3]}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(
                   height: 8.0,
                 ),
                 Text(
-                  'Core Exercises: ${repo.allExercisesTotalCountCore().toString()}',
+                  'Core Exercises: ${performanceCounts[4]}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(
                   height: 8.0,
                 ),
                 Text(
-                  'Leg Exercises: ${repo.allExercisesTotalCountLegs().toString()}',
+                  'Leg Exercises: ${performanceCounts[5]}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 MainBannerAd(),
               ],
-            ),
+            )
+            //   ;
+            // }),
           ],
         ),
       ),

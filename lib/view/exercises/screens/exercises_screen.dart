@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controller/controller.dart'
-    show ExerciseRepository, RoutePageManager, UserOptions;
+    show ExerciseRepository, RoutePageManager, StatsHelper, UserOptions;
 import '../../../model/model.dart';
 import '../widgets/widgets.dart'
     show ExerciseTile, RoundIconButton, CountFinePopupTotalCount;
@@ -42,7 +42,8 @@ class ExercisesScreen extends StatelessWidget {
 }
 
 Widget _body(BuildContext context) {
-  final repo = context.watch<ExerciseRepository>();
+  final repo = ExerciseRepository.of(context);
+  // context.watch<ExerciseRepository>();
 
   final bool userRemovedAds =
       Provider.of<UserOptions>(context).getOptionValue(userOptionsIndex: 2);
@@ -102,7 +103,9 @@ Widget _body(BuildContext context) {
                   splitMultiplier: 0,
                 );
                 print('QC PERFORMANCE: ${p.toString()}');
-                repo.addPerformance(p.toMap());
+                Provider.of<StatsHelper>(context, listen: false)
+                    .addPerformance(p.toMap());
+                // repo.addPerformance(p.toMap());
               },
             ),
           );

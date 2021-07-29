@@ -1,48 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/model.dart' show Exercise, Performance;
+import '../model/model.dart' show Exercise;
 import '../controller/controller.dart'
     show DataHelper, ExerciseHelper, ExerciseKeys;
 
 const String exerciseTable = 'exercise';
-const String performanceTable = 'performance';
+
 final _dbHelper = DataHelper();
 
 class ExerciseRepository extends ChangeNotifier {
-  ExerciseRepository._() {
-    fetchAndSetExerciseTableData();
-    // fetchAndSetPerformanceTableData();
-  }
+  ExerciseRepository._();
+  // {
+  //   fetchAndSetExerciseTableData();
+  // }
   static final ExerciseRepository _exerciseRepo = ExerciseRepository._();
   factory ExerciseRepository() => _exerciseRepo;
   static final ExerciseHelper _eHelper = ExerciseHelper();
   static ExerciseRepository get instance => _exerciseRepo;
+  static ExerciseRepository of(BuildContext context) {
+    return Provider.of<ExerciseRepository>(context, listen: false);
+  }
 
   Future<void> initialize() async {
-    //  await _dbHelper.getDataForRepo(exerciseTable);
-
     await fetchAndSetExerciseTableData();
   }
 
   static late List<Exercise> exerciseList;
-  static late List<Performance> performanceList;
 
   Exercise selectedExercise = Exercise();
 
   List<Exercise> getExercises() {
     fetchAndSetExerciseTableData();
     return exerciseList;
-  }
-
-  List<Performance> getPerformances() {
-    fetchAndSetExerciseTableData();
-    return performanceList;
-  }
-
-  Future<void> addPerformance(Map<String, dynamic> input) async {
-    final Database dB = await _dbHelper.database;
-    await dB.transaction((txn) => txn.insert(performanceTable, input));
   }
 
   /// Provides a Size based on String length and Font Styling IAN: this doesn't
@@ -57,74 +48,6 @@ class ExerciseRepository extends ChangeNotifier {
       textDirection: TextDirection.ltr,
     )..layout())
         .size;
-  }
-
-  int allExercisesTotalCount() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      totalCount += e.totalCount!;
-    }
-    return totalCount;
-  }
-
-  int allExercisesTotalCountArms() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      Map target = eAspectForView(input: e.targets);
-      target.removeWhere(
-          (key, value) => !key.toString().startsWith(r'targetArms'));
-      bool valid = target.values.any((e) => e == true);
-      if (valid) totalCount += e.totalCount!;
-    }
-    return totalCount;
-  }
-
-  int allExercisesTotalCountChest() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      Map target = eAspectForView(input: e.targets);
-      target.removeWhere(
-          (key, value) => !key.toString().startsWith(r'targetChest'));
-      bool valid = target.values.any((e) => e == true);
-      if (valid) totalCount += e.totalCount!;
-    }
-    return totalCount;
-  }
-
-  int allExercisesTotalCountBack() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      Map target = eAspectForView(input: e.targets);
-      target.removeWhere(
-          (key, value) => !key.toString().startsWith(r'targetBack'));
-      bool valid = target.values.any((e) => e == true);
-      if (valid) totalCount += e.totalCount!;
-    }
-    return totalCount;
-  }
-
-  int allExercisesTotalCountCore() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      Map target = eAspectForView(input: e.targets);
-      target.removeWhere(
-          (key, value) => !key.toString().startsWith(r'targetCore'));
-      bool valid = target.values.any((e) => e == true);
-      if (valid) totalCount += e.totalCount!;
-    }
-    return totalCount;
-  }
-
-  int allExercisesTotalCountLegs() {
-    int totalCount = 0;
-    for (var e in exerciseList) {
-      Map target = eAspectForView(input: e.targets);
-      target.removeWhere(
-          (key, value) => !key.toString().startsWith(r'targetLegs'));
-      bool valid = target.values.any((e) => e == true);
-      if (valid) totalCount += e.totalCount!;
-    }
-    return totalCount;
   }
 
   Future<void> fetchAndSetExerciseTableData() async {
@@ -147,6 +70,7 @@ class ExerciseRepository extends ChangeNotifier {
         .toList();
     exerciseList = convertedList;
     notifyListeners();
+    print('whatever');
   }
 
   Future<void> addToExerciseList(Map<String, dynamic> e) async {
@@ -157,6 +81,7 @@ class ExerciseRepository extends ChangeNotifier {
     );
     await dB.transaction((txn) => txn.insert(exerciseTable, e));
     await fetchAndSetExerciseTableData();
+    notifyListeners();
   }
 
   void selectExercise(Exercise e) {

@@ -229,7 +229,9 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                   repsOrHold: e.countForSets,
                                   splitMultiplier: 0,
                                 );
-                                repo.addPerformance(p.toMap());
+                                Provider.of<StatsHelper>(context, listen: false)
+                                    .addPerformance(p.toMap());
+                                // repo.addPerformance(p.toMap());
 
                                 print('EEQC PERFORMANCE: ${p.toString()}');
                                 // repo.selectExercise(e);

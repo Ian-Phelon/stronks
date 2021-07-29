@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-// 'CREATE TABLE IF NOT EXISTS performance (id ITEGER PRIMARY KEY, datePerformed TEXT, exerciseId INTEGER, updatedCount INTEGER, currentResistance INTEGER, repsOrHold INTEGER, splitMultiplier INTEGER)
 class Performance {
   final int? id;
   final int? exerciseId;
