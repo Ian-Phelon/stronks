@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stronks/controller/controller.dart';
-import 'package:provider/provider.dart';
 
 import '../../widgets/widgets.dart';
 

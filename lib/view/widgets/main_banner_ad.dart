@@ -88,8 +88,8 @@ class _MainBannerAdState extends State<MainBannerAd> {
   @override
   void initState() {
     // await
-    userRemovedAds = Provider.of<UserOptions>(context, listen: false)
-        .getOptionValue(userOptionsIndex: 2);
+    userRemovedAds =
+        UserOptions.of(context).getOptionValue(userOptionsIndex: 2);
     if (userRemovedAds == false) {
       myBanner.load();
     }
@@ -103,12 +103,13 @@ class _MainBannerAdState extends State<MainBannerAd> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: myBanner.size.height.toDouble(),
-        width: myBanner.size.width.toDouble(),
-        child:
-            userRemovedAds ? const SizedBox.shrink() : AdWidget(ad: myBanner),
-      ),
+      child: userRemovedAds
+          ? const SizedBox.shrink()
+          : Container(
+              height: myBanner.size.height.toDouble(),
+              width: myBanner.size.width.toDouble(),
+              child: AdWidget(ad: myBanner),
+            ),
     );
   }
 }

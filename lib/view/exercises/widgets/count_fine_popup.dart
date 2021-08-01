@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 typedef void CounterCallback(int value);
-typedef bool SubtractCallback(bool value);
 
 class CountFinePopup extends AlertDialog {
   const CountFinePopup({

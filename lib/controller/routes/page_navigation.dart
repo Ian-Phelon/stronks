@@ -4,7 +4,6 @@ import 'package:stronks/constants.dart';
 import 'package:stronks/view/view.dart';
 
 import '../routes/pages/pages.dart';
-import '../controller.dart' show ExerciseRepository;
 
 class StronksRouterDelegate extends RouterDelegate<StronksPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<StronksPath> {

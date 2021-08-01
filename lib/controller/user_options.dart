@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import './controller.dart';
@@ -17,6 +18,9 @@ class UserOptions extends ChangeNotifier {
 
   static final UserOptions _instance = UserOptions._();
   static UserOptions get instance => _instance;
+  static UserOptions of(BuildContext context) {
+    return Provider.of<UserOptions>(context, listen: false);
+  }
 
   Future<void> initialize() async {
     final dataList = await _dbHelper.getDataForRepo(_table);

@@ -156,28 +156,35 @@ class AspectTile extends StatelessWidget {
   }
 }
 
-Widget _targetIcon({
-  required IconData iconData,
-  required MapEntry<String, bool> target,
-  required Function() targetFineSelect,
-  BuildContext? context,
-}) {
-  final Color iconFineColor = Theme.of(context!).colorScheme.primaryVariant;
-  return Padding(
-    padding: const EdgeInsets.all(2.0),
-    child: Opacity(
-        opacity: target.value ? 1 : 0.5,
-        child: GestureDetector(
-          onTap: targetFineSelect,
-          child: Icon(
-            iconData,
-            color: target.value
-                ? Theme.of(context).colorScheme.error
-                : iconFineColor.withOpacity(0.65),
-            // Theme.of(context).colorScheme.primaryVariant,
-          ),
-        )),
-  );
+class TargetIcon extends StatelessWidget {
+  const TargetIcon({
+    Key? key,
+    required this.iconData,
+    required this.target,
+    required this.targetFineSelect,
+  }) : super(key: key);
+  final IconData iconData;
+  final MapEntry<String, bool> target;
+  final Function() targetFineSelect;
+  @override
+  Widget build(BuildContext context) {
+    final Color iconFineColor = Theme.of(context).colorScheme.primaryVariant;
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Opacity(
+          opacity: target.value ? 1 : 0.5,
+          child: GestureDetector(
+            onTap: targetFineSelect,
+            child: Icon(
+              iconData,
+              color: target.value
+                  ? Theme.of(context).colorScheme.error
+                  : iconFineColor.withOpacity(0.65),
+              // Theme.of(context).colorScheme.primaryVariant,
+            ),
+          )),
+    );
+  }
 }
 
 Widget _targetIconRow({
@@ -196,26 +203,26 @@ Widget _targetIconRow({
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _targetIcon(
-            iconData: Icons.gps_fixed,
-            target: targetFine.entries.elementAt(0),
-            targetFineSelect: inner,
-            context: context),
-        _targetIcon(
-            iconData: Icons.all_out,
-            target: targetFine.entries.elementAt(1),
-            targetFineSelect: outer,
-            context: context),
-        _targetIcon(
-            iconData: Icons.keyboard_arrow_up,
-            target: targetFine.entries.elementAt(2),
-            targetFineSelect: upper,
-            context: context),
-        _targetIcon(
-            iconData: Icons.keyboard_arrow_down,
-            target: targetFine.entries.elementAt(3),
-            targetFineSelect: lower,
-            context: context),
+        TargetIcon(
+          iconData: Icons.gps_fixed,
+          target: targetFine.entries.elementAt(0),
+          targetFineSelect: inner,
+        ),
+        TargetIcon(
+          iconData: Icons.all_out,
+          target: targetFine.entries.elementAt(1),
+          targetFineSelect: outer,
+        ),
+        TargetIcon(
+          iconData: Icons.keyboard_arrow_up,
+          target: targetFine.entries.elementAt(2),
+          targetFineSelect: upper,
+        ),
+        TargetIcon(
+          iconData: Icons.keyboard_arrow_down,
+          target: targetFine.entries.elementAt(3),
+          targetFineSelect: lower,
+        ),
       ],
     );
   }

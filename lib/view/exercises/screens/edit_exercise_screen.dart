@@ -91,23 +91,33 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   }
 
   void _triggerNameVisibility() {
-    editNameVisibility = !editNameVisibility;
+    setState(() {
+      editNameVisibility = !editNameVisibility;
+    });
   }
 
   void _triggerTargetVisibility() {
-    editTargetVisibility = !editTargetVisibility;
+    setState(() {
+      editTargetVisibility = !editTargetVisibility;
+    });
   }
 
   void _triggerStyleVisibility() {
-    editStyleVisibility = !editStyleVisibility;
+    setState(() {
+      editStyleVisibility = !editStyleVisibility;
+    });
   }
 
   void _triggerEquipVisibility() {
-    editEquipVisibility = !editEquipVisibility;
+    setState(() {
+      editEquipVisibility = !editEquipVisibility;
+    });
   }
 
   void _triggerNoteFieldVisibility() {
-    editNoteFieldVisibility = !editNoteFieldVisibility;
+    setState(() {
+      editNoteFieldVisibility = !editNoteFieldVisibility;
+    });
   }
 
   Map<String, bool> _newTargets() {
@@ -132,12 +142,15 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    ExerciseRepository.of(context).fetchAndSetExerciseTableData();
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     super.initState();
-    var repo = Provider.of<ExerciseRepository>(
-      context,
-      listen: false,
-    );
+    var repo = ExerciseRepository.of(context);
     editNameVisibility = false;
     exercise = repo.selectedExercise;
     countForResistance = exercise.resistance!;
@@ -173,6 +186,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
       addLegs = targetFine[4].values.any((e) => e == true);
     }
     _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
+    // super.initState();
   }
 
   @override
@@ -185,7 +199,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repo = context.watch<ExerciseRepository>();
+    final repo = ExerciseRepository.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -341,7 +355,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 );
 
                                 repo.updateGeneral(e);
-                                // repo.selectExercise(e);
                               },
                             ));
                   },
@@ -444,40 +457,44 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 },
                                 mapTargetFine: specificTarget,
                                 updateInner: () {
-                                  String thisKey = e1.key;
-                                  final bool isSelected = e1.value;
-                                  allTargets.update(
-                                      thisKey, (value) => !isSelected);
-                                  targetFine
-                                      .elementAt(index)
-                                      .update(thisKey, (value) => !isSelected);
+                                  setState(() {
+                                    String thisKey = e1.key;
+                                    final bool isSelected = e1.value;
+                                    allTargets.update(
+                                        thisKey, (value) => !isSelected);
+                                    targetFine.elementAt(index).update(
+                                        thisKey, (value) => !isSelected);
+                                  });
                                 },
                                 updateOuter: () {
-                                  String thisKey = e2.key;
-                                  final bool isSelected = e2.value;
-                                  allTargets.update(
-                                      thisKey, (value) => !isSelected);
-                                  targetFine
-                                      .elementAt(index)
-                                      .update(thisKey, (value) => !isSelected);
+                                  setState(() {
+                                    String thisKey = e2.key;
+                                    final bool isSelected = e2.value;
+                                    allTargets.update(
+                                        thisKey, (value) => !isSelected);
+                                    targetFine.elementAt(index).update(
+                                        thisKey, (value) => !isSelected);
+                                  });
                                 },
                                 updateUpper: () {
-                                  String thisKey = e3.key;
-                                  final bool isSelected = e3.value;
-                                  allTargets.update(
-                                      thisKey, (value) => !isSelected);
-                                  targetFine
-                                      .elementAt(index)
-                                      .update(thisKey, (value) => !isSelected);
+                                  setState(() {
+                                    String thisKey = e3.key;
+                                    final bool isSelected = e3.value;
+                                    allTargets.update(
+                                        thisKey, (value) => !isSelected);
+                                    targetFine.elementAt(index).update(
+                                        thisKey, (value) => !isSelected);
+                                  });
                                 },
                                 updateLower: () {
-                                  String thisKey = e4.key;
-                                  final bool isSelected = e4.value;
-                                  allTargets.update(
-                                      thisKey, (value) => !isSelected);
-                                  targetFine
-                                      .elementAt(index)
-                                      .update(thisKey, (value) => !isSelected);
+                                  setState(() {
+                                    String thisKey = e4.key;
+                                    final bool isSelected = e4.value;
+                                    allTargets.update(
+                                        thisKey, (value) => !isSelected);
+                                    targetFine.elementAt(index).update(
+                                        thisKey, (value) => !isSelected);
+                                  });
                                 },
                               ),
                             );
@@ -529,13 +546,15 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                               isSelected: isSelected,
                               aspect: aspect,
                               tapForSelection: () {
-                                String newStyleString =
-                                    Provider.of<ExerciseRepository>(context,
-                                            listen: false)
-                                        .syleKeys
-                                        .elementAt(index);
-                                styles.update(
-                                    newStyleString, (value) => !isSelected);
+                                setState(() {
+                                  String newStyleString =
+                                      Provider.of<ExerciseRepository>(context,
+                                              listen: false)
+                                          .syleKeys
+                                          .elementAt(index);
+                                  styles.update(
+                                      newStyleString, (value) => !isSelected);
+                                });
                               },
                             ),
                           );
@@ -587,13 +606,15 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             child: AspectTile(
                                 aspect: aspect,
                                 tapForSelection: () {
-                                  String newEquipString =
-                                      Provider.of<ExerciseRepository>(context,
-                                              listen: false)
-                                          .equipKeys
-                                          .elementAt(index);
-                                  equips.update(
-                                      newEquipString, (value) => !isSelected);
+                                  setState(() {
+                                    String newEquipString =
+                                        Provider.of<ExerciseRepository>(context,
+                                                listen: false)
+                                            .equipKeys
+                                            .elementAt(index);
+                                    equips.update(
+                                        newEquipString, (value) => !isSelected);
+                                  });
                                 },
                                 isSelected: isSelected),
                           );
@@ -665,9 +686,11 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       textAlign: TextAlign.center,
                       onChanged: (value) => nameTxtCtrl.text = value,
                       onSubmitted: (value) {
-                        var e = exercise.copyWith(name: nameTxtCtrl.text);
-                        repo.updateGeneral(e);
-                        _triggerNameVisibility();
+                        setState(() {
+                          var e = exercise.copyWith(name: nameTxtCtrl.text);
+                          repo.updateGeneral(e);
+                          _triggerNameVisibility();
+                        });
                       },
                     ),
                   ),

@@ -65,7 +65,6 @@ class StatsHelper extends ChangeNotifier {
     allExercisesTotalCountBack();
     allExercisesTotalCountCore();
     allExercisesTotalCountLegs();
-    print('something');
   }
 
   void allExercisesTotalCount() async {
@@ -74,7 +73,6 @@ class StatsHelper extends ChangeNotifier {
       totalCount += e.updatedCount!;
     }
     performanceCounts.insert(0, totalCount);
-    print('also something');
   }
 
   void allExercisesTotalCountArms() {
