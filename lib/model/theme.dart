@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io' as io;
 
-import 'package:stronks/constants.dart';
+import '../constants.dart';
 
 final bool isIos = io.Platform.isIOS;
 

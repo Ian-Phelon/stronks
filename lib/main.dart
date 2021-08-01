@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/view/widgets/main_banner_ad.dart';
+import './view/widgets/widgets.dart' show AdHelper;
 
-import 'app.dart';
-import 'controller/controller.dart';
+import './app.dart';
+import './controller/controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

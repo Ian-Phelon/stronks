@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/constants.dart';
-import 'package:stronks/view/view.dart';
+import '../../view/view.dart';
 
 import '../routes/pages/pages.dart';
 
@@ -82,7 +81,7 @@ class RoutePageManager extends ChangeNotifier {
       // Handling 404
       _pages.add(
         MaterialPage(
-          child: ErrorScreen(),
+          child: DashboardScreen(),
           key: UniqueKey(),
           name: '/404',
         ),

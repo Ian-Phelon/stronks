@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 
-///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-///
-///   Because this is going to be the last feature implemented, I'm gonna use it to fuck around
-///   with buttons/subroutes/displays here.
-///
-/// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 class TradingPlatformScreen extends StatelessWidget {
   const TradingPlatformScreen({Key? key}) : super(key: key);
   @override

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/controller/exercise_repository.dart'
-    show ExerciseRepository;
-import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
-import 'package:stronks/view/exercises/widgets/widgets.dart';
 
+import '../../exercises/widgets/widgets.dart' show CountFinePopup;
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
@@ -205,7 +202,9 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   }
 
   void _triggerNoteVisibility() {
-    editNoteVisibility = !editNoteVisibility;
+    setState(() {
+      editNoteVisibility = !editNoteVisibility;
+    });
   }
 
   @override

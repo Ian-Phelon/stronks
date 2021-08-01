@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronks/controller/controller.dart';
-import 'package:stronks/view/exercises/widgets/count_fine_popup.dart';
 
-import '../widgets/widgets.dart' show DeleteExercisePopup, RoundIconButton;
-import '../../widgets/widgets.dart'
-    show AspectTile, MainBannerAd, StronksTextButton, TutorialBar;
+import '../../../controller/controller.dart';
+import '../../exercises/widgets/widgets.dart';
+import '../../widgets/widgets.dart';
 import '../../../model/model.dart';
 
 List<Map<String, bool>> _mapTargetFine(Map<String, bool> allTargets) {
@@ -52,7 +50,7 @@ class EditExerciseScreen extends StatefulWidget {
 }
 
 class _EditExerciseScreenState extends State<EditExerciseScreen> {
-  final TextEditingController nameTxtCtrl = TextEditingController();
+  TextEditingController nameTxtCtrl = TextEditingController();
   final TextEditingController notesTxtCtrl = TextEditingController();
   late final TextEditingController initialNotesCtrl;
   late String initialNotes;
@@ -186,7 +184,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
       addLegs = targetFine[4].values.any((e) => e == true);
     }
     _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
-    // super.initState();
+    nameTxtCtrl.text = repo.selectedExercise.name!;
   }
 
   @override
@@ -204,7 +202,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text('${repo.selectedExercise.name}'),
+          title: Text('${nameTxtCtrl.text}'),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: ListView(
@@ -218,7 +216,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 GestureDetector(
                   onTap: () {
                     showDialog(
-                        barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupTotalCount(
                               exerciseName: repo.selectedExercise.name!,
@@ -228,7 +225,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 var e = repo.selectedExercise.copyWith(
                                   totalCount: count,
                                 );
-                                print('EEQC TARGETS: ${e.targets}');
                                 repo.updateGeneral(e);
                                 var p = Performance(
                                   id: null,
@@ -247,20 +243,21 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                     .addPerformance(p.toMap());
                                 // repo.addPerformance(p.toMap());
 
-                                print('EEQC PERFORMANCE: ${p.toString()}');
                                 // repo.selectExercise(e);
                               },
                             ));
                   },
-                  child: Text(
-                    '${repo.selectedExercise.totalCount}',
-                    style: Theme.of(context).textTheme.headline1,
+                  child: Consumer<ExerciseRepository>(
+                    builder: (context, ex, _) => Text(
+                      '${ex.selectedExercise.totalCount}',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: Text(
-                    '${repo.selectedExercise.name} Total Count',
+                    '${nameTxtCtrl.text} Total Count',
                     style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
@@ -345,7 +342,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                 GestureDetector(
                   onTap: () {
                     showDialog(
-                        barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupResistance(
                               exerciseName: repo.selectedExercise.name!,
@@ -353,23 +349,23 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                                 var e = repo.selectedExercise.copyWith(
                                   resistance: count,
                                 );
-
                                 repo.updateGeneral(e);
                               },
                             ));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Resistance: ${repo.selectedExercise.resistance == 0 ? 'n/a' : repo.selectedExercise.resistance} ${repo.selectedExercise.resistance == 0 ? '' : Provider.of<UserOptions>(context).getUserResistanceValue()}',
-                      style: Theme.of(context).textTheme.headline4,
+                    child: Consumer<ExerciseRepository>(
+                      builder: (context, repo, _) => Text(
+                        'Resistance: ${repo.selectedExercise.resistance == 0 ? 'n/a' : repo.selectedExercise.resistance} ${repo.selectedExercise.resistance == 0 ? '' : UserOptions.of(context).getUserResistanceValue()}',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
                     ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
                     showDialog(
-                        barrierDismissible: false,
                         context: context,
                         builder: (_) => CountFinePopupSets(
                               exerciseName: repo.selectedExercise.name!,
@@ -383,12 +379,13 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             ));
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Reps in a Set: ${repo.selectedExercise.countForSets == 0 ? 'n/a' : repo.selectedExercise.countForSets}',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                  ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Consumer<ExerciseRepository>(
+                        builder: (context, repo, _) => Text(
+                          'Reps in a Set: ${repo.selectedExercise.countForSets == 0 ? 'n/a' : repo.selectedExercise.countForSets}',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                      )),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(14.0),
@@ -635,9 +632,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                             showDialog(
                                 context: context,
                                 builder: (_) => DeleteExercisePopup(
-                                      deleteExerciseAndTile: () {
-                                        repo.removeExerciseFromDB(
-                                            repo.selectedExercise);
+                                      deleteExerciseAndTile: () async {
+                                        var e = exercise.id;
+
+                                        await repo.removeExerciseFromDB(e!);
                                         RoutePageManager.of(context)
                                             .toExercises();
                                       },
@@ -646,7 +644,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       Flexible(
                         flex: 16,
                         child: Text(
-                          '${repo.selectedExercise.name}',
+                          '${nameTxtCtrl.text}',
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.headline6,
                           textAlign: TextAlign.center,
@@ -686,11 +684,15 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       textAlign: TextAlign.center,
                       onChanged: (value) => nameTxtCtrl.text = value,
                       onSubmitted: (value) {
+                        // setState(() {
+                        var e = exercise.copyWith(name: nameTxtCtrl.text);
+                        repo.updateGeneral(e);
+                        _triggerNameVisibility();
+
                         setState(() {
-                          var e = exercise.copyWith(name: nameTxtCtrl.text);
-                          repo.updateGeneral(e);
-                          _triggerNameVisibility();
+                          nameTxtCtrl.text = value;
                         });
+                        // });
                       },
                     ),
                   ),

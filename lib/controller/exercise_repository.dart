@@ -70,7 +70,6 @@ class ExerciseRepository extends ChangeNotifier {
         .toList();
     exerciseList = convertedList;
     notifyListeners();
-    print('!!!!!!!!FETCH AND SET EXERCISE TABLE COMPLETE!!!!!!!!');
   }
 
   Future<void> addToExerciseList(Map<String, dynamic> e) async {
@@ -86,12 +85,12 @@ class ExerciseRepository extends ChangeNotifier {
 
   void selectExercise(Exercise e) {
     selectedExercise = e;
-    print('Selected: $selectedExercise');
     notifyListeners();
   }
 
-  Future<void> removeExerciseFromDB(Exercise e) async {
-    await _dbHelper.delete(e.id!, exerciseTable);
+  Future<void> removeExerciseFromDB(int id) async {
+    await _dbHelper.delete(id, exerciseTable);
+    fetchAndSetExerciseTableData();
     getExercises();
     notifyListeners();
   }

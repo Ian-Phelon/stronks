@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Color;
 
 /// Easy member access for a lot of common strings
 const String kTargetArmsInner = 'targetArmsInner';
@@ -49,25 +49,3 @@ const int kAspectStringSkip = 6;
 
 const Color kCommonColorPrimaryDark = Color(0xff2A2B9F);
 const String kFontFamily = 'Montserrat';
-// const TextStyle kAspectTextStyle = TextStyle(
-//   fontWeight: FontWeight.w600,
-//   fontFamily: kFontFamily,
-//   color: kCommonColorPrimaryDark,
-//   fontSize: 20,
-// );
-
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.red,
-      body: Text(
-        'OOPS',
-        style: TextStyle(
-          fontSize: 22.0,
-        ),
-      ),
-    );
-  }
-}

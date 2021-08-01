@@ -56,8 +56,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         repo.selectExercise(repoList[index]);
                         var initialCount = repoList[index].totalCount!;
 
-                        showDialog<int>(
-                          useRootNavigator: true,
+                        showDialog(
                           context: context,
                           builder: (BuildContext context) =>
                               CountFinePopupTotalCount(
@@ -73,7 +72,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                                 repoList[index].targets!.contains('Core'),
                                 repoList[index].targets!.contains('Legs'),
                               ];
-                              print('TILEQC TARGETS: ${e.targets}');
 
                               var p = Performance(
                                 id: null,
@@ -88,7 +86,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                                 repsOrHold: e.countForSets,
                                 splitMultiplier: 0,
                               );
-                              print('TILEQC PERFORMANCE: ${p.toString()}');
                               StatsHelper.of(context).addPerformance(p.toMap());
                               repo.updateGeneral(e);
                               repoList = repo.getExercises();

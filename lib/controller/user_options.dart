@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show ChangeNotifier, BuildContext, ThemeData;
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -27,7 +28,6 @@ class UserOptions extends ChangeNotifier {
     final bool check = userOpenedApp && dataList.isEmpty;
     if (check) await firstTime();
     loadThemes();
-    print(themes.length);
     await fetchAndSetUserOptionsTableData();
   }
 
@@ -78,7 +78,6 @@ class UserOptions extends ChangeNotifier {
     userOptions = convertedList;
 
     notifyListeners();
-    print('something IN USER OPTIONS');
   }
 
   Future<void> firstTime() async {
