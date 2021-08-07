@@ -84,7 +84,7 @@ class UserOptions extends ChangeNotifier {
     final UserOptionValue _metric =
         UserOptionValue(id: null, optionTitle: 'usesMetric', optionValue: 0);
     final UserOptionValue _removedAds = UserOptionValue(
-        id: null, optionTitle: 'userRemovedAds', optionValue: 1);
+        id: null, optionTitle: 'userRemovedAds', optionValue: 0);
     final Database db = await _dbHelper.database;
     await db.transaction((txn) => txn.insert(
           _table,
