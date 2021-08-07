@@ -25,7 +25,6 @@ class CommonDrawer extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.primaryVariant,
                 inactiveTrackColor: Theme.of(context).colorScheme.background,
-                //
                 activeColor: Theme.of(context).brightness == Brightness.light
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).colorScheme.primaryVariant,
@@ -40,13 +39,8 @@ class CommonDrawer extends StatelessWidget {
                 },
               ),
               SwitchListTile(
-                inactiveThumbColor:
-                    // Theme.of(context).brightness == Brightness.light
-                    //     ? Theme.of(context).colorScheme.primary
-                    //     :
-                    Theme.of(context).colorScheme.primary,
+                inactiveThumbColor: Theme.of(context).colorScheme.primary,
                 inactiveTrackColor: Theme.of(context).colorScheme.background,
-                //
                 activeColor: Theme.of(context).brightness == Brightness.light
                     ? Theme.of(context).colorScheme.primaryVariant
                     : Theme.of(context).colorScheme.primaryVariant,
@@ -79,4 +73,11 @@ class CommonDrawer extends StatelessWidget {
       );
     });
   }
+}
+
+void main() {
+  String ok =
+      '''Keeping track of your exercise routines has never been quicker with Stronks- Fitness Tracker: The easiest, simplest tool to keep track of your workouts. No more rifiling through written notes or scrolling forever to map your progress. Keep records of all your workouts in one easlily accessible location, without the hassle.''';
+
+  print(ok.length);
 }

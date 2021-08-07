@@ -10,6 +10,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserOptions>(builder: (context, repo, __) {
       return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         theme: repo.getCurrentTheme(),
         color: Theme.of(context).primaryColor,
         title: 'Stronks Fitness',

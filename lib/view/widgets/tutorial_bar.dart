@@ -21,13 +21,10 @@ class _TutorialBarState extends State<TutorialBar> {
 
   @override
   void initState() {
+    isVisible = false;
+    tutorial = _getTutorialStrings();
+    tutorialIndex = 0;
     super.initState();
-
-    setState(() {
-      isVisible = false;
-      tutorial = _getTutorialStrings();
-      tutorialIndex = 0;
-    });
   }
 
   void triggerVisibility() {
@@ -182,14 +179,16 @@ class Tutorial {
     //0
     '''
     Help is always here. Navigate tips by tapping the arrows to the right.
-    
     ''',
     //1
     '''
-    Tap Exercises to add, browse, or edit the exercises you want to keep track of. 
-    
+    Tap the icon in the top left to toggle dark mode and metric/imperial.
     ''',
     //2
+    '''
+    Tap Exercises to add, browse, or edit the exercises you want to keep track of. 
+    ''',
+    //3
     '''
     Stats show a breakdown of your overall progress.
     ''',

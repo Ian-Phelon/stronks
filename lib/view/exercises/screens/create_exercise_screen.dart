@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../exercises/widgets/widgets.dart' show CountFinePopup;
+import '../../exercises/widgets/widgets.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 
@@ -136,7 +136,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
   void initState() {
     /// When the screen is rebuilt, set all late values with user input using
     /// the top-level functions
-    super.initState();
 
     countForSets = 0;
     countForResistance = 0;
@@ -181,6 +180,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     allTargets = _getTargetForView(context, targetStringBuilder.toString());
 
     targetFine = _mapTargetFine(allTargets);
+    super.initState();
   }
 
   void incrementCountForSets(int i) {
@@ -288,8 +288,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         return Container(
                           height: sizeFromText.height,
                           width: _targetFineSeletctions[index] == true
-                              ? sizeFromText.width + 58
-                              : sizeFromText.width - 58,
+                              ? sizeFromText.width + 73
+                              : sizeFromText.width - 50,
                           child: AspectTile(
                             aspect: aspect,
                             mapTargetFine: specificTarget,
@@ -386,7 +386,7 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         );
                         return Container(
                           height: sizeFromText.height,
-                          width: sizeFromText.width,
+                          width: sizeFromText.width + 7,
                           child: AspectTile(
                             isSelected: isSelected,
                             aspect: aspect,
@@ -475,9 +475,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         onTap: () {
                           showDialog(
                               context: context,
-                              builder: (_) => CountFinePopup(
+                              builder: (_) => CountFinePopupSets(
                                     exerciseName: nameTxtCtrl.text,
-                                    titleText: 'How many reps in a set for',
                                     onCounterChanged: updateCountForSets,
                                   ));
                         },
@@ -502,9 +501,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                         onTap: () {
                           showDialog(
                               context: context,
-                              builder: (_) => CountFinePopup(
+                              builder: (_) => CountFinePopupResistance(
                                     exerciseName: nameTxtCtrl.text,
-                                    titleText: 'How much Resistance for',
                                     onCounterChanged: updateCountForResistance,
                                   ));
                         },

@@ -43,8 +43,6 @@ class UserOptions extends ChangeNotifier {
   String getUserResistanceValue() =>
       resistanceValues[userOptions[1].optionValue!];
   ThemeData getCurrentTheme() {
-    // toggleUsesDarkMode(true);
-
     return themes[userOptions[0].optionValue!];
   }
 
@@ -59,7 +57,7 @@ class UserOptions extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// [0: usesDarkMode, 1: usesMetric]
+  /// [0: usesDarkMode, 1: usesMetric, 2: userRemovedAds]
   bool getOptionValue({required int userOptionsIndex}) =>
       intToBool(userOptions[userOptionsIndex].optionValue!);
 
@@ -86,7 +84,7 @@ class UserOptions extends ChangeNotifier {
     final UserOptionValue _metric =
         UserOptionValue(id: null, optionTitle: 'usesMetric', optionValue: 0);
     final UserOptionValue _removedAds = UserOptionValue(
-        id: null, optionTitle: 'userRemovedAds', optionValue: 0);
+        id: null, optionTitle: 'userRemovedAds', optionValue: 1);
     final Database db = await _dbHelper.database;
     await db.transaction((txn) => txn.insert(
           _table,

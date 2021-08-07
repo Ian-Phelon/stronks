@@ -1,47 +1,17 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
+// import 'package:in_app_purchase/in_app_purchase.dart';
+
 import '../../../controller/controller.dart';
-// class AdHelper {
-
-//   static String get bannerAdUnitId {
-//     if (Platform.isAndroid) {
-//       return '<YOUR_ANDROID_BANNER_AD_UNIT_ID>';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_BANNER_AD_UNIT_ID>';
-//     } else {
-//       throw new UnsupportedError('Unsupported platform');
-//     }
-//   }
-
-//   static String get interstitialAdUnitId {
-//     if (Platform.isAndroid) {
-//       return '<YOUR_ANDROID_INTERSTITIAL_AD_UNIT_ID>';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>';
-//     } else {
-//       throw new UnsupportedError('Unsupported platform');
-//     }
-//   }
-
-//   static String get rewardedAdUnitId {
-//     if (Platform.isAndroid) {
-//       return '<YOUR_ANDROID_INTERSTITIAL_AD_UNIT_ID>';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>';
-//     } else {
-//       throw new UnsupportedError('Unsupported platform');
-//     }
-//   }
-// }
 
 class AdHelper {
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-3940256099942544/6300978111';
+      return 'ca-app-pub-8484067209507097/6321941867';
     } else if (Platform.isIOS) {
-      return 'ca-app-pub-3940256099942544/2934735716';
+      return 'ca-app-pub-8484067209507097/2413157458';
     } else {
       throw new UnsupportedError('Unsupported platform');
     }
@@ -112,4 +82,8 @@ class _MainBannerAdState extends State<MainBannerAd> {
             ),
     );
   }
+}
+
+class StronksPayments {
+  /// iap goes here
 }
