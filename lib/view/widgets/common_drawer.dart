@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../controller/controller.dart' show RoutePageManager, UserOptions;
-import '../../view/exercises/widgets/widgets.dart';
+/// should also show RoutePageManager for removing ads
+import '../../controller/controller.dart' show UserOptions;
+
+/// import '../../view/exercises/widgets/widgets.dart';
 
 class CommonDrawer extends StatelessWidget {
   const CommonDrawer({Key? key}) : super(key: key);
