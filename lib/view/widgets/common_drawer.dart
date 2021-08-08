@@ -54,19 +54,19 @@ class CommonDrawer extends StatelessWidget {
                   repo.toggleUsesMetric(v);
                 },
               ),
-              Visibility(
-                visible: !Provider.of<UserOptions>(context, listen: false)
-                    .getOptionValue(userOptionsIndex: 2),
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: StronksTextButton(
-                    text: 'Remove Ads',
-                    onTap: () {
-                      RoutePageManager.of(context).toPurchases();
-                    },
-                  ),
-                ),
-              )
+              // Visibility(
+              //   visible: !Provider.of<UserOptions>(context, listen: false)
+              //       .getOptionValue(userOptionsIndex: 2),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(18.0),
+              //     child: StronksTextButton(
+              //       text: 'Remove Ads',
+              //       onTap: () {
+              //         RoutePageManager.of(context).toPurchases();
+              //       },
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),

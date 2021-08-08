@@ -10,20 +10,20 @@ const List<String> encouragement = [
   'Pump Those Numbers Up!'
 ];
 
+final rng = Random();
+String encourage() => encouragement[rng.nextInt(encouragement.length)];
+final String theEncouragement = encourage();
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final rng = Random();
-    String encourage() => encouragement[rng.nextInt(encouragement.length)];
-
     return SafeArea(
       child: Scaffold(
         drawer: CommonDrawer(),
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: Text(encourage()),
+          title: Text(theEncouragement),
         ),
         body: Stack(
           children: [
