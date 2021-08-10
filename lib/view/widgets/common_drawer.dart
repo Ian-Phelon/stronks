@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// should also show RoutePageManager for removing ads
-import '../../controller/controller.dart' show UserOptions;
+import '../../controller/controller.dart' show UserOptions, RoutePageManager;
 
-/// import '../../view/exercises/widgets/widgets.dart';
+import '../../view/exercises/widgets/widgets.dart';
 
 class CommonDrawer extends StatelessWidget {
   const CommonDrawer({Key? key}) : super(key: key);
@@ -66,8 +66,8 @@ class CommonDrawer extends StatelessWidget {
               //       onTap: () {
               //         RoutePageManager.of(context).toPurchases();
               //       },
-              //     ),
-              //   ),
+              // ),
+              // ),
               // )
             ],
           ),
@@ -75,11 +75,4 @@ class CommonDrawer extends StatelessWidget {
       );
     });
   }
-}
-
-void main() {
-  String ok =
-      '''Keeping track of your exercise routines has never been quicker with Stronks- Fitness Tracker: The easiest, simplest tool to keep track of your workouts. No more rifiling through written notes or scrolling forever to map your progress. Keep records of all your workouts in one easlily accessible location, without the hassle.''';
-
-  print(ok.length);
 }
