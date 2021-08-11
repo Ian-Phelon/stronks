@@ -50,3 +50,6 @@ app.*.map.json
 android/
 ios/
 .env
+pubspec.lock
+lib/view/widgets/main_banner_ad.dart
+key.properties

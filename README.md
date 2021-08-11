@@ -1,13 +1,11 @@
-# stronks
+# Stronks
 
-A new fitness tracker made with Flutter and love.
+A new fitness tracker made for people that want to see numbers go up.
 
-## stronks Goals
+## Stronks Features
 
 ### 1. An intuitive interface for creating custom exercises.
    - If you insist on calling jumping-jacks "flippy flaps", now's your time to shine.
-
-   - You don't do only one flippy flap at a time, so we include a count for Sets.
 
    - Flippy flaps work different muscle groups. They target your legs, and your upper & outer chest and arms.
 
@@ -19,14 +17,12 @@ A new fitness tracker made with Flutter and love.
 
    - The notes section can be used to keep track of anything you want such as a list of ideas for re-naming flippy flap, or a reminder to purchase heavier bowling balls.
 
-   - Or, none of this matters, and you just want to keep a count for one exercise by hitting the Create Exercise button.
+   - Or, none of this matters, and you just want to keep a count for one exercise by hitting the create exercise button.
   
 ### 2. Keep track of your exercises.
-   - Count: rack 'em up.
+   - Count: Rack 'em up, pull out the mat,  .
   
-  ###### - Make a Circuit and add multiple exercises' counts at once.
 
 
 #### 3. Planned for the future
- - [ ] Increasing your count automatically adds your exercise to a calander. See how what exercises you did any day and how much.
- - [ ] Stats to show what you're focused on most, and what may need some attention.
+ - [ ] Increasing your count automatically adds your exercise to a calander. See what exercises you did any day and how many reps. When this feature is released, exercises you've kept track of before release will be included.
