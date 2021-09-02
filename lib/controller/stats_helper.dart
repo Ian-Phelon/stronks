@@ -24,12 +24,12 @@ class StatsHelper extends ChangeNotifier {
   }
 
   static late List<Performance> performanceList;
+  List<Performance> getPerformanceList() => performanceList;
 
-  List get pc => getPerformances();
   List<int> performanceCounts = [0, 0, 0, 0, 0, 0];
 
   /// [0]: totalCount, [1]: arms, [2]: chest, [3]: back, [4]: core, [5]: legs
-  List<int> getPerformances() {
+  List<int> getPerformanceCounts() {
     fetchAndSetPerformanceTableData();
     return performanceCounts;
   }
