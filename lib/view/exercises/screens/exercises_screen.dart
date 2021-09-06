@@ -19,8 +19,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget build(BuildContext context) {
     final bool userRemovedAds =
         UserOptions.of(context).getOptionValue(userOptionsIndex: 2);
-    // var repo = ExerciseRepository.of(context);
-    // List<Exercise> repoList = repo.getExercises();
     return Consumer<ExerciseRepository>(builder: (context, repo, _) {
       List<Exercise> repoList = repo.getExercises();
       return SafeArea(

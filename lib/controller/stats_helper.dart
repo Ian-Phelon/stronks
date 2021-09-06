@@ -59,6 +59,10 @@ class StatsHelper extends ChangeNotifier {
     performanceList = convertedList;
     notifyListeners();
     performanceCounts.clear();
+    innerInitialize();
+  }
+
+  void innerInitialize() {
     allExercisesTotalCount();
     allExercisesTotalCountArms();
     allExercisesTotalCountChest();
@@ -113,5 +117,12 @@ class StatsHelper extends ChangeNotifier {
       if (e.currentTargets!.contains('legs')) totalCount += e.updatedCount!;
     }
     performanceCounts.insert(5, totalCount);
+  }
+
+  Future<void> removeFromDB(int id) async {
+    await _dbHelper.delete(id, performanceTable);
+    fetchAndSetPerformanceTableData();
+    getPerformanceList();
+    notifyListeners();
   }
 }

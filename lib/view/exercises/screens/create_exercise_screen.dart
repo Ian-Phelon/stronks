@@ -639,7 +639,7 @@ class AddExerciseButton extends StatelessWidget {
       /// selected.
       result.update(
           'targets',
-          (value) => Provider.of<ExerciseRepository>(context, listen: false)
+          (value) => ExerciseRepository.of(context)
               .eAspectToStringBuilder(_newTargets()));
       repo.addToExerciseList(result);
       RoutePageManager.of(context).toExercises();
