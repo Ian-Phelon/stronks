@@ -1,42 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../controller/controller.dart' show UserOptions;
 import '../../../model/model.dart' show Performance;
 import './extensions.dart';
-
-List<Map<int, int>> weekList = [];
-List<DateTime> weekMarker = [];
-void clearWeeks() {
-  weekList.clear();
-  weekMarker.clear();
-}
-
-void addAWeek() => weekList.add(Map<int, int>());
-void updateWeek(int key, int count) =>
-    weekList.last.update(key, (value) => value += count, ifAbsent: () => count);
-DateTime targetDate() => weekMarker.last.subtract(8.days());
-
-List<Map<int, int>> weeks(
-    BuildContext context, List<Performance> performances) {
-  clearWeeks();
-  weekMarker.add(performances.first.datePerformed!.parsePerformanceDate());
-  for (var index = 0; index < performances.length; index++) {
-    var target = targetDate();
-    var e = performances[index];
-    var date = e.datePerformed!.parsePerformanceDate();
-    var key = e.exerciseId!;
-    var count = e.updatedCount!;
-
-    if (weekList.length != weekMarker.length) addAWeek();
-    if (date.isAfter(target)) updateWeek(key, count);
-    if (date.isBefore(target)) weekMarker.add(date);
-    if (weekList.length != weekMarker.length) {
-      addAWeek();
-      updateWeek(key, count);
-    }
-  }
-
-  return weekList;
-}
 
 class CalendarWeek extends StatefulWidget {
   const CalendarWeek({
@@ -51,7 +15,6 @@ class CalendarWeek extends StatefulWidget {
 
 class _CalendarWeekState extends State<CalendarWeek> {
   late DateTime lastPerformedDt;
-  // late List<Map<int, int>> nameAndTotalByWeek;
   late final List<Map<int, int>> everyWeek;
   @override
   void dispose() {
@@ -65,7 +28,11 @@ class _CalendarWeekState extends State<CalendarWeek> {
     } else {
       lastPerformedDt =
           widget.performances.first.datePerformed!.parsePerformanceDate();
-      everyWeek = weeks(context, widget.performances);
+      everyWeek = getSpan(
+        'week',
+        context,
+        widget.performances,
+      );
     }
     super.initState();
   }
@@ -80,7 +47,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
               counts.elementAt(i).toString());
       if (i < counts.length - 1) namesAndCounts.write('\n');
     }
-    return Text(
+    return new Text(
       '$namesAndCounts',
       style: Theme.of(context).textTheme.headline5,
     );
@@ -107,16 +74,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
         );
       },
       separatorBuilder: (context, index) {
-        var weekStart = weekMarker[index];
-        //.month.toString() +
-        //     '/' +
-        //     weekMarker[index].day.toString();
-
-        var weekEnd = weekMarker[index].subtract(7.days());
-        // var weekEnds = weekEnd.month.toString() + '/' + weekEnd.day.toString();
-
         return Text(
-          '${weekStart.monthAndDay(UserOptions.of(context).getOptionValue(userOptionsIndex: 1))} - ${weekEnd.monthAndDay(UserOptions.of(context).getOptionValue(userOptionsIndex: 1))}',
+          '${spanMarker[index].monthAndDay(context)} - ${spanMarker[index].subtract(7.days()).monthAndDay(context)}',
           style: Theme.of(context).textTheme.headline6,
         );
       },

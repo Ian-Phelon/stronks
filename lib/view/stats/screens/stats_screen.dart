@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../controller/controller.dart';
-import '../../../model/model.dart' show Performance;
 import '../../widgets/widgets.dart';
-import './extensions.dart';
 import './calendar_screen.dart';
 
 class StatsScreen extends StatefulWidget {

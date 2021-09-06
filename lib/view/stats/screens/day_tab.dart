@@ -15,11 +15,11 @@ class CalendarDay extends StatelessWidget {
         if (performances.isEmpty) {
           return Center(child: Text('You should do some exercise.'));
         }
-        var performance = performances[index - 1 < 0 ? 0 : index - 1];
+        var performance = performances[index.offsetOneBack()];
         if (index == 0) {
           var lastDatePerformed =
-              DateTime.parse(performances[index].datePerformed!);
-          return Text('${lastDatePerformed.month}/${lastDatePerformed.day}',
+              performances[index].datePerformed!.parsePerformanceDate();
+          return Text('${lastDatePerformed.monthAndDay(context)}',
               style: Theme.of(context).textTheme.headline6);
         }
         return Padding(
@@ -42,11 +42,14 @@ class CalendarDay extends StatelessWidget {
         var lastDt = performances[index.offsetOneBack()]
             .datePerformed!
             .parsePerformanceDate();
-        if (thisDt.day != lastDt.day)
+        if (thisDt.day != lastDt.day) {
           return Text(
-            '${thisDt.month}/${thisDt.day}',
+            '${thisDt.monthAndDay(context)}',
             style: Theme.of(context).textTheme.headline6,
           );
+        }
+
+        /// default
         return const SizedBox.shrink();
       },
       itemCount: performances.length + 1,
