@@ -26,14 +26,6 @@ void main() async {
         ChangeNotifierProvider<StatsHelper>(
           create: (_) => StatsHelper(),
         ),
-
-        // ChangeNotifierProxyProvider<DataHelper, ExerciseRepository>(
-        //   create: (_) => ExerciseRepository(),
-        //   update: (_, db, previous) => ExerciseRepository(
-        //     list: previous!.exerciseList,
-        //     dataHelper: DataHelper.dbAccess,
-        //   ),
-        // ),
       ],
       child: const App(),
     ),
