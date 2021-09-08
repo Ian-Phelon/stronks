@@ -21,21 +21,38 @@ class CalendarDay extends StatelessWidget {
           return DateSeparator(
             date: performances[index].datePerformed!.parsePerformanceDate(),
           );
-          // Text('${}',
-          //     style: Theme.of(context).textTheme.headline6);
         }
+
         return Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: ListTile(
-            trailing: Text(performance.updatedCount!.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(fontStyle: FontStyle.italic)),
-            tileColor: Theme.of(context).colorScheme.surface,
-            title: Text(
-                performance.exerciseId!.toString().exerciseIdToName(context),
-                style: Theme.of(context).textTheme.headline5),
+          padding: const EdgeInsets.all(4.0),
+          child: Material(
+            elevation: 2.0,
+            color: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              side: BorderSide(
+                width: 0.5,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                      performance.exerciseId!
+                          .toString()
+                          .exerciseIdToName(context),
+                      style: Theme.of(context).textTheme.headline5),
+                  Text(performance.updatedCount!.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6!
+                          .copyWith(fontStyle: FontStyle.italic)),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -49,7 +66,6 @@ class CalendarDay extends StatelessWidget {
           return DateSeparator(date: thisDt);
         }
 
-        /// default
         return const SizedBox.shrink();
       },
       itemCount: performances.length + 1,

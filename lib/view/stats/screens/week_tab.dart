@@ -49,7 +49,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
     }
     return new Text(
       '$namesAndCounts',
-      style: Theme.of(context).textTheme.headline5,
+      style: Theme.of(context).textTheme.headline5!.copyWith(height: 1.6),
     );
   }
 
@@ -65,13 +65,25 @@ class _CalendarWeekState extends State<CalendarWeek> {
         if (index == 0) {
           return const SizedBox.shrink();
         }
-
         return Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: ListTile(
-            title: weekForView(everyWeek[index.offsetOneBack()].keys,
-                everyWeek[index.offsetOneBack()].values),
-            tileColor: Theme.of(context).colorScheme.surface,
+          padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 4.0),
+          child: Material(
+            elevation: 2,
+            color: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              side: BorderSide(
+                width: 0.5,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
+              child: Center(
+                child: weekForView(everyWeek[index.offsetOneBack()].keys,
+                    everyWeek[index.offsetOneBack()].values),
+              ),
+            ),
           ),
         );
       },

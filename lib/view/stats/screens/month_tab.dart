@@ -58,12 +58,34 @@ class _CalendarMonthState extends State<CalendarMonth> {
             return const SizedBox.shrink();
           }
           return Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Center(
-              child: monthForView(monthly[index.offsetOneBack()].keys,
-                  monthly[index.offsetOneBack()].values),
+            padding: const EdgeInsets.all(6.0),
+            child: Material(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                side: BorderSide(
+                  width: 0.5,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
+                child: Center(
+                  child: monthForView(monthly[index.offsetOneBack()].keys,
+                      monthly[index.offsetOneBack()].values),
+                ),
+              ),
             ),
           );
+
+          // Padding(
+          //   padding: const EdgeInsets.all(12.0),
+          //   child: Center(
+          //     child: monthForView(monthly[index.offsetOneBack()].keys,
+          //         monthly[index.offsetOneBack()].values),
+          //   ),
+          // );
         },
         separatorBuilder: (context, index) {
           return DateSeparator(
