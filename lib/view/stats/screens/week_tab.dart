@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../model/model.dart' show Performance;
-import './extensions.dart';
+import '../widgets/widgets.dart';
+import './stats_extensions.dart';
 
 class CalendarWeek extends StatefulWidget {
   const CalendarWeek({
@@ -14,7 +15,7 @@ class CalendarWeek extends StatefulWidget {
 }
 
 class _CalendarWeekState extends State<CalendarWeek> {
-  late DateTime lastPerformedDt;
+  // late final DateTime lastPerformedDt;
   late final List<Map<int, int>> everyWeek;
   @override
   void dispose() {
@@ -23,22 +24,21 @@ class _CalendarWeekState extends State<CalendarWeek> {
 
   @override
   void initState() {
-    if (widget.performances.isEmpty) {
-      lastPerformedDt = DateTime.now();
-    } else {
-      lastPerformedDt =
-          widget.performances.first.datePerformed!.parsePerformanceDate();
+    if (widget.performances.isNotEmpty) {
       everyWeek = getSpan(
-        'week',
         context,
+        'week',
         widget.performances,
       );
+    } else {
+      everyWeek = [];
     }
+
     super.initState();
   }
 
   Text weekForView(Iterable<int> exerciseIds, Iterable<int> counts) {
-    StringBuffer namesAndCounts = StringBuffer();
+    final StringBuffer namesAndCounts = StringBuffer();
 
     for (var i = 0; i < counts.length; i++) {
       namesAndCounts.write(
@@ -58,7 +58,9 @@ class _CalendarWeekState extends State<CalendarWeek> {
     return ListView.separated(
       itemBuilder: (context, index) {
         if (widget.performances.isEmpty) {
-          return Center(child: Text('You should do some exercise.'));
+          return Center(
+              child: Text(
+                  'You haven\'t done any exercise in a day, much less 7 days ago.'));
         }
         if (index == 0) {
           return const SizedBox.shrink();
@@ -74,12 +76,12 @@ class _CalendarWeekState extends State<CalendarWeek> {
         );
       },
       separatorBuilder: (context, index) {
-        return Text(
-          '${spanMarker[index].monthAndDay(context)} - ${spanMarker[index].subtract(7.days()).monthAndDay(context)}',
-          style: Theme.of(context).textTheme.headline6,
+        return DateSeparator(
+          date: spanMarker[index],
+          separator: 'week',
         );
       },
-      itemCount: everyWeek.length + 1, //widget.performances.length + 1,
+      itemCount: everyWeek.length + 1,
     );
   }
 }

@@ -6,10 +6,6 @@ import './day_tab.dart';
 import './week_tab.dart';
 import './month_tab.dart';
 
-////dev?
-import '../../../controller/controller.dart' show StatsHelper;
-import 'dart:math';
-
 class CalendarPerformancesScreen extends StatefulWidget {
   const CalendarPerformancesScreen({
     Key? key,
@@ -24,8 +20,7 @@ class CalendarPerformancesScreen extends StatefulWidget {
 
 class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
     with TickerProviderStateMixin {
-  /// wouldn't let me declare it as a tabcontroller
-  var _nestedTabCtrl;
+  late TabController _nestedTabCtrl;
   Map<int, String> performanceIdToName = {};
   @override
   void initState() {
@@ -50,19 +45,6 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
           IconButton(
               onPressed: () {
                 ///playground
-                //   var ran = Random();
-                //   var wow = DateTime(2022, 6, 27);
-                //   var p = Performance(
-                //     id: null,
-                //     datePerformed: wow.toString(),
-                //     exerciseId: ran.nextInt(2) + 1,
-                //     updatedCount: ran.nextInt(15) + 1,
-                //     currentResistance: 0,
-                //     currentTargets: '',
-                //     repsOrHold: 0,
-                //     splitMultiplier: 0,
-                //   );
-                //   StatsHelper.of(context).addPerformance(p.toMap());
               },
               icon: Icon(Icons.menu))
         ],

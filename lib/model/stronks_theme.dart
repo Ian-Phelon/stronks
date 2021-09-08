@@ -74,6 +74,7 @@ class StronksTheme {
       primaryColorDark: kcolorPrimaryDark,
       primaryColorLight: kcolorPrimaryLight,
       fontFamily: kFontFamily,
+      shadowColor: kcolorPrimaryDark,
 
       /// largest headline2, smallest headline6
       textTheme: textTheme,
@@ -168,6 +169,7 @@ class StronksTheme {
       primaryColorDark: kcolorDarkModePrimaryDark,
       primaryColorLight: kcolorDarkModePrimaryLight,
       fontFamily: kFontFamily,
+      shadowColor: kcolorPrimaryDark,
 
       /// largest headline2, smallest headline6
       textTheme: textTheme,

@@ -18,6 +18,8 @@ extension StatsInts on int {
 
   /// return a Duration with this many days
   Duration days() => Duration(days: this);
+
+  /// returns the actual month of a DateTime month
   String asMonth() {
     switch (this) {
       case 1:
@@ -79,41 +81,41 @@ void clearSpan() {
 void spanTotalAddEmpty() => spanTotal.add(Map<int, int>());
 void updateLastSpan(int key, int count) => spanTotal.last
     .update(key, (value) => value += count, ifAbsent: () => count);
+
 DateTime targetWeek() => spanMarker.last.subtract(8.days());
 int targetMonth() =>
     spanMarker.last.month - 1 < 1 ? 12 : spanMarker.last.month - 1;
+dynamic getTarget(String timeSpan) {
+  switch (timeSpan) {
+    case 'week':
+      return targetWeek();
+    case 'month':
+      return targetMonth();
+    default:
+      return 'Big Oops';
+  }
+}
 
-///timespan: [week,month]
+///timespan: ['week', 'month']
 List<Map<int, int>> getSpan(
-  String timeSpan,
   BuildContext context,
+  String timeSpan,
   List<Performance> performances,
 ) {
   clearSpan();
   spanMarker.add(performances.first.datePerformed!.parsePerformanceDate());
-  dynamic getTarget() {
-    switch (timeSpan) {
-      case 'week':
-        return targetWeek();
-      case 'month':
-        return targetMonth();
-      default:
-        return targetWeek();
-    }
-  }
-
-  var target = getTarget(); //targetWeek();
+  var target = getTarget(timeSpan);
 
   if (target.runtimeType == DateTime) {
     for (var index = 0; index < performances.length; index++) {
-      var target = getTarget();
-      var e = performances[index];
-      var date = e.datePerformed!.parsePerformanceDate();
-      var key = e.exerciseId!;
-      var count = e.updatedCount!;
+      var target = getTarget(timeSpan);
+      final e = performances[index];
+      final date = e.datePerformed!.parsePerformanceDate();
+      final key = e.exerciseId!;
+      final count = e.updatedCount!;
       if (spanTotal.length != spanMarker.length) spanTotalAddEmpty();
       if (date.isAfter(target)) updateLastSpan(key, count);
-      if (date.isBefore(target)) spanMarker.add(date);
+      if (date.isBefore(target) || date.day == target.day) spanMarker.add(date);
       if (spanTotal.length != spanMarker.length) {
         spanTotalAddEmpty();
         updateLastSpan(key, count);
@@ -122,13 +124,12 @@ List<Map<int, int>> getSpan(
   }
   if (target.runtimeType == int) {
     for (var index = 0; index < performances.length; index++) {
-      var target = getTarget(); //targetWeek();
-      var e = performances[index];
-      var date = e.datePerformed!.parsePerformanceDate();
-      var key = e.exerciseId!;
-      var count = e.updatedCount!;
-      print(target);
-      bool newYear = date.month == 1 && target == 12;
+      var target = getTarget(timeSpan);
+      final e = performances[index];
+      final date = e.datePerformed!.parsePerformanceDate();
+      final key = e.exerciseId!;
+      final count = e.updatedCount!;
+      final bool newYear = date.month == 1 && target == 12;
       if (spanTotal.length != spanMarker.length) spanTotalAddEmpty();
       if (date.month > target || newYear) updateLastSpan(key, count);
       if (date.month == target) spanMarker.add(date);

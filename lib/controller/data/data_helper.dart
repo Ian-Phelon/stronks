@@ -116,32 +116,13 @@ class DataHelper extends ChangeNotifier {
   Future<int> update(Map<String, dynamic> input, String table) async {
     Database db = await _dbAccess.database;
     final int id = input['id'];
-    // final int totalCount = input['totalCount'];
-    // final String name = input['name'];
-    // final int countForSets = input['countForSets'];
-    // final String targets = input['targets'];
-    // final int resistance = input['resistance'];
-    // final String equipment = input['equipment'];
-    // final String steps = input['steps'];
-    // final String style = input['style'];
-    // final String notes = input['notes'];
-    // final int holdTime = input['holdTime'];
+
     return await db.transaction((txn) => txn.update(
           table,
           input,
           where: '$idColumn = ?',
           whereArgs: [
             id,
-            // totalCount,
-            // name,
-            // countForSets,
-            // targets,
-            // resistance,
-            // equipment,
-            // steps,
-            // style,
-            // notes,
-            // holdTime
           ],
           conflictAlgorithm: ConflictAlgorithm.replace,
         ));

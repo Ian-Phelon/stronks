@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../model/model.dart' show Performance;
-import './extensions.dart';
+import '../widgets/widgets.dart';
+import 'stats_extensions.dart';
 
 class CalendarMonth extends StatefulWidget {
   const CalendarMonth({
@@ -15,15 +16,20 @@ class CalendarMonth extends StatefulWidget {
 
 class _CalendarMonthState extends State<CalendarMonth> {
   late final List<Map<int, int>> monthly;
+  late final List<DateTime> duh;
 
   @override
   void initState() {
-    monthly = getSpan('month', context, widget.performances);
+    if (widget.performances.isNotEmpty) {
+      monthly = getSpan(context, 'month', widget.performances);
+    } else {
+      monthly = [];
+    }
     super.initState();
   }
 
   Text monthForView(Iterable<int> exerciseIds, Iterable<int> counts) {
-    StringBuffer namesAndCounts = StringBuffer();
+    final StringBuffer namesAndCounts = StringBuffer();
 
     for (var i = 0; i < counts.length; i++) {
       namesAndCounts.write(
@@ -34,7 +40,7 @@ class _CalendarMonthState extends State<CalendarMonth> {
     }
     return new Text(
       '$namesAndCounts',
-      style: Theme.of(context).textTheme.headline5,
+      style: Theme.of(context).textTheme.headline5!.copyWith(height: 1.6),
       softWrap: true,
     );
   }
@@ -44,13 +50,15 @@ class _CalendarMonthState extends State<CalendarMonth> {
     return ListView.separated(
         itemBuilder: (context, index) {
           if (widget.performances.isEmpty) {
-            return Center(child: Text('You should do some exercise.'));
+            return Center(
+                child: Text(
+                    'You really should get some exercise instead of always scrolling.'));
           }
           if (index == 0) {
             return const SizedBox.shrink();
           }
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Center(
               child: monthForView(monthly[index.offsetOneBack()].keys,
                   monthly[index.offsetOneBack()].values),
@@ -58,9 +66,9 @@ class _CalendarMonthState extends State<CalendarMonth> {
           );
         },
         separatorBuilder: (context, index) {
-          return Text(
-            '${spanMarker[index].monthAndYear()}',
-            style: Theme.of(context).textTheme.headline6,
+          return DateSeparator(
+            date: spanMarker[index],
+            separator: 'month',
           );
         },
         itemCount: monthly.length + 1);

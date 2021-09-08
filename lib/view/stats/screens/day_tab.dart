@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../model/model.dart' show Performance;
-import './extensions.dart';
+import './stats_extensions.dart';
+import '../widgets/widgets.dart';
 
 class CalendarDay extends StatelessWidget {
   const CalendarDay({
@@ -17,10 +18,11 @@ class CalendarDay extends StatelessWidget {
         }
         var performance = performances[index.offsetOneBack()];
         if (index == 0) {
-          var lastDatePerformed =
-              performances[index].datePerformed!.parsePerformanceDate();
-          return Text('${lastDatePerformed.monthAndDay(context)}',
-              style: Theme.of(context).textTheme.headline6);
+          return DateSeparator(
+            date: performances[index].datePerformed!.parsePerformanceDate(),
+          );
+          // Text('${}',
+          //     style: Theme.of(context).textTheme.headline6);
         }
         return Padding(
           padding: const EdgeInsets.all(2.0),
@@ -38,15 +40,13 @@ class CalendarDay extends StatelessWidget {
         );
       },
       separatorBuilder: (context, index) {
-        var thisDt = performances[index].datePerformed!.parsePerformanceDate();
-        var lastDt = performances[index.offsetOneBack()]
+        final thisDt =
+            performances[index].datePerformed!.parsePerformanceDate();
+        final lastDt = performances[index.offsetOneBack()]
             .datePerformed!
             .parsePerformanceDate();
         if (thisDt.day != lastDt.day) {
-          return Text(
-            '${thisDt.monthAndDay(context)}',
-            style: Theme.of(context).textTheme.headline6,
-          );
+          return DateSeparator(date: thisDt);
         }
 
         /// default
