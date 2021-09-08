@@ -51,8 +51,9 @@ class _CalendarMonthState extends State<CalendarMonth> {
         itemBuilder: (context, index) {
           if (widget.performances.isEmpty) {
             return Center(
-                child: Text(
-                    'You really should get some exercise instead of always scrolling.'));
+              child: Text(
+                  'You really should get some exercise instead of always scrolling.'),
+            );
           }
           if (index == 0) {
             return const SizedBox.shrink();
@@ -78,14 +79,6 @@ class _CalendarMonthState extends State<CalendarMonth> {
               ),
             ),
           );
-
-          // Padding(
-          //   padding: const EdgeInsets.all(12.0),
-          //   child: Center(
-          //     child: monthForView(monthly[index.offsetOneBack()].keys,
-          //         monthly[index.offsetOneBack()].values),
-          //   ),
-          // );
         },
         separatorBuilder: (context, index) {
           return DateSeparator(

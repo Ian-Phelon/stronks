@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../controller/controller.dart';
 import '../../widgets/widgets.dart';
 import './calendar_screen.dart';
-import 'stats_extensions.dart';
-
-////dev?
-import '../../../model/model.dart' show Performance;
-import 'dart:math';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({Key? key}) : super(key: key);
@@ -65,42 +60,6 @@ class TotalPerformances extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Stats'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                ///playground
-                // final plist = StatsHelper.performanceList;
-
-                ///delete everything
-                // for (var p in plist) {
-                //   StatsHelper.of(context).removeFromDB(p.id!);
-                //   print(p);
-                // }
-                // /// add days
-                // var ran = Random();
-                // var date = DateTime(2020, 3, 11);
-
-                // for (var i = 0; i < 400; i++) {
-                //   DateTime nextDay() =>
-                //       date = date.add(ran.nextBool() ? 0.days() : 1.days());
-                //   var p = Performance(
-                //     id: null,
-                //     datePerformed: nextDay().toString(),
-                //     exerciseId: ran.nextInt(6) + 1,
-                //     updatedCount: ran.nextInt(15) + 1,
-                //     currentResistance: 0,
-                //     currentTargets: '',
-                //     repsOrHold: 0,
-                //     splitMultiplier: 0,
-                //   );
-
-                //   StatsHelper.of(context).addPerformance(p.toMap());
-                //   print(
-                //       'date: ${p.datePerformed}, eId: ${p.exerciseId}, count: ${p.updatedCount}');
-                // }
-              },
-              icon: Icon(Icons.sort))
-        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(

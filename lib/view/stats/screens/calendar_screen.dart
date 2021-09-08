@@ -55,9 +55,11 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              ///put this back in when there's a search/filter
+              // SizedBox(
+              //   height: 46.0,
+              // ),
               TabBar(
-                overlayColor: MaterialStateColor.resolveWith(
-                    (states) => Theme.of(context).colorScheme.onBackground),
                 isScrollable: true,
                 tabs: <Widget>[
                   Tab(
@@ -72,21 +74,23 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
                 ],
                 controller: _nestedTabCtrl,
               ),
-              Container(
-                height: MediaQuery.of(context).size.height / 1.3,
-                child: TabBarView(
-                  controller: _nestedTabCtrl,
-                  children: [
-                    CalendarDay(
-                      performances: widget.performances.reversed.toList(),
-                    ),
-                    CalendarWeek(
-                      performances: widget.performances.reversed.toList(),
-                    ),
-                    CalendarMonth(
-                      performances: widget.performances.reversed.toList(),
-                    ),
-                  ],
+              Expanded(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: TabBarView(
+                    controller: _nestedTabCtrl,
+                    children: [
+                      CalendarDay(
+                        performances: widget.performances.reversed.toList(),
+                      ),
+                      CalendarWeek(
+                        performances: widget.performances.reversed.toList(),
+                      ),
+                      CalendarMonth(
+                        performances: widget.performances.reversed.toList(),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
