@@ -45,13 +45,13 @@ const kcolorDarkModeError = Colors.white;
 class StronksTheme {
   static final togglesForDarkMode = ToggleButtonsThemeData();
 
-  /// currently only using less opaque versions of kcolorDarkModeSecondaryDark for selectionColor, and
+  /// currently only using less opaque versions of kcolorDarkModeSecondaryDark
+  /// for selectionColor
   static final textCursorAndSelection = TextSelectionThemeData(
     cursorColor: kcolorPrimaryDark,
     selectionColor: Color.fromARGB(52, 0xCb, 0x8e, 0x9a),
     selectionHandleColor: Color.fromARGB(52, 0xCb, 0x8e, 0x9a),
   );
-  // static final duh = Text
   static ThemeData get lightMode {
     TextTheme textTheme = const TextTheme(
       headline1: kCommonLightThemeTextStyle,
@@ -65,8 +65,8 @@ class StronksTheme {
       headline5: kCommonLightThemeTextStyle,
       headline6: kCommonLightThemeTextStyle,
     );
+
     return ThemeData(
-      // toggleButtonsTheme: ToggleButtonsThemeData(),
       textSelectionTheme: textCursorAndSelection,
       platform: isIos ? TargetPlatform.iOS : TargetPlatform.android,
       brightness: Brightness.light,
@@ -75,6 +75,32 @@ class StronksTheme {
       primaryColorLight: kcolorPrimaryLight,
       fontFamily: kFontFamily,
       shadowColor: kcolorPrimaryDark,
+      splashColor: kcolorPrimaryLight,
+      hoverColor: kcolorPrimaryLight,
+      focusColor: kcolorPrimaryLight,
+      indicatorColor: kcolorPrimaryLight,
+      highlightColor: kcolorPrimaryLight,
+      buttonTheme: ButtonThemeData(splashColor: Colors.pink),
+
+      ///Tab bar theme, currently used in stats/calendar
+      tabBarTheme: TabBarTheme(
+        unselectedLabelColor: kcolorPrimaryDark,
+        unselectedLabelStyle: kCommonLightThemeTextStyle,
+        labelColor: kcolorPrimaryDark,
+        labelStyle: kCommonLightThemeTextStyle.copyWith(
+          fontStyle: FontStyle.italic,
+          fontSize: 17,
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(
+            color: kcolorPrimaryDark,
+            width: 2.4,
+            style: BorderStyle.solid,
+          ),
+          insets: EdgeInsets.zero,
+        ),
+      ),
 
       /// largest headline2, smallest headline6
       textTheme: textTheme,
@@ -170,6 +196,26 @@ class StronksTheme {
       primaryColorLight: kcolorDarkModePrimaryLight,
       fontFamily: kFontFamily,
       shadowColor: kcolorPrimaryDark,
+
+      ///Tab bar theme, currently used in stats/calendar
+      tabBarTheme: TabBarTheme(
+        unselectedLabelColor: kcolorDarkModePrimaryLight,
+        unselectedLabelStyle: kCommonLightThemeTextStyle,
+        labelColor: kcolorDarkModePrimaryLight,
+        labelStyle: kCommonLightThemeTextStyle.copyWith(
+          fontStyle: FontStyle.italic,
+          fontSize: 17,
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(
+            color: kcolorDarkModePrimaryLight,
+            width: 2.4,
+            style: BorderStyle.solid,
+          ),
+          insets: EdgeInsets.zero,
+        ),
+      ),
 
       /// largest headline2, smallest headline6
       textTheme: textTheme,

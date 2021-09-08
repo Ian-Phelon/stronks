@@ -56,10 +56,8 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               TabBar(
-                controller: _nestedTabCtrl,
-                indicatorColor: Colors.orange,
-                labelColor: Colors.orange,
-                unselectedLabelColor: Colors.black54,
+                overlayColor: MaterialStateColor.resolveWith(
+                    (states) => Theme.of(context).colorScheme.onBackground),
                 isScrollable: true,
                 tabs: <Widget>[
                   Tab(
@@ -72,6 +70,7 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
                     text: 'Month',
                   )
                 ],
+                controller: _nestedTabCtrl,
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.3,
