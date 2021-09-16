@@ -47,8 +47,8 @@ app.*.map.json
 
 
 # IAN: adding for now to keep off of github
-android/
-ios/
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
 .env
 pubspec.lock
 lib/view/widgets/main_banner_ad.dart
