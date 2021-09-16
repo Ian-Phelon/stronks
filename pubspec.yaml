@@ -12,13 +12,16 @@ dependencies:
   
   cupertino_icons: ^1.0.2
   google_mobile_ads: ^0.13.0
-  google_sign_in: ^5.0.0
+  # google_sign_in: ^5.0.0
   http: ^0.13.0
   path_provider: ^2.0.0
   provider: ^5.0.0
-  sign_in_with_apple: ^3.0.0
+  # sign_in_with_apple: ^3.0.0
   sqflite: ^2.0.0+3
   in_app_purchase: ^1.0.6
+  firebase_core: ^1.6.0
+  firebase_analytics: ^8.3.2
+  firebase_auth: ^3.1.1
 
 dev_dependencies:
   flutter_test:
