@@ -1,0 +1,2 @@
+json_key_file("~/Desktop/WOWSTRONKS/stronks-fireb-gplay-service.json") 
+package_name("com.opsolutions.stronks")

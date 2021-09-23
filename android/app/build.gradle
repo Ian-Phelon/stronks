@@ -34,6 +34,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/ianphelon/upload-keystore.jks')
+            storePassword 'stronksfitness'
+            keyAlias 'stronksupload'
+            keyPassword 'stronksfitness'
+        }
+    }
     compileSdkVersion 31
 
     sourceSets {
@@ -70,6 +78,7 @@ android {
 
                 }
             }
+            signingConfig signingConfigs.release
         }
 
            // signingConfig signingConfigs.debug
@@ -82,7 +91,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.gms:play-services-ads:20.3.0'
+    implementation 'com.google.android.gms:play-services-ads:20.4.0'
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
