@@ -27,8 +27,11 @@ void main() async {
           create: (_) => UserOptions.instance,
         ),
         ChangeNotifierProvider<StatsHelper>(
-          create: (_) => StatsHelper(),
+          create: (_) => StatsHelper.instance,
         ),
+        ChangeNotifierProvider<StronksAuth>(
+          create: (_) => StronksAuth.instance,
+        )
       ],
       child: const App(),
     ),

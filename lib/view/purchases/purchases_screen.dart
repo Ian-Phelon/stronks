@@ -7,6 +7,7 @@ class PurchasesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = StronksAuth.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -17,25 +18,14 @@ class PurchasesScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: Consumer<UserOptions>(
-                builder: (_, repo, __) {
-                  return Visibility(
-                    visible: !repo.getOptionValue(userOptionsIndex: 2),
-                    replacement: const SizedBox.shrink(),
-                    child: TextButton(
-                        onPressed: () {
-                          repo.toggleUserRemovedAds();
-                        },
-                        child: Text(
-                          'ok',
-                          style: Theme.of(context).textTheme.headline1,
-                        )),
-                  );
-                },
-              ),
-            )
+            // Container(
+            // child:
+            auth.appleButton(),
+            // ),
+            // Container(
+            // child:
+            auth.googleButton(),
+            // )
           ],
         ),
       ),

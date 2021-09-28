@@ -14,6 +14,7 @@ class CommonDrawer extends StatelessWidget {
     return Consumer<UserOptions>(builder: (_, repo, child) {
       bool isUsesDarkMode = repo.getOptionValue(userOptionsIndex: 0);
       bool isUsesMetric = repo.getOptionValue(userOptionsIndex: 1);
+
       return Drawer(
         child: Material(
           color: Theme.of(context).colorScheme.surface,
@@ -56,19 +57,21 @@ class CommonDrawer extends StatelessWidget {
                   repo.toggleUsesMetric(v);
                 },
               ),
-              // Visibility(
-              //   visible: !Provider.of<UserOptions>(context, listen: false)
-              //       .getOptionValue(userOptionsIndex: 2),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(18.0),
-              //     child: StronksTextButton(
-              //       text: 'Remove Ads',
-              //       onTap: () {
-              //         RoutePageManager.of(context).toPurchases();
-              //       },
-              // ),
-              // ),
-              // )
+              Visibility(
+                visible: true,
+
+                // !Provider.of<UserOptions>(context, listen: false)
+                //     .getOptionValue(userOptionsIndex: 2),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: StronksTextButton(
+                    text: 'Remove Ads',
+                    onTap: () {
+                      RoutePageManager.of(context).toPurchases();
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ),

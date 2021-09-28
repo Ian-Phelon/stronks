@@ -11,9 +11,6 @@ import '../model/model.dart' as theme show StronksTheme;
 final _dbHelper = DataHelper();
 const String _table = 'userOptions';
 
-// final UserOptionValue openedAppOnce =
-//     UserOptionValue(id: null, optionTitle: 'openedApp', optionValue: 1);
-
 class UserOptions extends ChangeNotifier {
   UserOptions._();
 
@@ -25,8 +22,7 @@ class UserOptions extends ChangeNotifier {
 
   Future<void> initialize() async {
     final dataList = await _dbHelper.getDataForRepo(_table);
-    final bool check = userOpenedApp && dataList.isEmpty;
-    if (check) await firstTime();
+    if (dataList.isEmpty) await firstTime();
     loadThemes();
     await fetchAndSetUserOptionsTableData();
   }
@@ -46,7 +42,6 @@ class UserOptions extends ChangeNotifier {
     return themes[userOptions[0].optionValue!];
   }
 
-  final bool userOpenedApp = true;
   late List<UserOptionValue> userOptions;
   late UserOptionValue? selectedOption;
 
@@ -101,8 +96,20 @@ class UserOptions extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleUserRemovedAds() async {
-    selectOption(userOptionsIndex: 2, updatedValue: 1);
+  Future<void> makeNewOption(
+      {required String optionTitle, required int optionValue}) async {
+    final Database db = await _dbHelper.database;
+    var userHasAccount = db.query(_table, limit: 1, offset: 4);
+    print(userHasAccount);
+    // await db.transaction((txn) => txn.insert(
+    //     _table,
+    //     UserOptionValue(optionTitle: optionTitle, optionValue: optionValue)
+    //         .toMap()));
+    notifyListeners();
+  }
+
+  Future<void> toggleUserRemovedAds(int updatedValue) async {
+    selectOption(userOptionsIndex: 2, updatedValue: updatedValue);
     var option = selectedOption!;
     await _dbHelper.update(option.toMap(), _table);
     await fetchAndSetUserOptionsTableData();
@@ -113,7 +120,6 @@ class UserOptions extends ChangeNotifier {
     var option = selectedOption!;
     await _dbHelper.update(option.toMap(), _table);
     await fetchAndSetUserOptionsTableData();
-    // getCurrentTheme();
   }
 
   Future<void> toggleUsesMetric(bool v) async {
@@ -134,7 +140,7 @@ class UserOptionValue {
   final String? optionTitle;
   int? optionValue;
   UserOptionValue({
-    required this.id,
+    this.id,
     required this.optionTitle,
     required this.optionValue,
   });
