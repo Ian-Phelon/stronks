@@ -5,15 +5,14 @@ import 'package:provider/provider.dart';
 import './app.dart';
 import './controller/controller.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await MobileAds.instance.initialize();
   await UserOptions.instance.initialize();
   await ExerciseRepository.instance.initialize();
   await StatsHelper.instance.initialize();
+  await StronksAuth.instance.initialize();
+
   runApp(
     MultiProvider(
       providers: [

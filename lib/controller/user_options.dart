@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import './controller.dart';
-import '../model/model.dart' as theme show StronksTheme;
+import '../model/model.dart' show StronksTheme, UserOptionValue;
 
 final _dbHelper = DataHelper();
 const String _table = 'userOptions';
@@ -31,8 +31,8 @@ class UserOptions extends ChangeNotifier {
   List<ThemeData> themes = [];
   void loadThemes() {
     themes.clear();
-    themes.add(theme.StronksTheme.lightMode);
-    themes.add(theme.StronksTheme.darkMode);
+    themes.add(StronksTheme.lightMode);
+    themes.add(StronksTheme.darkMode);
     notifyListeners();
   }
 
@@ -131,67 +131,4 @@ class UserOptions extends ChangeNotifier {
 
   int boolToInt(bool v) => v ? 1 : 0;
   bool intToBool(int v) => v == 1 ? true : false;
-}
-
-/// Representation of how user options are stored in the DB. optionValue will
-/// be either a 1 or 0 (bool).
-class UserOptionValue {
-  final int? id;
-  final String? optionTitle;
-  int? optionValue;
-  UserOptionValue({
-    this.id,
-    required this.optionTitle,
-    required this.optionValue,
-  });
-
-  UserOptionValue copyWith({
-    int? id,
-    String? optionTitle,
-    int? optionValue,
-  }) {
-    return UserOptionValue(
-      id: id ?? this.id,
-      optionTitle: optionTitle ?? this.optionTitle,
-      optionValue: optionValue ?? this.optionValue,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'optionTitle': optionTitle,
-      'optionValue': optionValue,
-    };
-  }
-
-  factory UserOptionValue.fromMap(Map<String, dynamic> map) {
-    return UserOptionValue(
-      id: map['id'],
-      optionTitle: map['optionTitle'],
-      optionValue: map['optionValue'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserOptionValue.fromJson(String source) =>
-      UserOptionValue.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'UserOptionValue(id: $id, optionTitle: $optionTitle, optionValue: $optionValue)';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is UserOptionValue &&
-        other.id == id &&
-        other.optionTitle == optionTitle &&
-        other.optionValue == optionValue;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ optionTitle.hashCode ^ optionValue.hashCode;
 }

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart' show ChangeNotifier, BuildContext;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,10 @@ class StronksAuth extends ChangeNotifier {
   static StronksAuth get instance => _instance;
   static StronksAuth of(BuildContext context) {
     return Provider.of<StronksAuth>(context, listen: false);
+  }
+
+  Future<void> initialize() async {
+    await Firebase.initializeApp();
   }
 
 ////////////////
@@ -66,10 +72,8 @@ class StronksAuth extends ChangeNotifier {
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 
-  /// Nice branded button that calls signInWithApple() stronksAuth
-  SignInWithAppleButton appleButton() =>
-      SignInWithAppleButton(onPressed: signInWithApple);
-
+  SignInButton appleButton() =>
+      SignInButton(Buttons.AppleDark, onPressed: signInWithApple);
 //////////////
   /// as apple above, so google below
 /////////////
@@ -97,4 +101,7 @@ class StronksAuth extends ChangeNotifier {
 
   SignInButton googleButton() =>
       SignInButton(Buttons.GoogleDark, onPressed: signInWithGoogle);
+  SignInButton emailButton() => SignInButton(Buttons.Email, onPressed: () {
+        print(FirebaseAuth.instance.currentUser);
+      });
 }

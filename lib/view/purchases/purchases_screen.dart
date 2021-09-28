@@ -18,14 +18,9 @@ class PurchasesScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Container(
-            // child:
             auth.appleButton(),
-            // ),
-            // Container(
-            // child:
             auth.googleButton(),
-            // )
+            auth.emailButton(),
           ],
         ),
       ),
