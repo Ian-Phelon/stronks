@@ -100,7 +100,7 @@ class UserOptions extends ChangeNotifier {
       {required String optionTitle, required int optionValue}) async {
     final Database db = await _dbHelper.database;
     var userHasAccount = db.query(_table, limit: 1, offset: 4);
-    print(userHasAccount);
+    print(userHasAccount.toString() + 'USEROPTIONS');
     // await db.transaction((txn) => txn.insert(
     //     _table,
     //     UserOptionValue(optionTitle: optionTitle, optionValue: optionValue)

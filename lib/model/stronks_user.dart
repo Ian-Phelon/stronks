@@ -1,5 +1,4 @@
-import './model.dart';
-
 class StronksUser {
-  List<UserO>
+  String? id;
+  StronksUser(this.id);
 }

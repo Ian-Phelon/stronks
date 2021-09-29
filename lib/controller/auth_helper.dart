@@ -4,12 +4,23 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart' show ChangeNotifier, BuildContext;
+
+import 'package:flutter/material.dart'
+    show BuildContext, ChangeNotifier, debugPrint;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+import '../model/model.dart' show StronksUser;
+import './controller.dart';
+
+enum AuthState {
+  unauthorized,
+  signedInWithGoogle,
+  signedInWithApple,
+  signedInWithEmailAndPW,
+  // signedInAnonymous,
+}
 
 class StronksAuth extends ChangeNotifier {
   StronksAuth._();
@@ -20,8 +31,44 @@ class StronksAuth extends ChangeNotifier {
     return Provider.of<StronksAuth>(context, listen: false);
   }
 
-  Future<void> initialize() async {
-    await Firebase.initializeApp();
+  final FirebaseAuth authorization = FirebaseAuth.instance;
+  void reloadUser() => authorization.currentUser?.reload();
+
+  /// provide the given apple sign in button for the view
+  SignInWithAppleButton appleButton(Function onPressed) =>
+      SignInWithAppleButton(
+        onPressed: () {
+          onPressed();
+        },
+      );
+
+  void stronksSignIn(AuthState authState) {
+    switch (authState) {
+      case AuthState.signedInWithEmailAndPW:
+        try {
+          userSignInEmailAndPW();
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+        break;
+      case AuthState.signedInWithGoogle:
+        try {
+          signInWithGoogle();
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+        break;
+      case AuthState.signedInWithApple:
+        try {
+          signInWithApple();
+        } catch (e) {
+          debugPrint('aSDasdaDAdasda' + e.toString());
+        }
+        break;
+      default:
+        _authFailed();
+    }
+    notifyListeners();
   }
 
 ////////////////
@@ -72,8 +119,6 @@ class StronksAuth extends ChangeNotifier {
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 
-  SignInButton appleButton() =>
-      SignInButton(Buttons.AppleDark, onPressed: signInWithApple);
 //////////////
   /// as apple above, so google below
 /////////////
@@ -99,9 +144,17 @@ class StronksAuth extends ChangeNotifier {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  SignInButton googleButton() =>
-      SignInButton(Buttons.GoogleDark, onPressed: signInWithGoogle);
-  SignInButton emailButton() => SignInButton(Buttons.Email, onPressed: () {
-        print(FirebaseAuth.instance.currentUser);
+  StronksUser? currentUser;
+  void isUserChange() => authorization.userChanges().listen((User? user) {
+        if (user == null) {
+        } else {}
       });
+
+  void userSignInEmailAndPW() => authorization.signInAnonymously();
+  void userSignOut() {
+    authorization.signOut();
+    isUserChange();
+  }
 }
+
+Exception _authFailed() => Exception('authorization failed');

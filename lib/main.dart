@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import './app.dart';
 import './controller/controller.dart';
@@ -11,7 +12,7 @@ void main() async {
   await UserOptions.instance.initialize();
   await ExerciseRepository.instance.initialize();
   await StatsHelper.instance.initialize();
-  await StronksAuth.instance.initialize();
+  await Firebase.initializeApp();
 
   runApp(
     MultiProvider(
