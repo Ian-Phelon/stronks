@@ -41,8 +41,9 @@ class StronksAuth extends ChangeNotifier {
   /// otherwise event fired is null
   Stream get userStream => authorization.userChanges();
 
-  AuthState checkAuthState(Error? error) {
+  AuthState checkAuthState(Object? error) {
     if (authorization.currentUser != null) return AuthState.authorized;
+    if (error != null) return AuthState.unknown;
     return AuthState.unauthorized;
   }
 
@@ -154,7 +155,9 @@ class StronksAuth extends ChangeNotifier {
     );
     try {
       await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {}
+    } catch (e) {
+      checkAuthState(e);
+    }
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
