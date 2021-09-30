@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../controller/controller.dart';
-import 'package:http/http.dart' as http;
 
-const String googleLogoCDN =
-    'https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA';
-
-class PurchasesScreen extends StatelessWidget {
+class PurchasesScreen extends StatefulWidget {
   const PurchasesScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PurchasesScreen> createState() => _PurchasesScreenState();
+}
+
+class _PurchasesScreenState extends State<PurchasesScreen> {
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController pwCtrl = TextEditingController();
+
+  bool editEmailVisibility = true;
+  bool editPwVisibility = true;
+  void _triggerEmailVisibility() {
+    setState(() {
+      editEmailVisibility = !editEmailVisibility;
+    });
+  }
+
+  void _triggerPwVisibility() {
+    setState(() {
+      editPwVisibility = !editPwVisibility;
+    });
+  }
+
+  @override
+  void dispose() {
+    /////⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡⇡↑⇡
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final auth = StronksAuth.of(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -29,11 +56,12 @@ class PurchasesScreen extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: AppleSignIn(
-                  signInButton: auth.appleButton(() => auth.signInWithApple()),
+                  signInWithApple: () => auth.signInWithApple(),
                 ),
               ),
               Padding(
@@ -45,7 +73,44 @@ class PurchasesScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: EmailSignIn(
-                  signInWithEmail: () => auth.userSignInEmailAndPW(),
+                  signInWithEmail: () => auth.userSignInEmailAndPW(
+                      '${emailCtrl.text}', '${pwCtrl.text}'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Visibility(
+                  replacement: const SizedBox.shrink(),
+                  visible: editEmailVisibility,
+                  child: TextField(
+                    autofocus: true,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.text,
+                    style: Theme.of(context).textTheme.headline6,
+                    onChanged: (value) => emailCtrl.text = value,
+                    onSubmitted: (value) {
+                      emailCtrl.text = value;
+                      _triggerEmailVisibility();
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Visibility(
+                  replacement: const SizedBox.shrink(),
+                  visible: editPwVisibility,
+                  child: TextField(
+                    autofocus: true,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.text,
+                    style: Theme.of(context).textTheme.headline6,
+                    onChanged: (value) => pwCtrl.text = value,
+                    onSubmitted: (value) {
+                      pwCtrl.text = value;
+                      _triggerPwVisibility();
+                    },
+                  ),
                 ),
               ),
             ],
@@ -73,27 +138,27 @@ class EmailSignIn extends StatelessWidget {
             side: BorderSide(
                 width: 2.0,
                 color: Theme.of(context).colorScheme.primaryVariant)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Icon(
-                Icons.email_outlined,
-                size: 33,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'Sign in Anonymously',
-                // style: Theme.of(context).textTheme.headline6,
-                style: TextStyle(
-                  fontSize: 33,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Icon(
+                  Icons.email_outlined,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  'Sign in with Email',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -115,36 +180,31 @@ class GoogleSignIn extends StatelessWidget {
       },
       child: Material(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            side: BorderSide(
-                width: 2.0,
-                color: Theme.of(context).colorScheme.primaryVariant)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Image.network(
-                googleLogoCDN,
-                height: 42,
-                errorBuilder: (_, __, ___) => Text(
-                  'G',
-                  style: TextStyle(fontSize: 33),
+          borderRadius: BorderRadius.circular(4.0),
+          side: BorderSide(
+              width: 2.0, color: Theme.of(context).colorScheme.primaryVariant),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: FaIcon(
+                  FontAwesomeIcons.google,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              // Icon(
-              //   Icons.format_align_justify_outlined,
-              //   size: 33,
-              // ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'Sign in goog',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  'Sign in with Google',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -154,46 +214,46 @@ class GoogleSignIn extends StatelessWidget {
 class AppleSignIn extends StatelessWidget {
   const AppleSignIn({
     Key? key,
-    // required this.signInWithApple,
-    required this.signInButton,
+    required this.signInWithApple,
   }) : super(key: key);
-  // final Function signInWithApple;
-  final Widget signInButton;
+  final Function signInWithApple;
 
   @override
   Widget build(BuildContext context) {
-    return signInButton;
-
-    // GestureDetector(
-    //   onTap: () {
-    //     // signInWithApple();
-    //   },
-    //   child: Material(
-    //     shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(4.0),
-    //         side: BorderSide(
-    //             width: 2.0,
-    //             color: Theme.of(context).colorScheme.primaryVariant)),
-    //     child: Row(
-    //       mainAxisSize: MainAxisSize.min,
-    //       children: [
-    //         Padding(
-    //           padding: const EdgeInsets.all(2.0),
-    //           child: Icon(
-    //             Icons.email_outlined,
-    //             size: 33,
-    //           ),
-    //         ),
-    //         Padding(
-    //           padding: const EdgeInsets.all(4.0),
-    //           child: Text(
-    //             'Sign in Anonymously',
-    //             style: Theme.of(context).textTheme.headline6,
-    //           ),
-    //         )
-    //       ],
-    //     ),
-    //   ),
-    // );
+    return GestureDetector(
+      onTap: () {
+        signInWithApple();
+      },
+      child: Material(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: BorderSide(
+                width: 2.0,
+                color: Theme.of(context).colorScheme.primaryVariant)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: FaIcon(
+                  FontAwesomeIcons.apple,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  size: 30,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  'Sign in with Apple',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

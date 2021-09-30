@@ -16,11 +16,14 @@ import './controller.dart';
 
 enum AuthState {
   unauthorized,
-  signedInWithGoogle,
-  signedInWithApple,
-  signedInWithEmailAndPW,
-  // signedInAnonymous,
+  authorized,
 }
+enum AuthSource {
+  email,
+  apple,
+  google,
+}
+final FirebaseAuth _authorization = FirebaseAuth.instance;
 
 class StronksAuth extends ChangeNotifier {
   StronksAuth._();
@@ -31,38 +34,47 @@ class StronksAuth extends ChangeNotifier {
     return Provider.of<StronksAuth>(context, listen: false);
   }
 
-  final FirebaseAuth authorization = FirebaseAuth.instance;
+  FirebaseAuth get authorization => _authorization;
+
+  /// this will give us a user object to work with if user is signed in,
+  /// otherwise event fired is null
+  Stream get userStream => authorization.userChanges();
+
+  AuthState checkAuthState() {
+    if (authorization.currentUser != null) return AuthState.authorized;
+    return AuthState.unauthorized;
+  }
+
   void reloadUser() => authorization.currentUser?.reload();
 
-  /// provide the given apple sign in button for the view
-  SignInWithAppleButton appleButton(Function onPressed) =>
-      SignInWithAppleButton(
-        onPressed: () {
-          onPressed();
-        },
-      );
+  void userSignOut() {
+    authorization.signOut();
+  }
 
-  void stronksSignIn(AuthState authState) {
-    switch (authState) {
-      case AuthState.signedInWithEmailAndPW:
+  void userSignInEmailAndPW(String email, String password) => authorization
+      .signInWithEmailAndPassword(email: email, password: password);
+
+  void stronksSignIn(AuthSource authSource, String? email, String? password) {
+    switch (authSource) {
+      case AuthSource.email:
         try {
-          userSignInEmailAndPW();
+          userSignInEmailAndPW(email!, password!);
         } catch (e) {
           debugPrint(e.toString());
         }
         break;
-      case AuthState.signedInWithGoogle:
+      case AuthSource.google:
         try {
           signInWithGoogle();
         } catch (e) {
           debugPrint(e.toString());
         }
         break;
-      case AuthState.signedInWithApple:
+      case AuthSource.apple:
         try {
           signInWithApple();
         } catch (e) {
-          debugPrint('aSDasdaDAdasda' + e.toString());
+          debugPrint(e.toString());
         }
         break;
       default:
@@ -143,18 +155,6 @@ class StronksAuth extends ChangeNotifier {
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
-
-  StronksUser? currentUser;
-  void isUserChange() => authorization.userChanges().listen((User? user) {
-        if (user == null) {
-        } else {}
-      });
-
-  void userSignInEmailAndPW() => authorization.signInAnonymously();
-  void userSignOut() {
-    authorization.signOut();
-    isUserChange();
-  }
 }
 
-Exception _authFailed() => Exception('authorization failed');
+Exception _authFailed() => Exception('stronks authorization failed');

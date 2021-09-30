@@ -51,8 +51,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 TextButton(
                     onPressed: () {
-                      ///
-                      print(StronksAuth.of(context).authorization.currentUser);
+                      final auth = StronksAuth.of(context);
                     },
                     child: Text('data'))
               ],
