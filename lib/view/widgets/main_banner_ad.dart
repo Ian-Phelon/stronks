@@ -34,13 +34,18 @@ class _MainBannerAdState extends State<MainBannerAd> {
   );
 
   late final bool userRemovedAds;
+  late final bool authorizedUser;
 
   @override
   void initState() {
     // await
     userRemovedAds =
         UserOptions.of(context).getOptionValue(userOptionsIndex: 2);
-    if (userRemovedAds == false) {
+    StronksAuth.of(context)
+        .userStream
+        .listen((event) => authorizedUser = event != null);
+
+    if (!userRemovedAds) {
       myBanner.load();
     }
     if (userRemovedAds) {
