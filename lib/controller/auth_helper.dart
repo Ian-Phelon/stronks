@@ -15,6 +15,7 @@ import '../model/model.dart' show StronksUser;
 import './controller.dart';
 
 enum AuthState {
+  unknown,
   unauthorized,
   authorized,
 }
@@ -40,7 +41,7 @@ class StronksAuth extends ChangeNotifier {
   /// otherwise event fired is null
   Stream get userStream => authorization.userChanges();
 
-  AuthState checkAuthState() {
+  AuthState checkAuthState(Error? error) {
     if (authorization.currentUser != null) return AuthState.authorized;
     return AuthState.unauthorized;
   }
@@ -151,7 +152,9 @@ class StronksAuth extends ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {}
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
