@@ -462,7 +462,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                     ),
                   ),
                 ),
-                MainBannerAd(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -515,7 +514,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
                     ],
                   ),
                 ),
-                MainBannerAd(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: StronksTextButton(
@@ -559,7 +557,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
               countForResistance: countForResistance,
               notes: notesTxtCtrl.text,
             ),
-            MainBannerAd(),
           ],
         ),
       ),

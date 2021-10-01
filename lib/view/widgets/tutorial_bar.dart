@@ -180,17 +180,17 @@ class Tutorial {
     '''
     Help is always here. Navigate tips by tapping the arrows to the right.
     ''',
-    //1
-    '''
-    Tap the icon in the top left to toggle dark mode and metric/imperial.
-    ''',
-    //2
+    //
     '''
     Tap Exercises to add, browse, or edit the exercises you want to keep track of. 
     ''',
-    //3
+    //
     '''
-    Stats show a breakdown of your overall progress.
+    Tap Stats to see a breakdown of your overall progress in Calendar or Stats views.
+    ''',
+    //
+    '''
+    Tap the icon in the top left to toggle dark mode and metric/imperial.
     ''',
   ];
 
@@ -307,6 +307,17 @@ class Tutorial {
     '''
     This page is a representation of all the hard work you've put in to achieve your goals. Let's pump those numbers up!
     ''',
+
+    ///1
+    '''
+    Swipe to, or tap the tabs on the bottom to switch to Calendar view.
+    ''',
+  ];
+  static final List<String> statsCalendar = const [
+    ///0
+    '''
+    Updating your exercises' total count notes the date here. Tap the tabs at the top of the screen, or swipe to sort your calendar by day, week, or month.
+    ''',
   ];
 
   /// uses the context recieved from tutorial's constructor to provide a list of strings to be rendered by the `TutorialBar`
@@ -324,6 +335,9 @@ class Tutorial {
         break;
       case 'editExercise':
         finalList = editExerciseScreen;
+        break;
+      case 'statsCalendar':
+        finalList = statsCalendar;
         break;
       case 'stats':
         finalList = statsScreen;

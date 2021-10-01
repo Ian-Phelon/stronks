@@ -54,6 +54,7 @@ class _StatsScreenState extends State<StatsScreen>
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(_titleText(titleTextIndex)),
         ),
         body: TabBarView(

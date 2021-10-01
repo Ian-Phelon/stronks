@@ -95,7 +95,7 @@ class StronksTheme {
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(
             color: kcolorPrimaryDark,
-            width: 2.4,
+            width: 4.4,
             style: BorderStyle.solid,
           ),
           insets: EdgeInsets.zero,
@@ -210,7 +210,7 @@ class StronksTheme {
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(
             color: kcolorDarkModePrimaryLight,
-            width: 2.4,
+            width: 4.4,
             style: BorderStyle.solid,
           ),
           insets: EdgeInsets.zero,

@@ -30,17 +30,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           backgroundColor: Theme.of(context).colorScheme.background,
           body: Stack(
             children: [
-              ListView.separated(
-                  padding: const EdgeInsets.only(bottom: 143),
+              ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(0, 55, 0, 143),
                   itemCount: repoList.length,
-                  separatorBuilder: (context, index) {
-                    if (index % 2 == 0)
-                      return userRemovedAds
-                          ? const SizedBox.shrink()
-                          : MainBannerAd();
-
-                    return const SizedBox.shrink();
-                  },
                   itemBuilder: (context, index) {
                     return ExerciseTile(
                       exercise: repoList[index],
@@ -94,6 +86,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     );
                   }),
               TutorialBar(pageContext: 'exercises'),
+              Align(
+                alignment: Alignment.topCenter,
+                child: MainBannerAd(),
+              ),
             ],
           ),
           floatingActionButtonLocation:

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// should also show RoutePageManager for removing ads
-import '../../controller/controller.dart' show UserOptions, RoutePageManager;
+import '../../controller/controller.dart' show UserOptions; //,RoutePageManager;
 
-import '../../view/exercises/widgets/widgets.dart';
+// import '../../view/exercises/widgets/widgets.dart';
 
 class CommonDrawer extends StatelessWidget {
   const CommonDrawer({Key? key}) : super(key: key);
@@ -57,21 +57,21 @@ class CommonDrawer extends StatelessWidget {
                   repo.toggleUsesMetric(v);
                 },
               ),
-              Visibility(
-                visible: true,
+              // Visibility(
+              //   visible: true,
 
-                // !Provider.of<UserOptions>(context, listen: false)
-                //     .getOptionValue(userOptionsIndex: 2),
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: StronksTextButton(
-                    text: 'Sign up/Remove Ads',
-                    onTap: () {
-                      RoutePageManager.of(context).toPurchases();
-                    },
-                  ),
-                ),
-              )
+              //   // !Provider.of<UserOptions>(context, listen: false)
+              //   //     .getOptionValue(userOptionsIndex: 2),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(18.0),
+              //     child: StronksTextButton(
+              //       text: 'Sign up/Remove Ads',
+              //       onTap: () {
+              //         RoutePageManager.of(context).toPurchases();
+              //       },
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),
