@@ -49,11 +49,6 @@ class DashboardScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: MainBannerAd(),
                 ),
-                TextButton(
-                    onPressed: () {
-                      final auth = StronksAuth.of(context);
-                    },
-                    child: Text('data'))
               ],
             ),
           ],
