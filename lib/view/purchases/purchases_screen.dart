@@ -41,15 +41,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          // automaticallyImplyLeading: false,
-          actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
-            IconButton(
-                onPressed: () {
-                  auth.userSignOut();
-                },
-                icon: Icon(Icons.delete))
-          ],
+          automaticallyImplyLeading: false,
           title: Text('Purchases'),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,

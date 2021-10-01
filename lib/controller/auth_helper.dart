@@ -39,18 +39,23 @@ class StronksAuth extends ChangeNotifier {
 
   /// this will give us a user object to work with if user is signed in,
   /// otherwise event fired is null
-  Stream get userStream => authorization.userChanges();
-
-  AuthState checkAuthState(Object? error) {
-    if (authorization.currentUser != null) return AuthState.authorized;
-    if (error != null) return AuthState.unknown;
-    return AuthState.unauthorized;
+  Stream<User?> get userStream => authorization.userChanges();
+  AuthState authorizedUser = AuthState.unknown;
+  void getAuthStaus() {
+    userStream.listen((event) {
+      if (event != null) {
+        authorizedUser = AuthState.authorized;
+      } else {
+        authorizedUser = AuthState.unauthorized;
+      }
+    });
+    notifyListeners();
   }
 
   void reloadUser() => authorization.currentUser?.reload();
-
   void userSignOut() {
     authorization.signOut();
+    reloadUser();
   }
 
   void userSignInEmailAndPW(String email, String password) => authorization
@@ -156,7 +161,7 @@ class StronksAuth extends ChangeNotifier {
     try {
       await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
-      checkAuthState(e);
+      print(e);
     }
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);

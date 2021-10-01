@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,32 +34,41 @@ class _MainBannerAdState extends State<MainBannerAd> {
     listener: BannerAdListener(),
   );
 
-  late final bool userRemovedAds;
-  late final bool authorizedUser;
+  late bool userRemovedAds;
 
   @override
   void initState() {
-    // await
+    super.initState();
+
     userRemovedAds =
         UserOptions.of(context).getOptionValue(userOptionsIndex: 2);
-    StronksAuth.of(context)
-        .userStream
-        .listen((event) => authorizedUser = event != null);
+
+    bool authorizedUser =
+        StronksAuth.of(context).authorizedUser == AuthState.authorized;
+
+    if (userRemovedAds && !authorizedUser) {
+      userRemovedAds = false;
+      myBanner.load();
+    }
 
     if (!userRemovedAds) {
       myBanner.load();
-    }
-    if (userRemovedAds) {
+    } else {
       myBanner.dispose();
     }
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: userRemovedAds
+      child: StronksAuth.of(context).authorizedUser == AuthState.authorized &&
+              userRemovedAds
           ? const SizedBox.shrink()
           : Container(
               height: myBanner.size.height.toDouble(),

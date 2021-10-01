@@ -65,7 +65,7 @@ class CommonDrawer extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: StronksTextButton(
-                    text: 'Remove Ads',
+                    text: 'Sign up/Remove Ads',
                     onTap: () {
                       RoutePageManager.of(context).toPurchases();
                     },
