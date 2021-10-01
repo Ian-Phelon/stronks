@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../model/model.dart' show Performance;
 import '../../widgets/widgets.dart';
-import '../widgets/widgets.dart';
 import './day_tab.dart';
 import './week_tab.dart';
 import './month_tab.dart';
@@ -11,11 +10,9 @@ class CalendarPerformancesScreen extends StatefulWidget {
   const CalendarPerformancesScreen({
     Key? key,
     required this.performances,
-    required this.bottomTabBar,
   }) : super(key: key);
 
   final List<Performance> performances;
-  final StatsBottomTabBar bottomTabBar;
   @override
   _CalendarPerformancesScreenState createState() =>
       _CalendarPerformancesScreenState();
@@ -27,9 +24,8 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
   Map<int, String> performanceIdToName = {};
   @override
   void initState() {
-    _nestedTabCtrl = TabController(length: 3, vsync: this);
-
     super.initState();
+    _nestedTabCtrl = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -40,61 +36,53 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Calendar'),
-      ),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              ///put this back in when there's a search/filter
-              // SizedBox(
-              //   height: 46.0,
-              // ),
-              TabBar(
-                isScrollable: true,
-                tabs: <Widget>[
-                  Tab(
-                    text: 'Day',
-                  ),
-                  Tab(
-                    text: 'Week',
-                  ),
-                  Tab(
-                    text: 'Month',
-                  ),
-                ],
-                controller: _nestedTabCtrl,
-              ),
-              Expanded(
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: TabBarView(
-                    controller: _nestedTabCtrl,
-                    children: [
-                      CalendarDay(
-                        performances: widget.performances.reversed.toList(),
-                      ),
-                      CalendarWeek(
-                        performances: widget.performances.reversed.toList(),
-                      ),
-                      CalendarMonth(
-                        performances: widget.performances.reversed.toList(),
-                      ),
-                    ],
-                  ),
+    return Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            ///put this back in when there's a search/filter
+            // SizedBox(
+            //   height: 46.0,
+            // ),
+            TabBar(
+              isScrollable: true,
+              tabs: <Widget>[
+                Tab(
+                  text: 'Day',
                 ),
-              )
-            ],
-          ),
-          TutorialBar(pageContext: 'statsCalendar'),
-        ],
-      ),
-      bottomNavigationBar: widget.bottomTabBar,
+                Tab(
+                  text: 'Week',
+                ),
+                Tab(
+                  text: 'Month',
+                ),
+              ],
+              controller: _nestedTabCtrl,
+            ),
+            Expanded(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: TabBarView(
+                  controller: _nestedTabCtrl,
+                  children: [
+                    CalendarDay(
+                      performances: widget.performances.reversed.toList(),
+                    ),
+                    CalendarWeek(
+                      performances: widget.performances.reversed.toList(),
+                    ),
+                    CalendarMonth(
+                      performances: widget.performances.reversed.toList(),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        TutorialBar(pageContext: 'statsCalendar'),
+      ],
     );
   }
 }

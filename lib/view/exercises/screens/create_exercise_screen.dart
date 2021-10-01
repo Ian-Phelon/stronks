@@ -134,6 +134,8 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
 
   @override
   void initState() {
+    super.initState();
+
     /// When the screen is rebuilt, set all late values with user input using
     /// the top-level functions
 
@@ -180,7 +182,6 @@ class _CreateExerciseScreenState extends State<CreateExerciseScreen> {
     allTargets = _getTargetForView(context, targetStringBuilder.toString());
 
     targetFine = _mapTargetFine(allTargets);
-    super.initState();
   }
 
   void incrementCountForSets(int i) {

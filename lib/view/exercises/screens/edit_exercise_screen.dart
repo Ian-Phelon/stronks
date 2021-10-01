@@ -147,6 +147,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
 
   @override
   void initState() {
+    super.initState();
     var repo = ExerciseRepository.of(context);
     editNameVisibility = false;
     exercise = repo.selectedExercise;
@@ -184,7 +185,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
     }
     _targetFineSeletctions = [addArms, addChest, addBack, addCore, addLegs];
     nameTxtCtrl.text = repo.selectedExercise.name!;
-    super.initState();
   }
 
   @override

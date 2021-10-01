@@ -15,12 +15,20 @@ class _StatsScreenState extends State<StatsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late final List<int> performanceCounts;
+  late int titleTextIndex;
+  void getTitleTextIndex() {
+    setState(() {
+      titleTextIndex = _tabController.index;
+    });
+  }
 
   @override
   void initState() {
+    super.initState();
     performanceCounts = StatsHelper.of(context).getPerformanceCounts();
     _tabController = TabController(length: 2, vsync: this);
-    super.initState();
+    titleTextIndex = 0;
+    _tabController.addListener(getTitleTextIndex);
   }
 
   @override
@@ -30,53 +38,37 @@ class _StatsScreenState extends State<StatsScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
+
+    super.dispose();
+  }
+
+  String _titleText(int? index) {
+    if (index != 0) return 'Calendar';
+    return 'Stats';
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: TabBarView(controller: _tabController, children: [
-        TotalPerformances(
-            performanceCounts: performanceCounts,
-            tabController: _tabController),
-        CalendarPerformancesScreen(
-          performances: StatsHelper.performanceList,
-          bottomTabBar: StatsBottomTabBar(tabController: _tabController),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(
+          title: Text(_titleText(titleTextIndex)),
         ),
-      ]),
-    );
-  }
-}
-
-class TotalPerformances extends StatelessWidget {
-  const TotalPerformances({
-    Key? key,
-    required this.performanceCounts,
-    required this.tabController,
-  }) : super(key: key);
-
-  final List<int> performanceCounts;
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Stats'),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            TotalPerformances(
+              performanceCounts: performanceCounts,
+            ),
+            CalendarPerformancesScreen(
+              performances: StatsHelper.performanceList,
+            ),
+          ],
+        ),
+        bottomNavigationBar: StatsBottomTabBar(tabController: _tabController),
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TotalsBody(
-            performanceCounts: performanceCounts,
-          ),
-        ],
-      ),
-      bottomNavigationBar: StatsBottomTabBar(tabController: tabController),
     );
   }
 }

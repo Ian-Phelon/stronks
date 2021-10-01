@@ -89,7 +89,7 @@ class StronksTheme {
         labelColor: kcolorPrimaryDark,
         labelStyle: kCommonLightThemeTextStyle.copyWith(
           fontStyle: FontStyle.italic,
-          fontSize: 17,
+          fontSize: 20,
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: UnderlineTabIndicator(
@@ -204,7 +204,7 @@ class StronksTheme {
         labelColor: kcolorDarkModePrimaryLight,
         labelStyle: kCommonLightThemeTextStyle.copyWith(
           fontStyle: FontStyle.italic,
-          fontSize: 17,
+          fontSize: 20,
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: UnderlineTabIndicator(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../widgets/widgets.dart' show TutorialBar, MainBannerAd;
 
-class TotalsBody extends StatelessWidget {
-  const TotalsBody({
+class TotalPerformances extends StatelessWidget {
+  const TotalPerformances({
     Key? key,
     required this.performanceCounts,
   }) : super(key: key);
