@@ -1,6 +1,5 @@
-import '../../../controller/controller.dart'
-    show ExerciseRepository, UserOptions;
-import '../../../model/model.dart' show Performance;
+import '../../controller/controller.dart' show ExerciseRepository, UserOptions;
+import '../../model/model.dart' show Performance;
 import 'package:flutter/material.dart' show BuildContext;
 
 extension StatsDates on DateTime {

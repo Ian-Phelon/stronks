@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/model.dart' show Performance;
 import '../../widgets/widgets.dart';
+import '../widgets/widgets.dart';
 import './day_tab.dart';
 import './week_tab.dart';
 import './month_tab.dart';
@@ -10,9 +11,11 @@ class CalendarPerformancesScreen extends StatefulWidget {
   const CalendarPerformancesScreen({
     Key? key,
     required this.performances,
+    required this.bottomTabBar,
   }) : super(key: key);
 
   final List<Performance> performances;
+  final StatsBottomTabBar bottomTabBar;
   @override
   _CalendarPerformancesScreenState createState() =>
       _CalendarPerformancesScreenState();
@@ -41,13 +44,6 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Calendar'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                ///playground
-              },
-              icon: Icon(Icons.menu))
-        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
@@ -70,7 +66,7 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
                   ),
                   Tab(
                     text: 'Month',
-                  )
+                  ),
                 ],
                 controller: _nestedTabCtrl,
               ),
@@ -98,6 +94,7 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
           TutorialBar(pageContext: 'statsCalendar'),
         ],
       ),
+      bottomNavigationBar: widget.bottomTabBar,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../model/model.dart' show Performance;
-import './stats_extensions.dart';
+import '../stats_extensions.dart';
 import '../widgets/widgets.dart';
 
 class CalendarDay extends StatelessWidget {

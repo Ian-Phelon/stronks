@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/stats_extensions.dart';
+import '../stats_extensions.dart';
 
 String _getDate(BuildContext context, DateTime date, String? separator) {
   switch (separator) {

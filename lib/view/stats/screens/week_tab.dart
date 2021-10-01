@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../model/model.dart' show Performance;
 import '../widgets/widgets.dart';
-import './stats_extensions.dart';
+import '../stats_extensions.dart';
 
 class CalendarWeek extends StatefulWidget {
   const CalendarWeek({
