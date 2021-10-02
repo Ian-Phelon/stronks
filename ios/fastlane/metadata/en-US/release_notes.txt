@@ -1,1 +1,3 @@
+Added a Calendar to view and sort exercises performed by day, week, or month.
 
+Added infrastructure for backend services.
