@@ -17,8 +17,6 @@ class ExercisesScreen extends StatefulWidget {
 class _ExercisesScreenState extends State<ExercisesScreen> {
   @override
   Widget build(BuildContext context) {
-    final bool userRemovedAds =
-        UserOptions.of(context).getOptionValue(userOptionsIndex: 2);
     return Consumer<ExerciseRepository>(builder: (context, repo, _) {
       List<Exercise> repoList = repo.getExercises();
       return SafeArea(
