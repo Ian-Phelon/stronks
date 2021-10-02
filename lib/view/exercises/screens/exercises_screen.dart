@@ -85,11 +85,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                       },
                     );
                   }),
-              TutorialBar(pageContext: 'exercises'),
               Align(
                 alignment: Alignment.topCenter,
                 child: MainBannerAd(),
               ),
+              TutorialBar(pageContext: 'exercises'),
             ],
           ),
           floatingActionButtonLocation:

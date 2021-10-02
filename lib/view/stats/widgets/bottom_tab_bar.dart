@@ -12,20 +12,19 @@ class StatsBottomTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Material(
-        color: Theme.of(context).colorScheme.surface,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 3.0,
-            color: Theme.of(context).primaryColorLight,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TabBar(
-              // labelColor: Theme.of(context).colorScheme.surface,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Material(
+            color: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 3.0,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+            child: TabBar(
               isScrollable: true,
               tabs: <Widget>[
                 Tab(
@@ -37,8 +36,8 @@ class StatsBottomTabBar extends StatelessWidget {
               ],
               controller: tabController,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

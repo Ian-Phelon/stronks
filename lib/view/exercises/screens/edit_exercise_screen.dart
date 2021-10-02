@@ -263,7 +263,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(14.0),
                   child: MainBannerAd(),
                 ),
                 GestureDetector(
@@ -386,10 +386,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                       )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: MainBannerAd(),
                 ),
                 StronksTextButton(
                   text: editTargetVisibility ? 'Update' : 'Targets',
@@ -620,7 +616,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                     ),
                   ),
                 ),
-                MainBannerAd(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -684,7 +679,6 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                       textAlign: TextAlign.center,
                       onChanged: (value) => nameTxtCtrl.text = value,
                       onSubmitted: (value) {
-                        // setState(() {
                         var e = exercise.copyWith(name: nameTxtCtrl.text);
                         repo.updateGeneral(e);
                         _triggerNameVisibility();
@@ -692,12 +686,10 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
                         setState(() {
                           nameTxtCtrl.text = value;
                         });
-                        // });
                       },
                     ),
                   ),
                 ),
-                MainBannerAd(),
               ],
             ),
           ],

@@ -41,10 +41,6 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            ///put this back in when there's a search/filter
-            // SizedBox(
-            //   height: 46.0,
-            // ),
             TabBar(
               isScrollable: true,
               tabs: <Widget>[
@@ -60,6 +56,7 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
               ],
               controller: _nestedTabCtrl,
             ),
+            MainBannerAd(),
             Expanded(
               child: Container(
                 height: MediaQuery.of(context).size.height,
@@ -78,7 +75,7 @@ class _CalendarPerformancesScreenState extends State<CalendarPerformancesScreen>
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         TutorialBar(pageContext: 'statsCalendar'),

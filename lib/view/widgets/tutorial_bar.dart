@@ -310,13 +310,13 @@ class Tutorial {
 
     ///1
     '''
-    Swipe to, or tap the tabs on the bottom to switch to Calendar view.
+    Swipe to, or tap the tabs on the bottom to switch into Calendar view.
     ''',
   ];
   static final List<String> statsCalendar = const [
     ///0
     '''
-    Updating your exercises' total count notes the date here. Tap the tabs at the top of the screen, or swipe to sort your calendar by day, week, or month.
+    Updating your exercises' total count will note the date here. Tap the tabs at the top of the screen, or swipe to sort your calendar by day, week, or month.
     ''',
   ];
 
