@@ -9,8 +9,7 @@ Stronks - Fitness Tracker is made for DIY exercise enthusiasts to keep track of 
 -  Set a style, and whether or not any equipment is needed.
 -  Dedicated notes section for each exercise.
 -  Updating your progress will automatically update your overall stats.
--  Check out your progress over time with a Calendar view: See what exercises you've performed sorted by day, week, or month.
 
 Stronks is made by a solo developer for personal use, but open for everyone to try. Your suggestions may be considered for any future updates.
 
-Ability to remove advertisements coming soon!
+Calendar view coming soon!
