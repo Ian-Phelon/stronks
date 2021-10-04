@@ -67,6 +67,6 @@ local.properties
 # scan temporary files
 **/fastlane/test_output
 
-/ios/*
-/android/*
+ios/**
+android/**
 
