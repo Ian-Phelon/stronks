@@ -1,1 +1,0 @@
-An exercise tracker that lets you update and view your progress quickly.
