@@ -1,3 +1,6 @@
+ios/
+android/
+
 # Miscellaneous
 *.class
 *.log
@@ -67,6 +70,5 @@ local.properties
 # scan temporary files
 **/fastlane/test_output
 
-ios/
-android/
+
 
