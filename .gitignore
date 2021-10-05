@@ -2,6 +2,11 @@ ios/
 android/
 .gradle/
 test/
+Gemfile
+Gemfile.lock
+web/
+.metadata
+
 
 # Miscellaneous
 *.class
